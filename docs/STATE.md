@@ -85,15 +85,21 @@
 Todo lo de arquitectura, modelo de datos, alcance, hosting, i18n, CI y
 comportamiento transversal está decidido y documentado.
 
-## Próximos pasos (Fase 1, bloque 1 — Cimientos)
+## Fase 1, bloque 1 — Cimientos (EN CURSO)
 
-1. **git init** + crear el proyecto Angular en `bowling-tracker/`
-2. Estructura de carpetas, standalone components, router con lazy-load
-3. Transloco (locale `es`) + estructura de textos
-4. Dexie: definición de stores, `schemaVersion` 1, capa `Repository`
-5. `ng add @angular/pwa` + `ngsw-config.json` → **sesión dedicada al SW**
-6. Primer arranque (`persist()` + aviso de datos locales)
-7. Nota corta de estrategia de tests en los docs
+- [x] `git init` (rama `main`), commit de la Fase 0
+- [x] `ng new bowling-tracker` — Angular 20.3, standalone, SCSS, sin SSR, router
+      vacío. Commit 89b860e.
+- [ ] Estructura de carpetas (`core/`, `features/`, `shared/`, `models/`)
+- [ ] Router con lazy-load + navegación inferior (5 secciones, pantallas vacías)
+- [ ] Transloco (locale `es`) + `es.json` inicial
+- [ ] Dexie: 6 stores, `schemaVersion` 1, interfaz `Repository` + impl IndexedDB
+- [ ] Primer arranque (`persist()` + aviso de datos locales)
+- [ ] Nota de estrategia de tests en los docs
+- [ ] `ng add @angular/pwa` + `ngsw-config.json` → **sesión dedicada al SW**
+
+**Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
+pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.
 
 ## Preguntas abiertas para el usuario
 
