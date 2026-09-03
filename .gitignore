@@ -1,0 +1,13 @@
+# deps
+node_modules/
+# angular build output
+/bowling-tracker/dist/
+/bowling-tracker/.angular/
+/bowling-tracker/tmp/
+# editor / OS
+.DS_Store
+Thumbs.db
+*.log
+# env
+.env
+.env.local

@@ -1,0 +1,291 @@
+<title>Identidad de Bowling Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+
+<style>
+  /* Diseño comprometido con modo oscuro. Colores explícitos, sin bloques de tema. */
+  :root {
+    --bg: #222A44;
+    --surface: #2B3556;
+    --surface-2: #333E63;
+    --ink: #ECEEF5;
+    --ink-soft: #A2AAC6;
+    --line: #414D77;
+    --accent: #F2A93B;
+    --accent-ink: #1B1406;
+    --secondary: #8FB6FF;
+    --logo-bg: #222A44;
+    --logo-stroke: #14101B;
+    --logo-sw: 2.4;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 14px 38px rgba(0,0,0,.42);
+    --display: "Bricolage Grotesque", "Hanken Grotesk", system-ui, sans-serif;
+    --body: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+    --mono: "DM Mono", ui-monospace, Menlo, monospace;
+    --maxw: 1020px;
+    --s--1: clamp(.82rem, .8rem + .1vw, .9rem);
+    --s-0: clamp(1rem, .97rem + .15vw, 1.06rem);
+    --s-1: clamp(1.2rem, 1.1rem + .5vw, 1.5rem);
+    --s-2: clamp(1.55rem, 1.35rem + 1vw, 2.2rem);
+    --s-3: clamp(2.2rem, 1.8rem + 2.1vw, 3.7rem);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: var(--s-0); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(1.1rem, 4vw, 2.4rem); }
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; letter-spacing: -.015em; }
+  h1 { font-size: var(--s-3); font-weight: 800; line-height: .98; }
+  h2 { font-size: var(--s-2); line-height: 1.05; }
+  h3 { font-size: var(--s-1); }
+  p { margin: 0; }
+  .eyebrow { font-family: var(--mono); font-size: var(--s--1); text-transform: uppercase; letter-spacing: .16em; color: var(--accent); }
+  .muted { color: var(--ink-soft); }
+  .lede { font-size: var(--s-1); line-height: 1.4; color: var(--ink-soft); max-width: 42ch; }
+
+  header { border-bottom: 1px solid var(--line); padding-block: clamp(2.2rem, 7vw, 4.2rem) clamp(1.6rem, 5vw, 2.8rem); }
+  .brandline { display: flex; align-items: center; gap: .8rem; margin-bottom: 2rem; }
+  .brandline .mk { width: 40px; height: 40px; display: block; border-radius: 10px; }
+  .brandline b { font-family: var(--display); font-weight: 800; font-size: 1.08rem; }
+  .brandline span { font-family: var(--mono); font-size: var(--s--1); color: var(--ink-soft); }
+  header .grid { display: grid; gap: 1.3rem; }
+  @media (min-width: 720px) { header .grid { grid-template-columns: 1.35fr 1fr; align-items: end; } }
+
+  section { padding-block: clamp(2.4rem, 7vw, 4.2rem); border-bottom: 1px solid var(--line); }
+  .sec-head { display: flex; flex-direction: column; gap: .55rem; margin-bottom: 2rem; }
+  .sec-head .n { font-family: var(--mono); font-size: var(--s--1); color: var(--ink-soft); }
+
+  /* pin study */
+  .study { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .study { grid-template-columns: 240px 1fr; } }
+  .study .stage { background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; display: grid; place-items: center; padding: 1.6rem; min-height: 220px; }
+  .study .stage svg { height: 172px; color: var(--ink); }
+  .study .note { align-self: center; }
+  .study .note h3 { font-size: 1.05rem; }
+  .study .note p { color: var(--ink-soft); font-size: var(--s--1); margin-top: .55rem; }
+
+  /* logo hero */
+  .logo-hero { display: grid; gap: 1.4rem; grid-template-columns: 1fr; align-items: center; }
+  @media (min-width: 720px) { .logo-hero { grid-template-columns: auto 1fr; } }
+  .logo-hero .icon-xl { width: min(340px, 74vw); aspect-ratio: 1; display: block; filter: drop-shadow(0 20px 44px rgba(0,0,0,.4)); }
+  .logo-hero .txt h3 { font-size: 1.1rem; margin-bottom: .5rem; }
+  .logo-hero .txt p { color: var(--ink-soft); font-size: var(--s--1); line-height: 1.5; max-width: 40ch; }
+  .logo-hero .txt p + p { margin-top: .7rem; }
+
+  .sizes { display: flex; align-items: flex-end; gap: 1.4rem; flex-wrap: wrap; margin-top: 2rem; padding-top: 1.6rem; border-top: 1px solid var(--line); }
+  .size { display: flex; flex-direction: column; align-items: center; gap: .6rem; }
+  .size svg { display: block; border-radius: 22.6%; box-shadow: 0 6px 20px rgba(0,0,0,.34); }
+  .size span { font-family: var(--mono); font-size: .62rem; color: var(--ink-soft); }
+
+  .callout { margin-top: 1.8rem; background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; padding: 1rem 1.2rem; font-size: var(--s--1); }
+  .callout b { font-family: var(--display); }
+
+  /* palette */
+  .swatches { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .sw { display: flex; flex-direction: column; }
+  .sw i { min-width: 66px; height: 44px; border-radius: 8px; display: block; border: 1px solid rgba(255,255,255,.08); }
+  .sw code { font-family: var(--mono); font-size: .62rem; color: var(--ink-soft); margin-top: .3rem; }
+  .sw small { font-family: var(--mono); font-size: .56rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; }
+
+  .mocks { display: grid; gap: 1rem; grid-template-columns: 1fr; margin-top: 1.6rem; }
+  @media (min-width: 560px) { .mocks { grid-template-columns: 1fr 1fr; } }
+  .mock { border-radius: 16px; padding: 1.05rem; border: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; gap: .75rem; }
+  .mock .cap { font-family: var(--mono); font-size: .6rem; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-soft); }
+  .tile { background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: .85rem .95rem; display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+  .tile .lab { font-family: var(--mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); }
+  .tile .big { font-family: var(--display); font-weight: 800; font-size: 1.85rem; line-height: 1; font-variant-numeric: tabular-nums; }
+  .tile .d { font-family: var(--mono); font-size: .76rem; }
+  .tile .d.up { color: var(--accent); }
+  .tile .d.blue { color: var(--secondary); }
+  .spark { display: flex; align-items: flex-end; gap: 3px; height: 30px; }
+  .spark i { flex: 1; background: var(--secondary); border-radius: 2px 2px 0 0; }
+  .sheet { display: flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .frm { flex: 1; border-right: 1px solid var(--line); padding: .38rem .22rem .42rem; text-align: center; }
+  .frm:last-child { border-right: 0; }
+  .frm .mk { display: flex; justify-content: flex-end; gap: 2px; margin-bottom: .26rem; }
+  .frm .mk span { width: 13px; height: 13px; font-size: .55rem; display: grid; place-items: center; font-family: var(--mono); border: 1px solid var(--line); }
+  .frm .mk span.x { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-weight: 700; }
+  .frm .cum { font-family: var(--display); font-weight: 700; font-size: .92rem; font-variant-numeric: tabular-nums; }
+  .nav { display: flex; justify-content: space-between; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: .5rem .2rem; }
+  .nav a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .2rem; text-decoration: none; }
+  .nav a span { font-family: var(--mono); font-size: .53rem; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-soft); }
+  .nav a i { width: 16px; height: 16px; border-radius: 5px; border: 2px solid var(--ink-soft); display: block; }
+  .nav a.on i { border-color: var(--accent); background: var(--accent); }
+  .nav a.on span { color: var(--accent); }
+
+  .type-rows { display: flex; flex-direction: column; gap: 1.2rem; }
+  .type-row { display: grid; gap: .5rem 2rem; grid-template-columns: 1fr; padding-bottom: 1.2rem; border-bottom: 1px dashed var(--line); }
+  .type-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  @media (min-width: 720px) { .type-row { grid-template-columns: 168px 1fr; } }
+  .type-meta { font-family: var(--mono); font-size: var(--s--1); color: var(--ink-soft); }
+  .type-meta b { display: block; color: var(--ink); font-weight: 500; }
+  .spec-display { font-family: var(--display); font-weight: 800; font-size: clamp(1.9rem, 6vw, 3rem); line-height: 1; letter-spacing: -.02em; }
+  .spec-body { font-family: var(--body); font-size: 1.03rem; max-width: 56ch; }
+  .spec-mono { font-family: var(--mono); font-size: 1.02rem; }
+  .spec-mono .a { color: var(--accent); }
+
+  footer { padding-block: clamp(2.2rem, 6vw, 3.4rem); }
+  footer p { color: var(--ink-soft); font-size: var(--s--1); max-width: 56ch; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <clipPath id="pinclip">
+    <path d="M37.008 70.879c0-10.431-2.002-17.898-6.938-27.025-3.639-6.637-4.818-13.985-3.402-21.214l2.348-12.207c.113-.543.117-.863.117-1.661C29.133 3.916 25.252 0 20.441 0c-4.709 0-8.582 3.916-8.582 8.772 0 .626.039 1.161.121 1.661l2.348 12.089c1.291 7.229.234 14.696-3.402 21.216-4.588 8.294-6.938 17.657-6.938 27.141 0 9.477 2.35 18.844 6.938 27.141h.062c.898 1.13 4.817 1.98 9.512 1.98 5.115 0 9.299-1.01 9.67-2.291 4.859-9.037 6.838-16.475 6.838-26.83z"/>
+  </clipPath>
+  <g id="pinart">
+    <path d="M37.008 70.879c0-10.431-2.002-17.898-6.938-27.025-3.639-6.637-4.818-13.985-3.402-21.214l2.348-12.207c.113-.543.117-.863.117-1.661C29.133 3.916 25.252 0 20.441 0c-4.709 0-8.582 3.916-8.582 8.772 0 .626.039 1.161.121 1.661l2.348 12.089c1.291 7.229.234 14.696-3.402 21.216-4.588 8.294-6.938 17.657-6.938 27.141 0 9.477 2.35 18.844 6.938 27.141h.062c.898 1.13 4.817 1.98 9.512 1.98 5.115 0 9.299-1.01 9.67-2.291 4.859-9.037 6.838-16.475 6.838-26.83z" fill="currentColor" stroke="var(--logo-stroke)" stroke-width="var(--logo-sw)" paint-order="stroke"/>
+    <g clip-path="url(#pinclip)">
+      <rect x="5" y="22" width="30" height="6" fill="var(--pin-stripe, var(--logo-bg))"/>
+      <rect x="5" y="32" width="30" height="6" fill="var(--pin-stripe, var(--logo-bg))"/>
+    </g>
+  </g>
+  <g id="ballart">
+    <circle cx="32" cy="32" r="26" fill="currentColor" stroke="var(--logo-stroke)" stroke-width="var(--logo-sw)" paint-order="stroke"/>
+    <circle cx="25.5" cy="24" r="2.8" fill="var(--logo-stroke)"/>
+    <circle cx="35" cy="25.5" r="2.8" fill="var(--logo-stroke)"/>
+    <circle cx="30" cy="32.5" r="2.8" fill="var(--logo-stroke)"/>
+  </g>
+  <g id="logomark" color="#ECEEF5">
+    <use href="#pinart" transform="translate(46 78) rotate(-20) scale(0.62) translate(-21 -101)" style="--pin-stripe:#F2A93B"/>
+    <use href="#pinart" transform="translate(73 90) rotate(33) scale(0.64) translate(-33 -101)" style="--pin-stripe:#F2A93B"/>
+    <use href="#pinart" transform="translate(58 84) rotate(13) scale(0.82) translate(-29 -101)" style="--pin-stripe:#8FB6FF"/>
+    <use href="#ballart" transform="translate(8 38) scale(1.22)"/>
+  </g>
+  <g id="icon">
+    <rect width="128" height="128" rx="29" fill="#333E63"/>
+    <svg x="14" y="15" width="100" height="100" viewBox="0 8 118 120" overflow="visible"><use href="#logomark"/></svg>
+  </g>
+</defs></svg>
+
+<header>
+  <div class="wrap">
+    <div class="brandline">
+      <svg class="mk" viewBox="0 0 128 128" aria-hidden="true"><use href="#icon"/></svg>
+      <b>Bowling Tracker</b>
+      <span>· identidad · iteración 7</span>
+    </div>
+    <div class="grid">
+      <div>
+        <p class="eyebrow">Logo cerrado · Bruma azul · modo oscuro</p>
+        <h1>Bola + tres bolos</h1>
+      </div>
+      <p class="lede">Opacidad completa, borde fino oscuro en cada pieza, franjas azul (1) y ámbar (2·3), sobre contenedor cuadrado redondeado. Un solo logo para todo.</p>
+    </div>
+  </div>
+</header>
+
+<section id="pin">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="n">01 — El bolo</span>
+      <h2>La pieza base</h2>
+      <p class="muted" style="max-width:46ch">Silueta del SVG estándar, con borde fino oscuro y las dos franjas del hombro.</p>
+    </div>
+    <div class="study">
+      <div class="stage"><svg viewBox="0 0 40 101" aria-hidden="true"><use href="#pinart" style="--pin-stripe:#8FB6FF" color="#ECEEF5"/></svg></div>
+      <div class="note">
+        <h3>Construcción</h3>
+        <p>Relleno blanco, contorno <code>#14101B</code> a ~1&nbsp;px, franjas de color plano recortadas contra la silueta. El bolo del vértice (1) lleva franja azul; los otros dos, ámbar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="logo">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="n">02 — El logo</span>
+      <h2>Icono definitivo</h2>
+      <p class="muted" style="max-width:50ch">Contenedor cuadrado con esquinas redondeadas y fondo <code>#222A44</code>. Dentro, la bola derribando los tres bolos: el 1 (azul) al frente, el 2 a la izquierda y el 3 recogido detrás, a la derecha.</p>
+    </div>
+
+    <div class="logo-hero">
+      <svg class="icon-xl" viewBox="0 0 128 128" aria-hidden="true"><use href="#icon"/></svg>
+      <div class="txt">
+        <h3>Qué cambió en esta versión</h3>
+        <p>Los tres bolos a <b>opacidad completa</b> — el halo y la superposición ya dan la profundidad, la transparencia solo los ensuciaba.</p>
+        <p><b>Borde fino oscuro</b> en bola y bolos, que define los solapes.</p>
+        <p>El bolo de la derecha <b>más recogido</b> (giro 33°, más metido tras el grupo).</p>
+        <p><b>Franjas azul + ámbar</b>, los dos acentos de la paleta.</p>
+      </div>
+    </div>
+
+    <div class="sizes">
+      <div class="size"><svg width="112" height="112" viewBox="0 0 128 128" aria-hidden="true"><use href="#icon"/></svg><span>112</span></div>
+      <div class="size"><svg width="64" height="64" viewBox="0 0 128 128" aria-hidden="true"><use href="#icon"/></svg><span>64</span></div>
+      <div class="size"><svg width="40" height="40" viewBox="0 0 128 128" aria-hidden="true"><use href="#icon"/></svg><span>40</span></div>
+      <div class="size"><svg width="24" height="24" viewBox="0 0 128 128" aria-hidden="true"><use href="#icon"/></svg><span>24</span></div>
+      <div class="size"><svg width="16" height="16" viewBox="0 0 128 128" aria-hidden="true"><use href="#icon"/></svg><span>16</span></div>
+    </div>
+
+    <div class="callout">
+      <b>Nota:</b> a 16–24&nbsp;px los tres bolos se juntan y se pierde detalle. Es un compromiso aceptado: un solo logo para favicon, icono de app y cabecera.
+    </div>
+  </div>
+</section>
+
+<section id="palette">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="n">03 — Color · Bruma azul</span>
+      <h2>Paleta (modo oscuro)</h2>
+      <p class="muted" style="max-width:48ch">Índigo de base, ámbar como acento principal (una cosa por pantalla), azul cobalto para métricas secundarias, rachas y microgáficos.</p>
+    </div>
+    <div class="swatches">
+      <span class="sw"><i style="background:#222A44"></i><code>#222A44</code><small>fondo</small></span>
+      <span class="sw"><i style="background:#2B3556"></i><code>#2B3556</code><small>tarjeta</small></span>
+      <span class="sw"><i style="background:#333E63"></i><code>#333E63</code><small>elevado</small></span>
+      <span class="sw"><i style="background:#ECEEF5"></i><code>#ECEEF5</code><small>tinta</small></span>
+      <span class="sw"><i style="background:#A2AAC6"></i><code>#A2AAC6</code><small>tinta 2</small></span>
+      <span class="sw"><i style="background:#F2A93B"></i><code>#F2A93B</code><small>acento</small></span>
+      <span class="sw"><i style="background:#8FB6FF"></i><code>#8FB6FF</code><small>azul</small></span>
+    </div>
+    <div class="mocks">
+      <div class="mock">
+        <span class="cap">Inicio</span>
+        <div class="tile"><div><div class="lab">Media · últimas 20</div><div class="big">176</div></div><div class="d up">▲ 8</div></div>
+        <div class="tile"><div><div class="lab">Racha limpia</div><div class="big" style="color:var(--secondary)">4</div></div><div class="d blue">partidas</div></div>
+        <nav class="nav">
+          <a class="on"><i></i><span>Inicio</span></a><a><i></i><span>Partidas</span></a>
+          <a><i></i><span>Stats</span></a><a><i></i><span>Arsenal</span></a><a><i></i><span>Ajustes</span></a>
+        </nav>
+      </div>
+      <div class="mock">
+        <span class="cap">Partida en curso</span>
+        <div class="sheet">
+          <div class="frm"><div class="mk"><span class="x">X</span></div><div class="cum">28</div></div>
+          <div class="frm"><div class="mk"><span>7</span><span>/</span></div><div class="cum">47</div></div>
+          <div class="frm"><div class="mk"><span>9</span><span>-</span></div><div class="cum">56</div></div>
+          <div class="frm"><div class="mk"><span class="x">X</span></div><div class="cum">84</div></div>
+          <div class="frm"><div class="mk"><span class="x">X</span></div><div class="cum">104</div></div>
+        </div>
+        <div class="tile"><div style="width:100%"><div class="lab">Evolución media · temporada</div><div class="spark"><i style="height:40%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:68%"></i><i style="height:62%"></i><i style="height:80%"></i><i style="height:74%"></i><i style="height:92%"></i></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="type">
+  <div class="wrap">
+    <div class="sec-head"><span class="n">04 — Tipografía</span><h2>Tres voces</h2></div>
+    <div class="type-rows">
+      <div class="type-row">
+        <div class="type-meta"><b>Bricolage Grotesque</b>Titulares y cifras · 700–800</div>
+        <div><div class="spec-display">Clean game · 244</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta"><b>Hanken Grotesk</b>Texto · 400–600</div>
+        <div><p class="spec-body">Registra cada tiro o solo el total de la partida. La app calcula el resto: puntuación, máximo posible, porcentaje de plenos y de semiplenos convertidos, y la evolución de tu media durante la temporada.</p></div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta"><b>DM Mono</b>Datos y etiquetas · 400–500</div>
+        <div><p class="spec-mono">MEDIA 176 &nbsp;·&nbsp; <span class="a">PLENOS</span> 41% &nbsp;·&nbsp; SPLITS 6% &nbsp;·&nbsp; 04 SEP 2026</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Identidad cerrada: logo, paleta (modo oscuro) y tipografía. Siguiente: bocetos de la pantalla de Inicio y de registro de partida, y de ahí, los tokens del proyecto Angular.</p>
+  </div>
+</footer>

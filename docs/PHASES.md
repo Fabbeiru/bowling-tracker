@@ -1,0 +1,65 @@
+# Fases del proyecto
+
+## Fase 0 — Planificación (actual)
+
+- [x] Análisis de viabilidad
+- [x] Estructura del repo y documentación
+- [x] ADR 0001 (proceso), 0002 (local-first)
+- [x] Decidir stack / framework → ADR 0004 (Angular)
+- [x] Alcance de la Fase 1: detalle L1+L2+L3; módulos núcleo + Arsenal +
+      Competiciones básicas + Pantalla de Datos
+- [ ] Cerrar modelo de datos (ADR 0005 + DATA-MODEL.md)
+- [ ] Desglose fino de la Fase 1 (ver nota abajo)
+- [ ] Paleta, nombre visible, logo, identidad
+- [ ] Decidir hosting (ADR 0006)
+
+> **Nota sobre alcance vs orden**: L1 + L2 + L3 y los tres módulos (Arsenal,
+> Competiciones básicas, Pantalla de Datos) están **dentro** de la Fase 1. Eso
+> no se recorta sin acordarlo aquí. Lo único que decidiremos al construir es el
+> **orden** de los bloques (qué se entrega antes), no qué entra.
+
+## Fase 1 — MVP local, usable en liga
+
+Objetivo: **poder usarlo de verdad la próxima jornada**, con backup fiable.
+
+Bloques (orden aproximado de entrega; el alcance no se recorta):
+
+1. **Cimientos**: proyecto Angular (standalone), PWA (service worker, manifest,
+   instalable, offline, estrategia de actualización con *prompt*), i18n
+   (Transloco, `es`), capa de datos (IndexedDB + repositorio + migraciones),
+   primer arranque (`persist()` + aviso de datos locales).
+2. **Motor de scoring**: módulo puro, con tests exhaustivos (300, foul en el 10,
+   semipleno en el 10 + bonus, gutter game, partida abierta…). Cálculo del
+   máximo posible.
+3. **Registro de partida**: flujo móvil para L1 / L2 / L3, décimo frame,
+   selector de pines en pie (L3), anotaciones, tipo de partida, equipamiento a
+   nivel partida, toggle de "ocultar máximo/proyección".
+4. **Arsenal**: alta/edición de bolas.
+5. **Boleras**: alta/edición de Venue.
+6. **Competiciones (básico)**: crear jornada/torneo y asociar partidas.
+7. **Histórico**: listar, editar y borrar sesiones/partidas.
+8. **Estadísticas v1**: lista cerrada en ESTADISTICAS.md, con filtros.
+9. **Identidad**: ✅ cerrada 2026-09-04 → `IDENTIDAD.md` (logo bola+3 bolos,
+   paleta Bruma azul modo-oscuro, Bricolage/Hanken/DM Mono). Falta al implementar:
+   exportar iconos PNG del manifest + favicon + apple-touch-icon, y `theme-color`.
+10. **Pantalla de Datos + backup mínimo**: uso/disponibilidad de almacenamiento
+    (`storage.estimate()`), descargar/restaurar `.json` completo. **Último
+    bloque de la fase.**
+
+## Fase 2 — Profundidad
+
+- Sincronización / cuenta (decisión de arquitectura propia).
+- Export "bueno": formato versionado + CSV para hoja de cálculo.
+- Backup a Google Drive / OneDrive: OAuth PKCE en cliente, sin backend. Sube un
+  JSON a una carpeta propia de la app y lo recupera. Es backup a archivo
+  (último que guarda gana), no sincronización registro a registro.
+- Detalle L3 completo: precisión 1ª bola, conversión de semiplenos, splits,
+  fouls.
+- Bola a nivel de tirada + análisis por equipamiento.
+- Competiciones: vistas de resultados, clasificaciones.
+- i18n.
+
+## Fase 3 — Extras
+
+- OCR de capturas de la pantalla de la bolera.
+- Lo que surja.
