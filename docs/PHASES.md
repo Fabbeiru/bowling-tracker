@@ -28,9 +28,10 @@ Bloques (orden aproximado de entrega; el alcance no se recorta):
    instalable, offline, estrategia de actualización con *prompt*), i18n
    (Transloco, `es`), capa de datos (IndexedDB + repositorio + migraciones),
    primer arranque (`persist()` + aviso de datos locales).
-2. **Motor de scoring**: módulo puro, con tests exhaustivos (300, foul en el 10,
-   semipleno en el 10 + bonus, gutter game, partida abierta…). Cálculo del
-   máximo posible.
+2. **Motor de scoring**: ✅ `core/scoring/` — módulo puro (sin Angular).
+   `scoreRolls`, `maxPossibleFromRolls`, `gameToRolls`, `scoreGame`. 31 tests
+   (perfect 300, carta clásica 133, turkey, 10º frame, partida en curso, máximo
+   posible). Los 3 niveles de detalle. Foul = 0.
 3. **Registro de partida**: flujo móvil para L1 / L2 / L3, décimo frame,
    selector de pines en pie (L3), anotaciones, tipo de partida, equipamiento a
    nivel partida, toggle de "ocultar máximo/proyección".

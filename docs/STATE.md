@@ -109,10 +109,22 @@ comportamiento transversal está decidido y documentado.
       estrategia. **9 tests pasan** (`ng test`, ~3,5 s, sin navegador).
 - [ ] `ng add @angular/pwa` + `ngsw-config.json` → **sesión dedicada al SW**
 
-**Bloque 1 completo** salvo el PWA (sesión aparte). Comprobado: `ng build` y
-`ng test` pasan; app arranca sin errores de consola. La BD IndexedDB se crea de
-forma perezosa en la primera lectura/escritura real. `npm audit`: 2
-vulnerabilidades moderadas (transitivas de dev) por revisar.
+**Bloque 1 completo** salvo el PWA (sesión aparte).
+
+## Fase 1, bloque 2 — Motor de scoring (HECHO)
+
+- `core/scoring/` — módulo puro, sin dependencias de Angular.
+  - `roll-scoring.ts`: `scoreRolls(rolls)` (por-frame: mark, points, cumulative),
+    `maxPossibleFromRolls(rolls)`.
+  - `game-scoring.ts`: `gameToRolls(game)` (normaliza los 3 niveles de detalle;
+    strike = un solo 10; foul = 0), `scoreGame(game)` → `GameScore`.
+  - `types.ts`: `FrameScore`, `GameScore`.
+- **40 tests pasan** (`ng test`, ~4 s): 20 roll-scoring + 11 game-scoring + 7
+  repo + 2 app. Cubre 300, carta clásica de 133, turkey, 10º frame en sus
+  variantes, partida en curso, máximo posible, los 3 niveles de detalle.
+
+Comprobado: `ng build` y `ng test` pasan. `npm audit`: 2 vulnerabilidades
+moderadas (transitivas de dev) por revisar.
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.
