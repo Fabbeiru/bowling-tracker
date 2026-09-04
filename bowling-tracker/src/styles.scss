@@ -17,6 +17,7 @@
   --ok: #57b26f;
   --warn: #e0a33f;
   --danger: #e2685d;
+  --danger-text: #f4938a;
 
   /* Tipografía */
   --font-display: "Bricolage Grotesque", "Hanken Grotesk", system-ui, sans-serif;
@@ -59,6 +60,14 @@ button {
   font: inherit;
   color: inherit;
   cursor: pointer;
+}
+
+/* Form controls never overflow their container (grid/flex children). */
+input,
+select,
+textarea {
+  min-width: 0;
+  max-width: 100%;
 }
 
 :focus-visible {

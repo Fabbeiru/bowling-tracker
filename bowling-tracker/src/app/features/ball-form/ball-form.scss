@@ -6,7 +6,7 @@
 
 .row2 {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   gap: 0.8rem;
 }
 
@@ -51,7 +51,8 @@ textarea.input {
   border: 0;
   background: transparent;
   border-radius: 7px;
-  padding: 0.45rem 0.2rem;
+  min-height: 40px;
+  padding: 0.5rem 0.2rem;
   font-size: 0.8rem;
   color: var(--ink-soft);
 

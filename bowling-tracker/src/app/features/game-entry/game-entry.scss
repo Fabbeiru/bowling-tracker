@@ -167,9 +167,10 @@ textarea.input {
 .delete {
   margin-top: 0.7rem;
   width: 100%;
+  min-height: 44px;
   border: 0;
   background: transparent;
-  color: var(--danger);
+  color: var(--danger-text);
   font-size: 0.85rem;
-  padding: 0.5rem;
+  padding: 0.6rem;
 }

@@ -8,13 +8,16 @@
 .new,
 .cta {
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
   background: var(--accent);
   color: var(--accent-ink);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.85rem;
   text-decoration: none;
-  padding: 0.5rem 0.8rem;
+  padding: 0.5rem 0.9rem;
   border-radius: var(--radius-sm);
 }
 

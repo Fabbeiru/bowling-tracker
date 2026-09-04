@@ -20,13 +20,16 @@
 }
 
 .add {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
   background: var(--accent);
   color: var(--accent-ink);
   text-decoration: none;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.78rem;
-  padding: 0.35rem 0.7rem;
+  padding: 0.4rem 0.8rem;
   border-radius: var(--radius-sm);
 }
 

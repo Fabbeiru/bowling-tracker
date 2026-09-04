@@ -61,8 +61,11 @@ export class DexieRepository extends Repository {
   }
 
   // --- Sessions ---
-  listSessions(): Promise<Session[]> {
-    return this.db.sessions.orderBy('date').reverse().toArray();
+  async listSessions(): Promise<Session[]> {
+    const all = await this.db.sessions.toArray();
+    return all.sort(
+      (a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt),
+    );
   }
   getSession(id: Id): Promise<Session | undefined> {
     return this.db.sessions.get(id);

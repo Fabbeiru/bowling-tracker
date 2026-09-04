@@ -22,6 +22,7 @@
       @if (competitions().length > 0) {
         <select
           class="comp-select"
+          [attr.aria-label]="t('stats.allCompetitions')"
           [value]="competitionFilter()"
           (change)="competitionFilter.set($any($event.target).value)"
         >

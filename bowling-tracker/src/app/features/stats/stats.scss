@@ -26,7 +26,8 @@
   background: transparent;
   color: var(--ink-soft);
   border-radius: 999px;
-  padding: 0.35rem 0.7rem;
+  min-height: 40px;
+  padding: 0.4rem 0.85rem;
   font-size: 0.78rem;
   white-space: nowrap;
 
@@ -42,6 +43,7 @@
   background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
+  min-height: 40px;
   padding: 0.5rem 0.7rem;
   font: inherit;
   color: var(--ink);
