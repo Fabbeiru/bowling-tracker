@@ -22,18 +22,15 @@ export class Settings {
   private readonly storage = inject(StorageService);
 
   readonly loading = signal(true);
-  readonly persisted = signal(false);
   readonly usage = signal<StorageEstimate | null>(null);
 
-  readonly usagePct = computed(() => {
-    const u = this.usage();
-    if (!u || u.quota <= 0) return 0;
-    return Math.min(100, Math.round((u.usage / u.quota) * 100));
-  });
-
+  /** Just the space used — the browser's "quota" figure is an estimate of
+   * free disk space, not a meaningful promise, and varies wildly by device
+   * (huge on desktop, small and stricter on mobile); showing it invites the
+   * wrong read, so we only surface what's actually stored. */
   readonly usageLabel = computed(() => {
     const u = this.usage();
-    return u ? `${formatBytes(u.usage)} de ${formatBytes(u.quota)}` : null;
+    return u ? formatBytes(u.usage) : null;
   });
 
   constructor() {
@@ -41,9 +38,7 @@ export class Settings {
   }
 
   private async load(): Promise<void> {
-    const [persisted, usage] = await Promise.all([this.storage.isPersisted(), this.storage.estimate()]);
-    this.persisted.set(persisted);
-    this.usage.set(usage);
+    this.usage.set(await this.storage.estimate());
     this.loading.set(false);
   }
 }

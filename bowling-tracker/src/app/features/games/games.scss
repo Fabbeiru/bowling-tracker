@@ -79,7 +79,9 @@
 }
 
 .session {
-  background: var(--surface);
+  /* Más oscura que su propia cabecera: la cabecera "flota" sobre el
+     contenido en vez de fundirse con él. */
+  background: var(--bg);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
@@ -87,9 +89,9 @@
 
 .session__head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 0.3rem 0.6rem;
+  gap: 0.35rem 0.5rem;
   padding: 0.6rem 0.9rem;
   background: var(--surface-2);
   border-bottom: 1px solid var(--line);
@@ -104,11 +106,14 @@
 
 .session__type {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 16%, transparent);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
 }
 
 .session__venue {

@@ -9,9 +9,11 @@
   align-items: stretch;
   height: calc(var(--nav-height) + var(--safe-bottom));
   padding-bottom: var(--safe-bottom);
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  background: color-mix(in srgb, var(--surface) 96%, transparent);
   backdrop-filter: blur(10px);
   border-top: 1px solid var(--line);
+  /* Levanta la barra del contenido que hay detrás en vez de fundirse con él. */
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.28);
   /* Fuerza su propia capa de composición: sin esto, el blur de un elemento
      fijo se repinta en cada frame durante el rebote elástico del scroll en
      iOS, lo que se percibe como una vibración muy rápida al llegar al final. */
