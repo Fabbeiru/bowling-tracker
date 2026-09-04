@@ -199,7 +199,7 @@
     "dataWhere": "Los datos se guardan solo en este dispositivo, usando el almacenamiento propio del navegador.",
     "dataNote": "No hay cuenta ni servidor: nadie más tiene acceso a tus datos, pero tampoco existe todavía una copia persistente — si desinstalas el navegador que estás usando, borras sus datos o cambias de dispositivo, pierdes la información introducida en la app.",
     "dataSyncSoon": "Se está trabajando en un sistema de exportación/sincronización de datos.",
-    "footer": "Bowling Tracker · hecho por fabbeiru"
+    "footerCredit": "Bowling Tracker · hecho por"
   },
   "notFound": {
     "title": "Página no encontrada",

@@ -33,25 +33,24 @@
   & + & {
     margin-top: 0.6rem;
   }
-
-  &--muted {
-    font-size: 0.8rem;
-    opacity: 0.85;
-  }
 }
 
 .footer-note {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   margin-top: 1.5rem;
   padding-bottom: 1rem;
   color: var(--ink-soft);
   font-size: 0.78rem;
 
   img {
-    border-radius: 22.6%;
-    opacity: 0.9;
+    border-radius: 50%;
+  }
+
+  strong {
+    color: var(--ink);
+    font-weight: 700;
   }
 }
