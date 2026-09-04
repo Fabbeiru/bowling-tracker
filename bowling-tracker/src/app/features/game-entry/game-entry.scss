@@ -133,4 +133,16 @@
   font-weight: 700;
   font-size: 0.95rem;
   width: 100%;
+
+  &--ghost {
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+  }
+}
+
+.count-note {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
 }

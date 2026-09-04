@@ -148,9 +148,16 @@ moderadas (transitivas de dev) por revisar.
   tirada se guarda al momento. Scoresheet resalta el frame actual. Botón
   deshacer. Probado con Playwright (7/ X 9- → 48, sin errores).
 - 62 tests pasan (`game-builder.spec.ts` con 10º frame, undo, throw-detail).
-- **Falta del bloque 3**: entrada `por tiro` (rack de pinos, el reto), 10º
-  frame afinado en UI, anotaciones, equipamiento, toggle de ocultar máximo,
-  editar/borrar partidas del histórico.
+- ✅ **Entrada `por tiro` (rack de pinos)**: `shared/components/pin-rack/`
+  (triángulo de 10, 3 estados: en pie / derribado ahora / ya caído; presets
+  Pleno/Semipleno/Fallo; `linkedSignal` para resetear al cambiar de bola;
+  emite `{pinsKnocked, pinsStanding}`). En `game-entry`: usa rack para nivel
+  `throw`; si `standingBefore` es null (tiro anterior por conteo) o el usuario
+  pulsa "solo el número", cae al `pin-pad`. Probado con Playwright (deja 7-10,
+  convierte el 7 → 9 abierto, sin errores).
+- **Falta del bloque 3**: 10º frame afinado en UI (funciona pero sin pulir),
+  anotaciones, equipamiento, toggle de ocultar máximo, editar/borrar histórico,
+  presets de splits comunes en el rack.
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.

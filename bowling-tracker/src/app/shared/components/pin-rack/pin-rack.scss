@@ -1,0 +1,98 @@
+.rack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0.6rem 0 1rem;
+}
+
+.rack__row {
+  display: flex;
+  gap: 12px;
+}
+
+.pin {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  border: 2px solid transparent;
+  background: var(--ink);
+  color: #1a2036;
+  -webkit-tap-highlight-color: transparent;
+
+  &--knocked {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  &--gone {
+    background: transparent;
+    color: var(--line);
+    border-color: var(--line);
+  }
+}
+
+.presets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.preset {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.count-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 0.9rem;
+}
+
+.count-line__k {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.count-line__v {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.4rem;
+}
+
+.count-toggle {
+  margin-top: 0.6rem;
+  width: 100%;
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem;
+  font-size: 0.8rem;
+}
+
+.confirm {
+  margin-top: 1rem;
+  width: 100%;
+  border: 0;
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+}

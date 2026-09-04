@@ -60,14 +60,34 @@
         }
       }
       @default {
-        <div class="soon">
-          <p class="soon__title">{{ t('gameEntry.rackSoonTitle') }}</p>
-          <p class="soon__hint">{{ t('gameEntry.rackSoonHint') }}</p>
-        </div>
+        @if (position(); as pos) {
+          <div class="ball-line">
+            <span>{{ t('gameEntry.ballLine', { frame: pos.frame, ball: pos.ball }) }}</span>
+            <button type="button" class="undo" (click)="undo()">{{ t('gameEntry.undo') }}</button>
+          </div>
+          @if (!countMode() && pos.standingBefore; as standing) {
+            <app-pin-rack
+              [standingBefore]="standing"
+              [ball]="pos.ball"
+              (delivery)="recordRack($event)"
+              (countOnly)="countMode.set(true)"
+            />
+          } @else {
+            <p class="count-note">{{ t('gameEntry.countOnlyNote') }}</p>
+            <app-pin-pad [standingCount]="pos.standingCount" (pins)="record($event)" />
+          }
+        } @else {
+          <p class="done">{{ t('gameEntry.gameComplete') }}</p>
+        }
       }
     }
 
-    <button class="cta" type="button" (click)="finish()">
+    <button
+      class="cta"
+      [class.cta--ghost]="game()!.detailLevel !== 'total' && !complete()"
+      type="button"
+      (click)="finish()"
+    >
       {{ complete() ? t('gameEntry.finishDone') : t('gameEntry.finish') }}
     </button>
   }

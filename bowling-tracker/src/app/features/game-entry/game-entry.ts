@@ -8,10 +8,11 @@ import { applyDelivery, entryPosition, isComplete, scoreGame, undoLastDelivery }
 import { Game } from '../../models';
 import { Scoresheet } from '../../shared/components/scoresheet/scoresheet';
 import { PinPad } from '../../shared/components/pin-pad/pin-pad';
+import { PinRack, RackDelivery } from '../../shared/components/pin-rack/pin-rack';
 
 @Component({
   selector: 'app-game-entry',
-  imports: [FormsModule, RouterLink, TranslocoDirective, Scoresheet, PinPad],
+  imports: [FormsModule, RouterLink, TranslocoDirective, Scoresheet, PinPad, PinRack],
   templateUrl: './game-entry.html',
   styleUrl: './game-entry.scss',
 })
@@ -22,6 +23,8 @@ export class GameEntry {
   readonly game = signal<Game | null>(null);
   readonly loading = signal(true);
   readonly totalInput = signal<number | null>(null);
+  /** In "throw" games, enter this ball as a bare count instead of marking pins. */
+  readonly countMode = signal(false);
 
   readonly score = computed(() => {
     const g = this.game();
@@ -52,10 +55,19 @@ export class GameEntry {
   }
 
   async record(pins: number): Promise<void> {
+    await this.apply({ pinsKnocked: pins });
+  }
+
+  async recordRack(d: RackDelivery): Promise<void> {
+    await this.apply({ pinsKnocked: d.pinsKnocked, pinsStanding: d.pinsStanding });
+  }
+
+  private async apply(delivery: { pinsKnocked: number; pinsStanding?: number[] }): Promise<void> {
     const g = this.game();
     if (!g) return;
-    const updated = applyDelivery(g, { pinsKnocked: pins });
+    const updated = applyDelivery(g, delivery);
     this.game.set(updated);
+    this.countMode.set(false);
     await this.repo.saveGame(updated);
   }
 
@@ -64,6 +76,7 @@ export class GameEntry {
     if (!g) return;
     const updated = undoLastDelivery(g);
     this.game.set(updated);
+    this.countMode.set(false);
     await this.repo.saveGame(updated);
   }
 

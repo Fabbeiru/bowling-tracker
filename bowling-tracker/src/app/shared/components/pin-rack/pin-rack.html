@@ -1,0 +1,39 @@
+<div class="rack">
+  @for (row of rows; track $index) {
+    <div class="rack__row">
+      @for (pin of row; track pin) {
+        <button
+          type="button"
+          class="pin"
+          [class.pin--knocked]="stateOf(pin) === 'knocked'"
+          [class.pin--gone]="stateOf(pin) === 'gone'"
+          [disabled]="stateOf(pin) === 'gone'"
+          [attr.aria-pressed]="stateOf(pin) === 'knocked'"
+          (click)="toggle(pin)"
+        >
+          {{ pin }}
+        </button>
+      }
+    </div>
+  }
+</div>
+
+<div class="presets">
+  <button type="button" class="preset" (click)="knockAll()">{{ allLabel() }}</button>
+  <button type="button" class="preset" (click)="knockNone()">
+    {{ standingBefore().length === 10 ? 'Nada' : 'Fallo' }}
+  </button>
+</div>
+
+<div class="count-line">
+  <span class="count-line__k">Bolos derribados</span>
+  <span class="count-line__v">{{ knockedCount() }}</span>
+</div>
+
+<button type="button" class="count-toggle" (click)="countOnly.emit()">
+  Solo el número, sin marcar pinos
+</button>
+
+<button type="button" class="confirm" (click)="confirm()">
+  {{ ball() >= 2 ? 'Guardar frame' : 'Siguiente bola' }}
+</button>
