@@ -32,7 +32,8 @@ export class Games {
   private readonly repo = inject(Repository);
   private readonly toast = inject(ToastService);
 
-  static readonly PAGE_SIZE = 15;
+  /** Games per page, not sessions — a session can hold more than one game. */
+  static readonly PAGE_SIZE = 10;
 
   readonly rows = signal<SessionRow[]>([]);
   readonly loading = signal(true);
@@ -46,14 +47,31 @@ export class Games {
     return type === 'all' ? rows : rows.filter((r) => r.session.type === type);
   });
 
-  readonly pageCount = computed(() =>
-    Math.max(1, Math.ceil(this.filteredRows().length / Games.PAGE_SIZE)),
-  );
-
-  readonly pagedRows = computed(() => {
-    const start = (this.page() - 1) * Games.PAGE_SIZE;
-    return this.filteredRows().slice(start, start + Games.PAGE_SIZE);
+  /**
+   * Sessions bucketed into pages of ~PAGE_SIZE *games* (not sessions) each —
+   * a session is never split across pages, so a page can slightly exceed the
+   * target when a session holds several games.
+   */
+  readonly pages = computed(() => {
+    const pages: SessionRow[][] = [];
+    let current: SessionRow[] = [];
+    let count = 0;
+    for (const row of this.filteredRows()) {
+      if (count > 0 && count >= Games.PAGE_SIZE) {
+        pages.push(current);
+        current = [];
+        count = 0;
+      }
+      current.push(row);
+      count += row.games.length;
+    }
+    if (current.length > 0) pages.push(current);
+    return pages.length > 0 ? pages : [[]];
   });
+
+  readonly pageCount = computed(() => this.pages().length);
+
+  readonly pagedRows = computed(() => this.pages()[this.page() - 1] ?? []);
 
   constructor() {
     void this.load();

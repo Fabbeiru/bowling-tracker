@@ -125,6 +125,10 @@
       ></textarea>
     </div>
 
+    <button type="button" class="add-game" [disabled]="addingGame() || !complete()" (click)="addAnotherGame()">
+      {{ t('gameEntry.addAnotherGame') }}
+    </button>
+
     <button
       class="cta"
       [class.cta--ghost]="game()!.detailLevel !== 'total' && !complete()"
@@ -133,10 +137,6 @@
       (click)="finish()"
     >
       {{ complete() ? t('gameEntry.finishDone') : t('gameEntry.finish') }}
-    </button>
-
-    <button type="button" class="add-game" [disabled]="addingGame() || !complete()" (click)="addAnotherGame()">
-      {{ t('gameEntry.addAnotherGame') }}
     </button>
 
     <button type="button" class="delete" (click)="confirmingDelete.set(true)">
