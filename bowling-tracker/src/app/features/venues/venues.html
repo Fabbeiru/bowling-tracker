@@ -1,0 +1,36 @@
+<section class="screen" *transloco="let t">
+  <app-back-link to="/arsenal" [label]="t('arsenal.title')" />
+
+  <header class="screen__head screen__head--row">
+    <div>
+      <h1>{{ t('venues.title') }}</h1>
+      <p>{{ t('venues.subtitle') }}</p>
+    </div>
+    <a class="add" routerLink="/venues/new">{{ t('venues.add') }}</a>
+  </header>
+
+  @if (loading()) {
+    <p class="muted">{{ t('common.loading') }}</p>
+  } @else if (venues().length === 0) {
+    <div class="empty-state">
+      <p class="empty-state__title">{{ t('arsenal.noVenues') }}</p>
+      <a class="cta" routerLink="/venues/new">{{ t('arsenal.addVenue') }}</a>
+    </div>
+  } @else {
+    <ul class="list">
+      @for (venue of venues(); track venue.id) {
+        <a class="row" [class.row--inactive]="!venue.active" [routerLink]="['/venues', venue.id]">
+          <span class="row__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21s7-6.5 7-11.5a7 7 0 1 0-14 0C5 14.5 12 21 12 21z" />
+              <circle cx="12" cy="9.5" r="2.3" />
+            </svg>
+          </span>
+          <span class="row__name">{{ venue.name }}</span>
+          <span class="row__meta">{{ venue.city }}</span>
+        </a>
+      }
+    </ul>
+  }
+</section>

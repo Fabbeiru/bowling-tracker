@@ -28,8 +28,12 @@
   color: var(--ink-soft);
 }
 
-.group--venues .group__icon {
+.venues-link {
+  display: inline-block;
+  margin-bottom: 1rem;
   color: var(--secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
 }
 
 .add {

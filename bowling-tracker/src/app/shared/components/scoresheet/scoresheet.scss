@@ -23,7 +23,9 @@
   }
 
   &--current {
-    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    /* Mezclado sobre --surface-2 (fondo real), no sobre transparent: Safari
+       interpola mal color-mix con transparent y sale casi negro. */
+    background: color-mix(in srgb, var(--accent) 15%, var(--surface-2));
   }
 }
 

@@ -170,7 +170,9 @@
 
   &--on {
     border-color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    /* Mezclado sobre --bg (fondo real), no sobre transparent: ver nota en
+       scoresheet.scss. */
+    background: color-mix(in srgb, var(--accent) 12%, var(--bg));
   }
 }
 

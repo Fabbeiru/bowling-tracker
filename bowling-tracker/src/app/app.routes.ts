@@ -43,12 +43,17 @@ export const routes: Routes = [
     loadComponent: () => import('./features/ball-form/ball-form').then((m) => m.BallForm),
   },
   {
-    path: 'arsenal/venues/new',
+    path: 'venues',
+    title: 'Boleras · Bowling Tracker',
+    loadComponent: () => import('./features/venues/venues').then((m) => m.Venues),
+  },
+  {
+    path: 'venues/new',
     title: 'Nueva bolera · Bowling Tracker',
     loadComponent: () => import('./features/venue-form/venue-form').then((m) => m.VenueForm),
   },
   {
-    path: 'arsenal/venues/:id',
+    path: 'venues/:id',
     title: 'Bolera · Bowling Tracker',
     loadComponent: () => import('./features/venue-form/venue-form').then((m) => m.VenueForm),
   },

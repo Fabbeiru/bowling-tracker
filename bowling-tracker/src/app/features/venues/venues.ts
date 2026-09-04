@@ -4,20 +4,20 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
-import { Ball } from '../../models';
-import { BallAvatar } from '../../shared/components/ball-avatar/ball-avatar';
+import { Venue } from '../../models';
+import { BackLink } from '../../shared/components/back-link/back-link';
 
 @Component({
-  selector: 'app-arsenal',
-  imports: [RouterLink, TranslocoDirective, BallAvatar],
-  templateUrl: './arsenal.html',
-  styleUrl: './arsenal.scss',
+  selector: 'app-venues',
+  imports: [RouterLink, TranslocoDirective, BackLink],
+  templateUrl: './venues.html',
+  styleUrl: '../arsenal/arsenal.scss',
 })
-export class Arsenal {
+export class Venues {
   private readonly repo = inject(Repository);
   private readonly toast = inject(ToastService);
 
-  readonly balls = signal<Ball[]>([]);
+  readonly venues = signal<Venue[]>([]);
   readonly loading = signal(true);
 
   constructor() {
@@ -26,9 +26,9 @@ export class Arsenal {
 
   private async load(): Promise<void> {
     try {
-      this.balls.set(await this.repo.listBalls({ includeInactive: true }));
+      this.venues.set(await this.repo.listVenues({ includeInactive: true }));
     } catch {
-      this.toast.error('errors.loadArsenal');
+      this.toast.error('errors.loadVenues');
     } finally {
       this.loading.set(false);
     }

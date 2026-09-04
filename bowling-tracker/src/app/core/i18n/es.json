@@ -130,7 +130,7 @@
   },
   "arsenal": {
     "title": "Arsenal",
-    "subtitle": "Tus bolas y las boleras donde juegas.",
+    "subtitle": "Tu equipo de bowling.",
     "balls": "Bolas",
     "venues": "Boleras",
     "competitions": "Competiciones",
@@ -140,6 +140,11 @@
     "noBalls": "Aún no has añadido ninguna bola.",
     "noVenues": "Aún no has añadido ninguna bolera.",
     "noCompetitions": "Aún no has añadido ninguna liga ni torneo."
+  },
+  "venues": {
+    "title": "Boleras",
+    "subtitle": "Las boleras donde juegas.",
+    "add": "+ Nueva"
   },
   "competitionForm": {
     "newTitle": "Nueva competición",
@@ -223,6 +228,7 @@
     "saveCompetition": "No se pudo guardar la competición.",
     "updateCompetition": "No se pudo actualizar la competición.",
     "loadCompetitions": "No se pudieron cargar las competiciones.",
+    "loadVenues": "No se pudieron cargar las boleras.",
     "loadPickers": "No se pudo cargar tu arsenal ni tus competiciones.",
     "createCompetition": "No se pudo crear la competición.",
     "createGame": "No se pudo crear la partida. Inténtalo de nuevo.",

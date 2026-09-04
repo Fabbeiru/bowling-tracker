@@ -68,7 +68,7 @@ export class VenueForm {
     const venue: Venue = this.existing ? { ...this.existing, ...patch } : createVenue(patch);
     try {
       await this.repo.saveVenue(venue);
-      await this.router.navigate(['/arsenal']);
+      await this.router.navigate(['/venues']);
     } catch {
       this.toast.error('errors.saveVenue');
     }
@@ -79,7 +79,7 @@ export class VenueForm {
     try {
       if (this.existing.active) await this.repo.deactivateVenue(this.existing.id);
       else await this.repo.saveVenue({ ...this.existing, active: true });
-      await this.router.navigate(['/arsenal']);
+      await this.router.navigate(['/venues']);
     } catch {
       this.toast.error('errors.updateVenue');
     }

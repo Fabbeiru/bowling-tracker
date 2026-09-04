@@ -111,7 +111,10 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--secondary);
-  background: color-mix(in srgb, var(--secondary) 16%, transparent);
+  /* Mezclado sobre --surface-2 (el fondo real de la cabecera), no sobre
+     transparent: Safari interpola mal color-mix(...,transparent) y sale
+     casi negro en vez de un tinte suave. */
+  background: color-mix(in srgb, var(--secondary) 16%, var(--surface-2));
   border-radius: 999px;
   padding: 0.15rem 0.5rem;
 }
@@ -188,12 +191,14 @@
   }
 }
 
+/* Mezclado sobre --bg (el fondo real de la sesión), no sobre transparent:
+   ver nota en .session__type. */
 .game--clean {
-  background: color-mix(in srgb, var(--secondary) 10%, transparent);
+  background: color-mix(in srgb, var(--secondary) 20%, var(--bg));
 }
 
 .game--perfect {
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  background: color-mix(in srgb, var(--accent) 30%, var(--bg));
 }
 
 .pager {
