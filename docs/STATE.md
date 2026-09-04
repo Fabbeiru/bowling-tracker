@@ -95,15 +95,21 @@ comportamiento transversal está decidido y documentado.
 - [x] Rutas en inglés + Transloco 8 (loader que empaqueta `es.json`, un idioma).
       Textos en `src/app/core/i18n/es.json`. `PlaceholderScreen` compartido.
       → ADR 0009 (inglés en código, español en interfaz). Commit 13f774d.
-- [ ] Dexie: 6 stores, `schemaVersion` 1, interfaz `Repository` + impl IndexedDB
-- [ ] Primer arranque (`persist()` + aviso de datos locales)
+- [x] **Modelo de datos** en `models/` (Ball, Venue, Competition, Session, Game
+      + Frame/Throw, AppMeta) + helpers `newId`, `nowLocalIso`, `todayLocalIso`.
+- [x] **Dexie**: `AppDb` (6 stores, versión 1) tras `APP_DB` token; `Repository`
+      abstracto + `DexieRepository`; `provideRepository()`. Spec de repo escrito
+      (usa una BD desechable por test — corre en Karma).
+- [x] **Primer arranque**: `StorageService` (`persist()`, `estimate()`) +
+      `providePersistenceRequest()` como app initializer. Aviso de datos locales
+      ya estaba en Inicio.
 - [ ] Estrategia de tests: `ng test` aún no verificado (necesita navegador
       headless); decidir Karma vs Vitest y dejar nota
 - [ ] `ng add @angular/pwa` + `ngsw-config.json` → **sesión dedicada al SW**
 
-Comprobado: `ng build` pasa; app probada en viewport móvil con Playwright
-(rutas, i18n y estado activo OK). `npm audit`: 2 vulnerabilidades moderadas
-(transitivas de dev) por revisar.
+Comprobado: `ng build` pasa; app arranca sin errores de consola (Playwright).
+La BD IndexedDB se crea de forma perezosa en la primera lectura/escritura real.
+`npm audit`: 2 vulnerabilidades moderadas (transitivas de dev) por revisar.
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.
