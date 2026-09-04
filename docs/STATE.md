@@ -205,6 +205,45 @@ Nota operativa: el dev server (esbuild watch) a veces no detecta archivos nuevos
 - **Filtros de estadísticas**: chips por tipo de sesión + selector de
   competición; `computeStats` sobre partidas filtradas.
 
+## Pruebas en el móvil (2026-09-04, commit 9f5fa55)
+
+Servidor expuesto en LAN (`ng serve --host 0.0.0.0`) para probar desde el
+móvil. Aparecieron varios problemas reales, todos corregidos:
+
+- **Bug de puntuación**: el teclado marcaba "Pleno" en la 2ª bola tras fallar
+  la 1ª (0 bolos), cuando derribar el resto ahí es un semipleno.
+  `EntryPosition` gana `freshRack` (solo verdadero cuando la bola parte de un
+  rack limpio) y el teclado usa ese campo, no `standingCount === 10`.
+- **Bug crítico de guardado en el móvil**: `crypto.randomUUID()` no existe en
+  contextos no seguros (HTTP a una IP de LAN). Sin id no se guardaba nada y no
+  había ningún aviso. `newId()` ahora cae a `crypto.getRandomValues` si
+  `randomUUID` no está disponible. Verificado forzando su ausencia con
+  Playwright.
+- **Feedback de errores**: `ToastService` + `<app-toast>` montado en `App`;
+  todas las escrituras de las pantallas quedan con `try/catch` y aviso visible
+  (COMPORTAMIENTO-TRANSVERSAL §6, antes pendiente).
+- **Navegación**: `BackLink` compartido ("‹ volver") en todas las pantallas
+  secundarias (antes solo había bottom nav).
+- **Competiciones**: alta rápida en modal desde `game-new` (sin salir del
+  formulario); gestión movida de Arsenal a `/competitions`, enlazada desde
+  Partidas.
+- **Partidas**: botón "+ Añadir otra partida a esta sesión" en `game-entry`
+  (resuelve que antes cada partida nueva creaba siempre una sesión de 1);
+  chips de filtro por tipo en la lista.
+- **Estadísticas**: el selector de competición solo aparece con el filtro
+  Liga/Torneo.
+- Placeholders en los formularios de arsenal/competición; tarjeta
+  "Puntuación" redundante quitada en nivel `total`.
+- `isComplete()` para nivel `total` corregido (exige `totalPins` definido).
+
+**75 tests pasan** (nuevos: `id.spec.ts`, `freshRack` e `isComplete` en
+`game-builder.spec.ts`).
+
+**Pendiente / backlog anotado**: paginación de la lista de partidas (no urge
+con el volumen actual), presets de splits comunes en el rack, editar sesión
+tras crearla, pantalla de sesión dedicada (de momento resuelto de forma ligera
+con "+ añadir partida").
+
 ## Siguiente: Bloque 10 (Datos + backup) y PWA (sesión dedicada)
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
