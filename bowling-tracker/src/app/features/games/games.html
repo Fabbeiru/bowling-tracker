@@ -21,7 +21,12 @@
         <li class="session">
           <div class="session__head">
             <span class="session__date">{{ row.session.date }}</span>
-            <span class="session__type">{{ t('sessionType.' + row.session.type) }}</span>
+            <span class="session__type">
+              {{ row.competitionName || t('sessionType.' + row.session.type) }}
+            </span>
+            @if (row.venueName) {
+              <span class="session__venue">· {{ row.venueName }}</span>
+            }
           </div>
           <ul class="games">
             @for (item of row.games; track item.game.id) {

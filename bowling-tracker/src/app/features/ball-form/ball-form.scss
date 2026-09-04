@@ -38,6 +38,30 @@ textarea.input {
   resize: vertical;
 }
 
+.seg {
+  display: flex;
+  gap: 4px;
+  background: var(--surface-2);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.seg__opt {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  border-radius: 7px;
+  padding: 0.45rem 0.2rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+
+  &--on {
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+}
+
 .cta {
   margin-top: 0.4rem;
   border: 0;

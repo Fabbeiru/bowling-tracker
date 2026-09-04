@@ -30,6 +30,25 @@
 
     <div class="group">
       <div class="group__head">
+        <h2>{{ t('arsenal.competitions') }}</h2>
+        <a class="add" routerLink="/arsenal/competitions/new">{{ t('arsenal.addCompetition') }}</a>
+      </div>
+      @if (competitions().length === 0) {
+        <p class="group__empty">{{ t('arsenal.noCompetitions') }}</p>
+      } @else {
+        <ul class="list">
+          @for (comp of competitions(); track comp.id) {
+            <a class="row" [class.row--inactive]="!comp.active" [routerLink]="['/arsenal/competitions', comp.id]">
+              <span class="row__name">{{ comp.name }}</span>
+              <span class="row__meta">{{ t('competitionType.' + comp.type) }}@if (comp.season) {&nbsp;·&nbsp;{{ comp.season }}}</span>
+            </a>
+          }
+        </ul>
+      }
+    </div>
+
+    <div class="group">
+      <div class="group__head">
         <h2>{{ t('arsenal.venues') }}</h2>
         <a class="add" routerLink="/arsenal/venues/new">{{ t('arsenal.addVenue') }}</a>
       </div>

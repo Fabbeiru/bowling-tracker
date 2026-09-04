@@ -18,6 +18,10 @@
     "tournament": "Torneo",
     "social": "Social"
   },
+  "competitionType": {
+    "league": "Liga",
+    "tournament": "Torneo"
+  },
   "detailLevel": {
     "total": {
       "name": "Total",
@@ -53,6 +57,8 @@
     "title": "Nueva partida",
     "sessionType": "Tipo de sesión",
     "date": "Fecha",
+    "competition": "Competición",
+    "addCompetition": "Crear una competición",
     "venue": "Bolera",
     "primaryBall": "Bola principal",
     "spareBall": "Bola de spare",
@@ -102,10 +108,25 @@
     "subtitle": "Tus bolas y las boleras donde juegas.",
     "balls": "Bolas",
     "venues": "Boleras",
+    "competitions": "Competiciones",
     "addBall": "Añadir bola",
     "addVenue": "Añadir bolera",
+    "addCompetition": "Añadir competición",
     "noBalls": "Aún no has añadido ninguna bola.",
-    "noVenues": "Aún no has añadido ninguna bolera."
+    "noVenues": "Aún no has añadido ninguna bolera.",
+    "noCompetitions": "Aún no has añadido ninguna liga ni torneo."
+  },
+  "competitionForm": {
+    "newTitle": "Nueva competición",
+    "editTitle": "Editar competición",
+    "type": "Tipo",
+    "name": "Nombre",
+    "season": "Temporada",
+    "startDate": "Inicio",
+    "endDate": "Fin",
+    "notes": "Notas",
+    "deactivate": "Archivar competición",
+    "reactivate": "Desarchivar competición"
   },
   "ballForm": {
     "newTitle": "Nueva bola",

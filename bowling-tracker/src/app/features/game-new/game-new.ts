@@ -1,15 +1,23 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { todayLocalIso } from '../../core/util/dates';
-import { Ball, createGame, createSession, DetailLevel, SessionType, Venue } from '../../models';
+import {
+  Ball,
+  Competition,
+  createGame,
+  createSession,
+  DetailLevel,
+  SessionType,
+  Venue,
+} from '../../models';
 
 @Component({
   selector: 'app-game-new',
-  imports: [ReactiveFormsModule, TranslocoDirective],
+  imports: [ReactiveFormsModule, RouterLink, TranslocoDirective],
   templateUrl: './game-new.html',
   styleUrl: './game-new.scss',
 })
@@ -23,25 +31,45 @@ export class GameNew {
   readonly saving = signal(false);
   readonly balls = signal<Ball[]>([]);
   readonly venues = signal<Venue[]>([]);
+  readonly competitions = signal<Competition[]>([]);
+  readonly type = signal<SessionType>('practice');
+
+  readonly relevantCompetitions = computed(() => {
+    const t = this.type();
+    if (t !== 'league' && t !== 'tournament') return [];
+    return this.competitions().filter((c) => c.type === t);
+  });
 
   readonly form = this.fb.nonNullable.group({
-    type: this.fb.nonNullable.control<SessionType>('practice'),
     date: this.fb.nonNullable.control(todayLocalIso()),
     detailLevel: this.fb.nonNullable.control<DetailLevel>('frame'),
+    competitionId: this.fb.nonNullable.control(''),
     venueId: this.fb.nonNullable.control(''),
     primaryBallId: this.fb.nonNullable.control(''),
     spareBallId: this.fb.nonNullable.control(''),
   });
 
   constructor() {
-    void Promise.all([this.repo.listBalls(), this.repo.listVenues()]).then(([balls, venues]) => {
+    void Promise.all([
+      this.repo.listBalls(),
+      this.repo.listVenues(),
+      this.repo.listCompetitions(),
+    ]).then(([balls, venues, competitions]) => {
       this.balls.set(balls);
       this.venues.set(venues);
+      this.competitions.set(competitions);
     });
   }
 
-  select<K extends 'type' | 'detailLevel'>(key: K, value: string): void {
-    this.form.controls[key].setValue(value as never);
+  selectType(value: SessionType): void {
+    this.type.set(value);
+    if (value !== 'league' && value !== 'tournament') {
+      this.form.controls.competitionId.setValue('');
+    }
+  }
+
+  selectLevel(value: DetailLevel): void {
+    this.form.controls.detailLevel.setValue(value);
   }
 
   async start(): Promise<void> {
@@ -50,9 +78,10 @@ export class GameNew {
     try {
       const v = this.form.getRawValue();
       const session = createSession({
-        type: v.type,
+        type: this.type(),
         date: v.date,
         defaultDetailLevel: v.detailLevel,
+        competitionId: v.competitionId || undefined,
         venueId: v.venueId || undefined,
       });
       await this.repo.saveSession(session);

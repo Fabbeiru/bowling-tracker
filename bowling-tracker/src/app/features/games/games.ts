@@ -8,6 +8,8 @@ import { Game, Session } from '../../models';
 
 interface SessionRow {
   session: Session;
+  competitionName?: string;
+  venueName?: string;
   games: { game: Game; total: number; complete: boolean }[];
 }
 
@@ -28,12 +30,21 @@ export class Games {
   }
 
   private async load(): Promise<void> {
-    const sessions = await this.repo.listSessions();
+    const [sessions, competitions, venues] = await Promise.all([
+      this.repo.listSessions(),
+      this.repo.listCompetitions({ includeInactive: true }),
+      this.repo.listVenues({ includeInactive: true }),
+    ]);
+    const compName = new Map(competitions.map((c) => [c.id, c.name]));
+    const venueName = new Map(venues.map((v) => [v.id, v.name]));
+
     const rows = await Promise.all(
       sessions.map(async (session) => {
         const games = await this.repo.listGamesBySession(session.id);
         return {
           session,
+          competitionName: session.competitionId ? compName.get(session.competitionId) : undefined,
+          venueName: session.venueId ? venueName.get(session.venueId) : undefined,
           games: games.map((game) => {
             const s = scoreGame(game);
             return { game, total: s.total, complete: s.complete };

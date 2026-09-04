@@ -53,6 +53,18 @@ export const routes: Routes = [
     loadComponent: () => import('./features/venue-form/venue-form').then((m) => m.VenueForm),
   },
   {
+    path: 'arsenal/competitions/new',
+    title: 'Nueva competición · Bowling Tracker',
+    loadComponent: () =>
+      import('./features/competition-form/competition-form').then((m) => m.CompetitionForm),
+  },
+  {
+    path: 'arsenal/competitions/:id',
+    title: 'Competición · Bowling Tracker',
+    loadComponent: () =>
+      import('./features/competition-form/competition-form').then((m) => m.CompetitionForm),
+  },
+  {
     path: 'settings',
     title: 'Ajustes · Bowling Tracker',
     loadComponent: () => import('./features/settings/settings').then((m) => m.Settings),

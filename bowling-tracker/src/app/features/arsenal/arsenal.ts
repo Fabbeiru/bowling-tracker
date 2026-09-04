@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
-import { Ball, Venue } from '../../models';
+import { Ball, Competition, Venue } from '../../models';
 
 @Component({
   selector: 'app-arsenal',
@@ -16,6 +16,7 @@ export class Arsenal {
 
   readonly balls = signal<Ball[]>([]);
   readonly venues = signal<Venue[]>([]);
+  readonly competitions = signal<Competition[]>([]);
   readonly loading = signal(true);
 
   constructor() {
@@ -23,12 +24,14 @@ export class Arsenal {
   }
 
   private async load(): Promise<void> {
-    const [balls, venues] = await Promise.all([
+    const [balls, venues, competitions] = await Promise.all([
       this.repo.listBalls({ includeInactive: true }),
       this.repo.listVenues({ includeInactive: true }),
+      this.repo.listCompetitions({ includeInactive: true }),
     ]);
     this.balls.set(balls);
     this.venues.set(venues);
+    this.competitions.set(competitions);
     this.loading.set(false);
   }
 }

@@ -7,16 +7,16 @@
     <div class="field">
       <label>{{ t('gameNew.sessionType') }}</label>
       <div class="seg" role="radiogroup">
-        @for (type of sessionTypes; track type) {
+        @for (st of sessionTypes; track st) {
           <button
             type="button"
             role="radio"
-            [attr.aria-checked]="form.controls.type.value === type"
-            [class.seg__opt--on]="form.controls.type.value === type"
+            [attr.aria-checked]="type() === st"
+            [class.seg__opt--on]="type() === st"
             class="seg__opt"
-            (click)="select('type', type)"
+            (click)="selectType(st)"
           >
-            {{ t('sessionType.' + type) }}
+            {{ t('sessionType.' + st) }}
           </button>
         }
       </div>
@@ -26,6 +26,21 @@
       <label for="date">{{ t('gameNew.date') }}</label>
       <input id="date" type="date" formControlName="date" class="input" />
     </div>
+
+    @if (type() === 'league' || type() === 'tournament') {
+      <div class="field">
+        <label for="competition">{{ t('gameNew.competition') }}</label>
+        <select id="competition" class="input" formControlName="competitionId">
+          <option value="">{{ t('gameNew.none') }}</option>
+          @for (comp of relevantCompetitions(); track comp.id) {
+            <option [value]="comp.id">{{ comp.name }}</option>
+          }
+        </select>
+        @if (relevantCompetitions().length === 0) {
+          <a class="hint-link" routerLink="/arsenal/competitions/new">{{ t('gameNew.addCompetition') }}</a>
+        }
+      </div>
+    }
 
     @if (venues().length > 0) {
       <div class="field">
@@ -72,7 +87,7 @@
             [attr.aria-checked]="form.controls.detailLevel.value === level"
             [class.option--on]="form.controls.detailLevel.value === level"
             class="option"
-            (click)="select('detailLevel', level)"
+            (click)="selectLevel(level)"
           >
             <b>{{ t('detailLevel.' + level + '.name') }}</b>
             <small>{{ t('detailLevel.' + level + '.hint') }}</small>

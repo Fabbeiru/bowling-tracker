@@ -1,0 +1,59 @@
+<section class="screen" *transloco="let t">
+  <header class="screen__head">
+    <h1>{{ editing() ? t('competitionForm.editTitle') : t('competitionForm.newTitle') }}</h1>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="form">
+    <div class="field">
+      <label>{{ t('competitionForm.type') }}</label>
+      <div class="seg" role="radiogroup">
+        @for (type of types; track type) {
+          <button
+            type="button"
+            role="radio"
+            class="seg__opt"
+            [attr.aria-checked]="form.controls.type.value === type"
+            [class.seg__opt--on]="form.controls.type.value === type"
+            (click)="setType(type)"
+          >
+            {{ t('competitionType.' + type) }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="name">{{ t('competitionForm.name') }}</label>
+      <input id="name" class="input" formControlName="name" autocomplete="off" />
+    </div>
+
+    <div class="field">
+      <label for="season">{{ t('competitionForm.season') }}</label>
+      <input id="season" class="input" formControlName="season" placeholder="2026/27" autocomplete="off" />
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="start">{{ t('competitionForm.startDate') }}</label>
+        <input id="start" class="input" type="date" formControlName="startDate" />
+      </div>
+      <div class="field">
+        <label for="end">{{ t('competitionForm.endDate') }}</label>
+        <input id="end" class="input" type="date" formControlName="endDate" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="notes">{{ t('competitionForm.notes') }}</label>
+      <textarea id="notes" class="input" rows="2" formControlName="notes"></textarea>
+    </div>
+
+    <button type="submit" class="cta" [disabled]="form.invalid">{{ t('common.save') }}</button>
+  </form>
+
+  @if (editing()) {
+    <button type="button" class="toggle" (click)="toggleActive()">
+      {{ active() ? t('competitionForm.deactivate') : t('competitionForm.reactivate') }}
+    </button>
+  }
+</section>
