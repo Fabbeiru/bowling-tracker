@@ -92,15 +92,18 @@ comportamiento transversal está decidido y documentado.
 - [x] Estructura de carpetas (`core/`, `features/`, `shared/`, `models/`)
 - [x] Router con lazy-load + navegación inferior (5 secciones + not-found,
       pantallas con estado vacío) + paleta/tipografía aplicadas. Commit 1216e9e.
-- [ ] Transloco (locale `es`) — extraer los textos ya escritos + `es.json`
+- [x] Rutas en inglés + Transloco 8 (loader que empaqueta `es.json`, un idioma).
+      Textos en `src/app/core/i18n/es.json`. `PlaceholderScreen` compartido.
+      → ADR 0009 (inglés en código, español en interfaz). Commit 13f774d.
 - [ ] Dexie: 6 stores, `schemaVersion` 1, interfaz `Repository` + impl IndexedDB
 - [ ] Primer arranque (`persist()` + aviso de datos locales)
 - [ ] Estrategia de tests: `ng test` aún no verificado (necesita navegador
       headless); decidir Karma vs Vitest y dejar nota
 - [ ] `ng add @angular/pwa` + `ngsw-config.json` → **sesión dedicada al SW**
 
-Iconos de nav: SVG inline simples. El `build` (development) pasa; app probada en
-viewport móvil con Playwright (rutas + estado activo OK).
+Comprobado: `ng build` pasa; app probada en viewport móvil con Playwright
+(rutas, i18n y estado activo OK). `npm audit`: 2 vulnerabilidades moderadas
+(transitivas de dev) por revisar.
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.
