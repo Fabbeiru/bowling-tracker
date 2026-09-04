@@ -6,6 +6,8 @@
   </header>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="form">
+    <p class="form-legend"><span class="req-mark">*</span>{{ t('form.requiredLegend') }}</p>
+
     <div class="field">
       <label>{{ t('competitionForm.type') }}</label>
       <div class="seg" role="radiogroup">
@@ -25,43 +27,28 @@
     </div>
 
     <div class="field">
-      <label for="name">
-        {{ t('competitionForm.name') }}
-        <span class="label-tag label-tag--required">{{ t('form.required') }}</span>
-      </label>
+      <label for="name">{{ t('competitionForm.name') }}<span class="req-mark">*</span></label>
       <input id="name" class="input" formControlName="name" autocomplete="off" [placeholder]="t('competitionForm.namePlaceholder')" />
     </div>
 
     <div class="field">
-      <label for="season">
-        {{ t('competitionForm.season') }}
-        <span class="label-tag">{{ t('form.optional') }}</span>
-      </label>
+      <label for="season">{{ t('competitionForm.season') }}</label>
       <input id="season" class="input" formControlName="season" [placeholder]="t('competitionForm.seasonPlaceholder')" autocomplete="off" />
     </div>
 
     <div class="row2">
       <div class="field">
-        <label for="start">
-          {{ t('competitionForm.startDate') }}
-          <span class="label-tag">{{ t('form.optional') }}</span>
-        </label>
+        <label for="start">{{ t('competitionForm.startDate') }}</label>
         <input id="start" class="input" type="date" formControlName="startDate" />
       </div>
       <div class="field">
-        <label for="end">
-          {{ t('competitionForm.endDate') }}
-          <span class="label-tag">{{ t('form.optional') }}</span>
-        </label>
+        <label for="end">{{ t('competitionForm.endDate') }}</label>
         <input id="end" class="input" type="date" formControlName="endDate" />
       </div>
     </div>
 
     <div class="field">
-      <label for="notes">
-        {{ t('competitionForm.notes') }}
-        <span class="label-tag">{{ t('form.optional') }}</span>
-      </label>
+      <label for="notes">{{ t('competitionForm.notes') }}</label>
       <textarea
         id="notes"
         class="input"

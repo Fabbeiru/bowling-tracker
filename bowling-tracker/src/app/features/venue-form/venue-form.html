@@ -6,27 +6,20 @@
   </header>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="form">
+    <p class="form-legend"><span class="req-mark">*</span>{{ t('form.requiredLegend') }}</p>
+
     <div class="field">
-      <label for="name">
-        {{ t('venueForm.name') }}
-        <span class="label-tag label-tag--required">{{ t('form.required') }}</span>
-      </label>
+      <label for="name">{{ t('venueForm.name') }}<span class="req-mark">*</span></label>
       <input id="name" class="input" formControlName="name" autocomplete="off" [placeholder]="t('venueForm.namePlaceholder')" />
     </div>
 
     <div class="row2">
       <div class="field">
-        <label for="city">
-          {{ t('venueForm.city') }}
-          <span class="label-tag">{{ t('form.optional') }}</span>
-        </label>
+        <label for="city">{{ t('venueForm.city') }}</label>
         <input id="city" class="input" formControlName="city" autocomplete="off" [placeholder]="t('venueForm.cityPlaceholder')" />
       </div>
       <div class="field">
-        <label for="lanes">
-          {{ t('venueForm.lanes') }}
-          <span class="label-tag">{{ t('form.optional') }}</span>
-        </label>
+        <label for="lanes">{{ t('venueForm.lanes') }}</label>
         <input
           id="lanes"
           class="input"
@@ -44,10 +37,7 @@
     </div>
 
     <div class="field">
-      <label for="notes">
-        {{ t('venueForm.notes') }}
-        <span class="label-tag">{{ t('form.optional') }}</span>
-      </label>
+      <label for="notes">{{ t('venueForm.notes') }}</label>
       <textarea
         id="notes"
         class="input"

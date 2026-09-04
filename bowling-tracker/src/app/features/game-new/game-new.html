@@ -110,10 +110,7 @@
       <div class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
         <h2 class="dialog__title">{{ t('gameNew.newCompetitionTitle') }}</h2>
         <div class="field">
-          <label for="qname">
-            {{ t('competitionForm.name') }}
-            <span class="label-tag label-tag--required">{{ t('form.required') }}</span>
-          </label>
+          <label for="qname">{{ t('competitionForm.name') }}<span class="req-mark">*</span></label>
           <input
             id="qname"
             class="input"
@@ -124,10 +121,7 @@
           />
         </div>
         <div class="field">
-          <label for="qseason">
-            {{ t('competitionForm.season') }}
-            <span class="label-tag">{{ t('form.optional') }}</span>
-          </label>
+          <label for="qseason">{{ t('competitionForm.season') }}</label>
           <input
             id="qseason"
             class="input"

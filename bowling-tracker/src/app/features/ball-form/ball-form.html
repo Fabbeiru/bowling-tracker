@@ -6,13 +6,12 @@
   </header>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="form">
+    <p class="form-legend"><span class="req-mark">*</span>{{ t('form.requiredLegend') }}</p>
+
     <div class="avatar-row">
       <app-ball-avatar [imageUrl]="form.controls.imageUrl.value" [size]="64" />
       <div class="field field--grow">
-        <label for="image">
-          {{ t('ballForm.image') }}
-          <span class="label-tag">{{ t('form.optional') }}</span>
-        </label>
+        <label for="image">{{ t('ballForm.image') }}</label>
         <input
           id="image"
           class="input"
@@ -25,10 +24,7 @@
     </div>
 
     <div class="field">
-      <label for="name">
-        {{ t('ballForm.name') }}
-        <span class="label-tag label-tag--required">{{ t('form.required') }}</span>
-      </label>
+      <label for="name">{{ t('ballForm.name') }}<span class="req-mark">*</span></label>
       <input
         id="name"
         class="input"
@@ -40,17 +36,11 @@
 
     <div class="row2">
       <div class="field">
-        <label for="brand">
-          {{ t('ballForm.brand') }}
-          <span class="label-tag">{{ t('form.optional') }}</span>
-        </label>
+        <label for="brand">{{ t('ballForm.brand') }}</label>
         <input id="brand" class="input" formControlName="brand" autocomplete="off" [placeholder]="t('ballForm.brandPlaceholder')" />
       </div>
       <div class="field">
-        <label for="weight">
-          {{ t('ballForm.weight') }}
-          <span class="label-tag">{{ t('form.optional') }}</span>
-        </label>
+        <label for="weight">{{ t('ballForm.weight') }}</label>
         <input
           id="weight"
           class="input"
@@ -69,26 +59,17 @@
     </div>
 
     <div class="field">
-      <label for="cover">
-        {{ t('ballForm.coverstock') }}
-        <span class="label-tag">{{ t('form.optional') }}</span>
-      </label>
+      <label for="cover">{{ t('ballForm.coverstock') }}</label>
       <input id="cover" class="input" formControlName="coverstock" autocomplete="off" [placeholder]="t('ballForm.coverstockPlaceholder')" />
     </div>
 
     <div class="field">
-      <label for="layout">
-        {{ t('ballForm.layout') }}
-        <span class="label-tag">{{ t('form.optional') }}</span>
-      </label>
+      <label for="layout">{{ t('ballForm.layout') }}</label>
       <input id="layout" class="input" formControlName="layout" autocomplete="off" [placeholder]="t('ballForm.layoutPlaceholder')" />
     </div>
 
     <div class="field">
-      <label for="notes">
-        {{ t('ballForm.notes') }}
-        <span class="label-tag">{{ t('form.optional') }}</span>
-      </label>
+      <label for="notes">{{ t('ballForm.notes') }}</label>
       <textarea
         id="notes"
         class="input"

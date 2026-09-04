@@ -35,6 +35,13 @@
 
 html, body { height: 100%; }
 
+html {
+  /* Evita el rebote elástico de iOS al final del scroll: combinado con el
+     panel inferior fijo (backdrop-filter), el rebote provocaba un repintado
+     muy rápido y visible ("vibración") justo al llegar al final del contenido. */
+  overscroll-behavior-y: none;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -102,21 +109,21 @@ textarea {
   margin-top: 0.25rem;
 }
 
-/* Etiqueta "obligatorio"/"opcional" junto al label de un campo (todos los formularios). */
-.field > label {
-  display: flex;
-  align-items: baseline;
-  gap: 0.4em;
-}
-.label-tag {
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  color: var(--ink-soft);
-  opacity: 0.75;
-}
-.label-tag--required {
+/* Campos obligatorios: asterisco junto al label + una única leyenda al
+   principio del formulario (el resto de campos se asumen opcionales). */
+.req-mark {
   color: var(--danger-text);
-  opacity: 1;
+  margin-left: 0.15em;
+}
+.form-legend {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  margin-bottom: 1rem;
+
+  .req-mark {
+    margin-left: 0;
+    margin-right: 0.2em;
+  }
 }
 
 /* Estado vacío (ver docs/COMPORTAMIENTO-TRANSVERSAL.md §4) */

@@ -88,23 +88,27 @@
 .session__head {
   display: flex;
   align-items: baseline;
-  gap: 0.6rem;
-  padding: 0.7rem 0.9rem;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--surface-2);
   border-bottom: 1px solid var(--line);
 }
 
 .session__date {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
   color: var(--ink);
 }
 
 .session__type {
   font-family: var(--font-mono);
   font-size: 0.62rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--ink-soft);
+  color: var(--secondary);
 }
 
 .session__venue {
@@ -137,7 +141,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
 }
 
 .game__badge {

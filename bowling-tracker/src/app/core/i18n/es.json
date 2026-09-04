@@ -196,8 +196,7 @@
     "back": "Volver al inicio"
   },
   "form": {
-    "required": "obligatorio",
-    "optional": "opcional",
+    "requiredLegend": "campo obligatorio",
     "onlyNumbers": "Solo números."
   },
   "errors": {

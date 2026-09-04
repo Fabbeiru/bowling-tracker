@@ -184,6 +184,10 @@
   font-size: 0.95rem;
   width: 100%;
 
+  &:disabled {
+    opacity: 0.45;
+  }
+
   &--ghost {
     background: transparent;
     color: var(--ink-soft);

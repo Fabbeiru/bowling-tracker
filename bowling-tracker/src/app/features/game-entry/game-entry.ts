@@ -58,6 +58,15 @@ export class GameEntry {
     return g ? isComplete(g) : false;
   });
 
+  /** Whether the total-detail input holds a value worth saving (0..300). */
+  readonly validTotal = computed(() => {
+    const raw = this.totalInput();
+    return raw !== null && !Number.isNaN(raw) && raw >= 0 && raw <= 300;
+  });
+
+  /** Guards against a slow load resolving after a newer one has started (e.g. rapid navigation between games). */
+  private loadingId: string | null = null;
+
   constructor() {
     // `games/:id` is the same route for every game, so navigating from one
     // game to another (e.g. "add another game to this session") reuses this
@@ -74,33 +83,37 @@ export class GameEntry {
   }
 
   private async load(id: string): Promise<void> {
+    this.loadingId = id;
     this.loading.set(true);
     this.confirmingDelete.set(false);
     this.countMode.set(false);
     try {
       const g = await this.repo.getGame(id);
+      if (this.loadingId !== id) return; // a newer navigation has since started loading
       this.game.set(g ?? null);
       this.totalInput.set(g?.totalPins ?? null);
       this.notes.set(g?.notes ?? '');
-      if (g) await this.loadSessionContext(g);
+      if (g) await this.loadSessionContext(g, id);
     } catch {
       this.toast.error('errors.loadGame');
     } finally {
-      this.loading.set(false);
+      if (this.loadingId === id) this.loading.set(false);
     }
   }
 
-  private async loadSessionContext(g: Game): Promise<void> {
+  private async loadSessionContext(g: Game, id: string): Promise<void> {
     const [session, siblings] = await Promise.all([
       this.repo.getSession(g.sessionId),
       this.repo.listGamesBySession(g.sessionId),
     ]);
+    if (this.loadingId !== id) return;
     this.session.set(session ?? null);
     this.sessionGameCount.set(siblings.length);
     const [competition, venue] = await Promise.all([
       session?.competitionId ? this.repo.getCompetition(session.competitionId) : undefined,
       session?.venueId ? this.repo.getVenue(session.venueId) : undefined,
     ]);
+    if (this.loadingId !== id) return;
     this.competitionName.set(competition?.name);
     this.venueName.set(venue?.name);
   }

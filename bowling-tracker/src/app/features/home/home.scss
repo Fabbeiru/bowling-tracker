@@ -1,3 +1,14 @@
+.brand-head {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-head__logo {
+  flex: none;
+  border-radius: 22.6%;
+}
+
 .local-note {
   background: var(--surface-2);
   border: 1px solid var(--line);

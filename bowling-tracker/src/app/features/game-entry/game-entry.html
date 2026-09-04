@@ -60,11 +60,9 @@
 
     @switch (game()!.detailLevel) {
       @case ('total') {
+        <p class="form-legend"><span class="req-mark">*</span>{{ t('form.requiredLegend') }}</p>
         <div class="field">
-          <label for="total">
-            {{ t('gameEntry.totalLabel') }}
-            <span class="label-tag label-tag--required">{{ t('form.required') }}</span>
-          </label>
+          <label for="total">{{ t('gameEntry.totalLabel') }}<span class="req-mark">*</span></label>
           <input
             id="total"
             class="input"
@@ -115,10 +113,7 @@
     }
 
     <div class="field">
-      <label for="notes">
-        {{ t('gameEntry.notesLabel') }}
-        <span class="label-tag">{{ t('form.optional') }}</span>
-      </label>
+      <label for="notes">{{ t('gameEntry.notesLabel') }}</label>
       <textarea
         id="notes"
         class="input"
@@ -134,16 +129,15 @@
       class="cta"
       [class.cta--ghost]="game()!.detailLevel !== 'total' && !complete()"
       type="button"
+      [disabled]="game()!.detailLevel === 'total' && !validTotal()"
       (click)="finish()"
     >
       {{ complete() ? t('gameEntry.finishDone') : t('gameEntry.finish') }}
     </button>
 
-    @if (complete()) {
-      <button type="button" class="add-game" [disabled]="addingGame()" (click)="addAnotherGame()">
-        {{ t('gameEntry.addAnotherGame') }}
-      </button>
-    }
+    <button type="button" class="add-game" [disabled]="addingGame() || !complete()" (click)="addAnotherGame()">
+      {{ t('gameEntry.addAnotherGame') }}
+    </button>
 
     <button type="button" class="delete" (click)="confirmingDelete.set(true)">
       {{ t('gameEntry.delete') }}

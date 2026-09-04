@@ -12,6 +12,11 @@
   background: color-mix(in srgb, var(--surface) 92%, transparent);
   backdrop-filter: blur(10px);
   border-top: 1px solid var(--line);
+  /* Fuerza su propia capa de composición: sin esto, el blur de un elemento
+     fijo se repinta en cada frame durante el rebote elástico del scroll en
+     iOS, lo que se percibe como una vibración muy rápida al llegar al final. */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .bottom-nav__item {
