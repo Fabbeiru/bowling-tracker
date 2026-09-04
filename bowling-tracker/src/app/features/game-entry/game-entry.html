@@ -1,10 +1,11 @@
 <section class="screen" *transloco="let t">
+  <app-back-link to="/games" [label]="t('common.backToGames')" />
+
   @if (loading()) {
     <p class="muted">{{ t('common.loading') }}</p>
   } @else if (!game()) {
     <div class="empty-state">
       <p class="empty-state__title">{{ t('gameEntry.notFound') }}</p>
-      <a class="link" routerLink="/games">{{ t('common.backToGames') }}</a>
     </div>
   } @else {
     <header class="screen__head">
@@ -15,14 +16,12 @@
     @if (score(); as s) {
       @if (game()!.detailLevel !== 'total') {
         <app-scoresheet [frames]="s.frames" [currentFrame]="position()?.frame ?? null" />
-      }
 
-      <div class="live">
-        <div class="tile">
-          <div class="tile__lab">{{ t('gameEntry.score') }}</div>
-          <div class="tile__val">{{ s.total }}</div>
-        </div>
-        @if (game()!.detailLevel !== 'total') {
+        <div class="live">
+          <div class="tile">
+            <div class="tile__lab">{{ t('gameEntry.score') }}</div>
+            <div class="tile__val">{{ s.total }}</div>
+          </div>
           <button type="button" class="tile tile--btn" (click)="settings.toggleHideMaxProjection()">
             <div class="tile__lab">
               {{ t('gameEntry.maxPossible') }}
@@ -32,8 +31,8 @@
               {{ settings.hideMaxProjection() ? '···' : s.maxPossible }}
             </div>
           </button>
-        }
-      </div>
+        </div>
+      }
     }
 
     @switch (game()!.detailLevel) {
@@ -47,6 +46,7 @@
             inputmode="numeric"
             min="0"
             max="300"
+            placeholder="0–300"
             [ngModel]="totalInput()"
             (ngModelChange)="totalInput.set($event)"
             (blur)="saveTotal()"
@@ -59,7 +59,7 @@
             <span>{{ t('gameEntry.ballLine', { frame: pos.frame, ball: pos.ball }) }}</span>
             <button type="button" class="undo" (click)="undo()">{{ t('gameEntry.undo') }}</button>
           </div>
-          <app-pin-pad [standingCount]="pos.standingCount" (pins)="record($event)" />
+          <app-pin-pad [standingCount]="pos.standingCount" [freshRack]="pos.freshRack" (pins)="record($event)" />
         } @else {
           <p class="done">{{ t('gameEntry.gameComplete') }}</p>
         }
@@ -79,7 +79,7 @@
             />
           } @else {
             <p class="count-note">{{ t('gameEntry.countOnlyNote') }}</p>
-            <app-pin-pad [standingCount]="pos.standingCount" (pins)="record($event)" />
+            <app-pin-pad [standingCount]="pos.standingCount" [freshRack]="pos.freshRack" (pins)="record($event)" />
           }
         } @else {
           <p class="done">{{ t('gameEntry.gameComplete') }}</p>
@@ -108,6 +108,12 @@
     >
       {{ complete() ? t('gameEntry.finishDone') : t('gameEntry.finish') }}
     </button>
+
+    @if (complete()) {
+      <button type="button" class="add-game" [disabled]="addingGame()" (click)="addAnotherGame()">
+        {{ t('gameEntry.addAnotherGame') }}
+      </button>
+    }
 
     <button type="button" class="delete" (click)="confirmingDelete.set(true)">
       {{ t('gameEntry.delete') }}

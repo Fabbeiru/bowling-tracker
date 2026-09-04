@@ -1,23 +1,27 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
+import { ToastService } from '../../core/errors/toast.service';
 import { todayLocalIso } from '../../core/util/dates';
 import {
   Ball,
   Competition,
+  CompetitionType,
+  createCompetition,
   createGame,
   createSession,
   DetailLevel,
   SessionType,
   Venue,
 } from '../../models';
+import { BackLink } from '../../shared/components/back-link/back-link';
 
 @Component({
   selector: 'app-game-new',
-  imports: [ReactiveFormsModule, RouterLink, TranslocoDirective],
+  imports: [ReactiveFormsModule, FormsModule, TranslocoDirective, BackLink],
   templateUrl: './game-new.html',
   styleUrl: './game-new.scss',
 })
@@ -25,6 +29,7 @@ export class GameNew {
   private readonly fb = inject(FormBuilder);
   private readonly repo = inject(Repository);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
 
   readonly sessionTypes: SessionType[] = ['practice', 'league', 'tournament', 'social'];
   readonly detailLevels: DetailLevel[] = ['total', 'frame', 'throw'];
@@ -33,6 +38,11 @@ export class GameNew {
   readonly venues = signal<Venue[]>([]);
   readonly competitions = signal<Competition[]>([]);
   readonly type = signal<SessionType>('practice');
+
+  readonly showQuickCreate = signal(false);
+  readonly quickName = signal('');
+  readonly quickSeason = signal('');
+  readonly creatingCompetition = signal(false);
 
   readonly relevantCompetitions = computed(() => {
     const t = this.type();
@@ -50,15 +60,22 @@ export class GameNew {
   });
 
   constructor() {
-    void Promise.all([
-      this.repo.listBalls(),
-      this.repo.listVenues(),
-      this.repo.listCompetitions(),
-    ]).then(([balls, venues, competitions]) => {
+    void this.loadPickers();
+  }
+
+  private async loadPickers(): Promise<void> {
+    try {
+      const [balls, venues, competitions] = await Promise.all([
+        this.repo.listBalls(),
+        this.repo.listVenues(),
+        this.repo.listCompetitions(),
+      ]);
       this.balls.set(balls);
       this.venues.set(venues);
       this.competitions.set(competitions);
-    });
+    } catch {
+      this.toast.error('No se pudo cargar tu arsenal ni tus competiciones.');
+    }
   }
 
   selectType(value: SessionType): void {
@@ -70,6 +87,34 @@ export class GameNew {
 
   selectLevel(value: DetailLevel): void {
     this.form.controls.detailLevel.setValue(value);
+  }
+
+  openQuickCreate(): void {
+    this.quickName.set('');
+    this.quickSeason.set('');
+    this.showQuickCreate.set(true);
+  }
+
+  async quickCreateCompetition(): Promise<void> {
+    const name = this.quickName().trim();
+    const type = this.type();
+    if (!name || (type !== 'league' && type !== 'tournament') || this.creatingCompetition()) return;
+    this.creatingCompetition.set(true);
+    try {
+      const competition = createCompetition({
+        type: type as CompetitionType,
+        name,
+        season: this.quickSeason().trim() || undefined,
+      });
+      await this.repo.saveCompetition(competition);
+      this.competitions.update((list) => [...list, competition]);
+      this.form.controls.competitionId.setValue(competition.id);
+      this.showQuickCreate.set(false);
+    } catch {
+      this.toast.error('No se pudo crear la competición.');
+    } finally {
+      this.creatingCompetition.set(false);
+    }
   }
 
   async start(): Promise<void> {
@@ -96,6 +141,8 @@ export class GameNew {
       await this.repo.saveGame(game);
 
       await this.router.navigate(['/games', game.id]);
+    } catch {
+      this.toast.error('No se pudo crear la partida. Inténtalo de nuevo.');
     } finally {
       this.saving.set(false);
     }

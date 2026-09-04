@@ -1,0 +1,31 @@
+<section class="screen" *transloco="let t">
+  <app-back-link to="/games" [label]="t('games.title')" />
+
+  <header class="screen__head screen__head--row">
+    <div>
+      <h1>{{ t('competitions.title') }}</h1>
+      <p>{{ t('competitions.subtitle') }}</p>
+    </div>
+    <a class="add" routerLink="/competitions/new">{{ t('arsenal.addCompetition') }}</a>
+  </header>
+
+  @if (loading()) {
+    <p class="muted">{{ t('common.loading') }}</p>
+  } @else if (competitions().length === 0) {
+    <div class="empty-state">
+      <p class="empty-state__title">{{ t('arsenal.noCompetitions') }}</p>
+      <a class="cta" routerLink="/competitions/new">{{ t('arsenal.addCompetition') }}</a>
+    </div>
+  } @else {
+    <ul class="list">
+      @for (comp of competitions(); track comp.id) {
+        <a class="row" [class.row--inactive]="!comp.active" [routerLink]="['/competitions', comp.id]">
+          <span class="row__name">{{ comp.name }}</span>
+          <span class="row__meta">
+            {{ t('competitionType.' + comp.type) }}@if (comp.season) {&nbsp;·&nbsp;{{ comp.season }}}
+          </span>
+        </a>
+      }
+    </ul>
+  }
+</section>

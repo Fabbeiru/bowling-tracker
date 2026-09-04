@@ -164,6 +164,22 @@ textarea.input {
   font-family: var(--font-body);
 }
 
+.add-game {
+  margin-top: 0.7rem;
+  width: 100%;
+  min-height: 44px;
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--secondary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
 .delete {
   margin-top: 0.7rem;
   width: 100%;

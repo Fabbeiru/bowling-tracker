@@ -9,6 +9,8 @@ import { Component, computed, input, output } from '@angular/core';
 export class PinPad {
   /** Pins standing before this ball. */
   readonly standingCount = input.required<number>();
+  /** Whether clearing all standing pins here is a strike (vs. completing a spare). */
+  readonly freshRack = input(false);
 
   readonly pins = output<number>();
 
@@ -18,7 +20,7 @@ export class PinPad {
   );
 
   /** Label for the "knock everything down" button. */
-  readonly allLabel = computed(() => (this.standingCount() === 10 ? 'Pleno' : 'Semipleno'));
+  readonly allLabel = computed(() => (this.freshRack() ? 'Pleno' : 'Semipleno'));
 
   emit(n: number): void {
     this.pins.emit(n);

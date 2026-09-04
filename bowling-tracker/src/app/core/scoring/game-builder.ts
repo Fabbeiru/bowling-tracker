@@ -16,6 +16,14 @@ export interface EntryPosition {
    * detail, or the previous ball was recorded as a count without pin marks).
    */
   standingBefore: number[] | null;
+  /**
+   * True when this ball faces a completely fresh rack (the first ball of any
+   * frame, or a tenth-frame bonus ball after a strike/spare). Knocking down
+   * all `standingCount` pins here is a strike ("Pleno"); when false, clearing
+   * them completes a spare ("Semipleno") even though `standingCount` can also
+   * be 10 (e.g. after missing the first ball entirely).
+   */
+  freshRack: boolean;
 }
 
 export interface Delivery {
@@ -50,18 +58,24 @@ export function entryPosition(game: Pick<Game, 'detailLevel' | 'frames'>): Entry
 
     if (index < 10) {
       if (pins.length === 0) {
-        return { frame: index, ball: 1, standingCount: 10, standingBefore: [...ALL_PINS] };
+        return { frame: index, ball: 1, standingCount: 10, standingBefore: [...ALL_PINS], freshRack: true };
       }
       if (pins[0] === 10) continue; // strike
       if (pins.length === 1) {
-        return { frame: index, ball: 2, standingCount: 10 - pins[0], standingBefore: standingAfter(fr, 1) };
+        return {
+          frame: index,
+          ball: 2,
+          standingCount: 10 - pins[0],
+          standingBefore: standingAfter(fr, 1),
+          freshRack: false,
+        };
       }
       continue; // open or spare, frame done
     }
 
     // Frame 10
     if (pins.length === 0) {
-      return { frame: 10, ball: 1, standingCount: 10, standingBefore: [...ALL_PINS] };
+      return { frame: 10, ball: 1, standingCount: 10, standingBefore: [...ALL_PINS], freshRack: true };
     }
     const a = pins[0];
     if (pins.length === 1) {
@@ -71,6 +85,7 @@ export function entryPosition(game: Pick<Game, 'detailLevel' | 'frames'>): Entry
         ball: 2,
         standingCount: fresh ? 10 : 10 - a,
         standingBefore: fresh ? [...ALL_PINS] : standingAfter(fr, 1),
+        freshRack: fresh,
       };
     }
     const b = pins[1];
@@ -82,9 +97,12 @@ export function entryPosition(game: Pick<Game, 'detailLevel' | 'frames'>): Entry
           ball: 3,
           standingCount: fresh ? 10 : 10 - b,
           standingBefore: fresh ? [...ALL_PINS] : standingAfter(fr, 2),
+          freshRack: fresh,
         };
       }
-      if (a + b === 10) return { frame: 10, ball: 3, standingCount: 10, standingBefore: [...ALL_PINS] };
+      if (a + b === 10) {
+        return { frame: 10, ball: 3, standingCount: 10, standingBefore: [...ALL_PINS], freshRack: true };
+      }
       return null; // open tenth, done
     }
     return null; // three balls recorded
@@ -93,8 +111,8 @@ export function entryPosition(game: Pick<Game, 'detailLevel' | 'frames'>): Entry
   return null;
 }
 
-export function isComplete(game: Pick<Game, 'detailLevel' | 'frames'>): boolean {
-  if (game.detailLevel === 'total') return true;
+export function isComplete(game: Pick<Game, 'detailLevel' | 'frames' | 'totalPins'>): boolean {
+  if (game.detailLevel === 'total') return game.totalPins !== undefined;
   return entryPosition(game) === null;
 }
 

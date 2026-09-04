@@ -1,4 +1,6 @@
 <section class="screen" *transloco="let t">
+  <app-back-link to="/arsenal" [label]="t('nav.arsenal')" />
+
   <header class="screen__head">
     <h1>{{ editing() ? t('venueForm.editTitle') : t('venueForm.newTitle') }}</h1>
   </header>
@@ -6,23 +8,29 @@
   <form [formGroup]="form" (ngSubmit)="save()" class="form">
     <div class="field">
       <label for="name">{{ t('venueForm.name') }}</label>
-      <input id="name" class="input" formControlName="name" autocomplete="off" />
+      <input id="name" class="input" formControlName="name" autocomplete="off" placeholder="Bowling Vigo" />
     </div>
 
     <div class="row2">
       <div class="field">
         <label for="city">{{ t('venueForm.city') }}</label>
-        <input id="city" class="input" formControlName="city" autocomplete="off" />
+        <input id="city" class="input" formControlName="city" autocomplete="off" placeholder="Vigo" />
       </div>
       <div class="field">
         <label for="lanes">{{ t('venueForm.lanes') }}</label>
-        <input id="lanes" class="input" type="number" inputmode="numeric" min="1" formControlName="lanes" />
+        <input id="lanes" class="input" type="number" inputmode="numeric" min="1" placeholder="12" formControlName="lanes" />
       </div>
     </div>
 
     <div class="field">
       <label for="notes">{{ t('venueForm.notes') }}</label>
-      <textarea id="notes" class="input" rows="2" formControlName="notes"></textarea>
+      <textarea
+        id="notes"
+        class="input"
+        rows="2"
+        formControlName="notes"
+        [placeholder]="t('venueForm.notesPlaceholder')"
+      ></textarea>
     </div>
 
     <button type="submit" class="cta" [disabled]="form.invalid">{{ t('common.save') }}</button>

@@ -27,12 +27,20 @@ describe('entryPosition', () => {
       ball: 1,
       standingCount: 10,
       standingBefore: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      freshRack: true,
     });
   });
 
   it('moves to ball 2 after a non-strike first ball', () => {
     const g = applyDelivery(blankGame('frame'), { pinsKnocked: 6 });
     expect(entryPosition(g)).toMatchObject({ frame: 1, ball: 2 });
+  });
+
+  it('is not a fresh rack on ball 2 even after missing the first ball entirely', () => {
+    // 0 on ball 1 -> all 10 pins standing for ball 2, but clearing them is a
+    // spare, not a strike.
+    const g = applyDelivery(blankGame('frame'), { pinsKnocked: 0 });
+    expect(entryPosition(g)).toMatchObject({ frame: 1, ball: 2, standingCount: 10, freshRack: false });
   });
 
   it('skips to the next frame after a strike', () => {
@@ -43,7 +51,19 @@ describe('entryPosition', () => {
   it('is null for total-detail games', () => {
     expect(entryPosition(blankGame('total'))).toBeNull();
   });
+});
 
+describe('isComplete — total detail', () => {
+  it('is not complete until a total is entered', () => {
+    expect(isComplete(blankGame('total'))).toBe(false);
+  });
+
+  it('is complete once totalPins is set', () => {
+    expect(isComplete({ ...blankGame('total'), totalPins: 150 })).toBe(true);
+  });
+});
+
+describe('entryPosition — tenth frame', () => {
   it('offers a third ball in the tenth after a strike', () => {
     const g = playFrame([...Array<number>(18).fill(0), 10, 4]);
     expect(entryPosition(g)).toMatchObject({ frame: 10, ball: 3 });

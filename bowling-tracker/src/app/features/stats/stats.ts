@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
+import { ToastService } from '../../core/errors/toast.service';
 import { computeStats } from '../../core/stats/stats';
 import { Competition, Game, Session, SessionType } from '../../models';
 
@@ -15,6 +16,7 @@ type TypeFilter = SessionType | 'all';
 })
 export class Stats {
   private readonly repo = inject(Repository);
+  private readonly toast = inject(ToastService);
 
   readonly loading = signal(true);
   private readonly games = signal<Game[]>([]);
@@ -55,16 +57,28 @@ export class Stats {
     void this.load();
   }
 
+  selectType(type: TypeFilter): void {
+    this.typeFilter.set(type);
+    if (type !== 'league' && type !== 'tournament') {
+      this.competitionFilter.set('all');
+    }
+  }
+
   private async load(): Promise<void> {
-    const [games, sessions, competitions] = await Promise.all([
-      this.repo.listGames(),
-      this.repo.listSessions(),
-      this.repo.listCompetitions({ includeInactive: true }),
-    ]);
-    this.games.set(games);
-    this.sessions.set(sessions);
-    this.competitions.set(competitions);
-    this.loading.set(false);
+    try {
+      const [games, sessions, competitions] = await Promise.all([
+        this.repo.listGames(),
+        this.repo.listSessions(),
+        this.repo.listCompetitions({ includeInactive: true }),
+      ]);
+      this.games.set(games);
+      this.sessions.set(sessions);
+      this.competitions.set(competitions);
+    } catch {
+      this.toast.error('No se pudieron cargar las estadísticas.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   pct(value: number | null): string {

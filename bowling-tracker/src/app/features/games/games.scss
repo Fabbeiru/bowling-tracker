@@ -30,6 +30,45 @@
   color: var(--ink-soft);
 }
 
+.competitions-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: var(--secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.chips {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 1rem;
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex: none;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  border-radius: 999px;
+  min-height: 40px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.78rem;
+  white-space: nowrap;
+
+  &--on {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: transparent;
+    font-weight: 600;
+  }
+}
+
 .sessions {
   list-style: none;
   margin: 0;

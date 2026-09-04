@@ -4,20 +4,20 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
-import { Ball, Venue } from '../../models';
+import { Competition } from '../../models';
+import { BackLink } from '../../shared/components/back-link/back-link';
 
 @Component({
-  selector: 'app-arsenal',
-  imports: [RouterLink, TranslocoDirective],
-  templateUrl: './arsenal.html',
-  styleUrl: './arsenal.scss',
+  selector: 'app-competitions',
+  imports: [RouterLink, TranslocoDirective, BackLink],
+  templateUrl: './competitions.html',
+  styleUrl: '../arsenal/arsenal.scss',
 })
-export class Arsenal {
+export class Competitions {
   private readonly repo = inject(Repository);
   private readonly toast = inject(ToastService);
 
-  readonly balls = signal<Ball[]>([]);
-  readonly venues = signal<Venue[]>([]);
+  readonly competitions = signal<Competition[]>([]);
   readonly loading = signal(true);
 
   constructor() {
@@ -26,14 +26,9 @@ export class Arsenal {
 
   private async load(): Promise<void> {
     try {
-      const [balls, venues] = await Promise.all([
-        this.repo.listBalls({ includeInactive: true }),
-        this.repo.listVenues({ includeInactive: true }),
-      ]);
-      this.balls.set(balls);
-      this.venues.set(venues);
+      this.competitions.set(await this.repo.listCompetitions({ includeInactive: true }));
     } catch {
-      this.toast.error('No se pudo cargar el arsenal.');
+      this.toast.error('No se pudieron cargar las competiciones.');
     } finally {
       this.loading.set(false);
     }

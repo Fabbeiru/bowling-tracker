@@ -1,4 +1,6 @@
 <section class="screen" *transloco="let t">
+  <app-back-link to="/competitions" [label]="t('competitions.title')" />
+
   <header class="screen__head">
     <h1>{{ editing() ? t('competitionForm.editTitle') : t('competitionForm.newTitle') }}</h1>
   </header>
@@ -24,7 +26,7 @@
 
     <div class="field">
       <label for="name">{{ t('competitionForm.name') }}</label>
-      <input id="name" class="input" formControlName="name" autocomplete="off" />
+      <input id="name" class="input" formControlName="name" autocomplete="off" placeholder="Liga Municipal" />
     </div>
 
     <div class="field">
@@ -45,7 +47,13 @@
 
     <div class="field">
       <label for="notes">{{ t('competitionForm.notes') }}</label>
-      <textarea id="notes" class="input" rows="2" formControlName="notes"></textarea>
+      <textarea
+        id="notes"
+        class="input"
+        rows="2"
+        formControlName="notes"
+        [placeholder]="t('competitionForm.notesPlaceholder')"
+      ></textarea>
     </div>
 
     <button type="submit" class="cta" [disabled]="form.invalid">{{ t('common.save') }}</button>

@@ -4,11 +4,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
+import { ToastService } from '../../core/errors/toast.service';
 import { Competition, CompetitionType, createCompetition } from '../../models';
+import { BackLink } from '../../shared/components/back-link/back-link';
 
 @Component({
   selector: 'app-competition-form',
-  imports: [ReactiveFormsModule, TranslocoDirective],
+  imports: [ReactiveFormsModule, TranslocoDirective, BackLink],
   templateUrl: './competition-form.html',
   styleUrl: '../ball-form/ball-form.scss',
 })
@@ -16,6 +18,7 @@ export class CompetitionForm {
   private readonly fb = inject(FormBuilder);
   private readonly repo = inject(Repository);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
 
   private existing: Competition | null = null;
   readonly editing = signal(false);
@@ -37,7 +40,13 @@ export class CompetitionForm {
   }
 
   private async load(id: string): Promise<void> {
-    const c = await this.repo.getCompetition(id);
+    let c: Competition | undefined;
+    try {
+      c = await this.repo.getCompetition(id);
+    } catch {
+      this.toast.error('No se pudo cargar la competición.');
+      return;
+    }
     if (!c) return;
     this.existing = c;
     this.editing.set(true);
@@ -70,14 +79,22 @@ export class CompetitionForm {
     const competition: Competition = this.existing
       ? { ...this.existing, ...patch }
       : createCompetition(patch);
-    await this.repo.saveCompetition(competition);
-    await this.router.navigate(['/arsenal']);
+    try {
+      await this.repo.saveCompetition(competition);
+      await this.router.navigate(['/competitions']);
+    } catch {
+      this.toast.error('No se pudo guardar la competición.');
+    }
   }
 
   async toggleActive(): Promise<void> {
     if (!this.existing) return;
-    if (this.existing.active) await this.repo.deactivateCompetition(this.existing.id);
-    else await this.repo.saveCompetition({ ...this.existing, active: true });
-    await this.router.navigate(['/arsenal']);
+    try {
+      if (this.existing.active) await this.repo.deactivateCompetition(this.existing.id);
+      else await this.repo.saveCompetition({ ...this.existing, active: true });
+      await this.router.navigate(['/competitions']);
+    } catch {
+      this.toast.error('No se pudo actualizar la competición.');
+    }
   }
 }

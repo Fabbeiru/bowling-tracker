@@ -4,11 +4,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
+import { ToastService } from '../../core/errors/toast.service';
 import { Ball, createBall } from '../../models';
+import { BackLink } from '../../shared/components/back-link/back-link';
 
 @Component({
   selector: 'app-ball-form',
-  imports: [ReactiveFormsModule, TranslocoDirective],
+  imports: [ReactiveFormsModule, TranslocoDirective, BackLink],
   templateUrl: './ball-form.html',
   styleUrl: './ball-form.scss',
 })
@@ -16,6 +18,7 @@ export class BallForm {
   private readonly fb = inject(FormBuilder);
   private readonly repo = inject(Repository);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
 
   private existing: Ball | null = null;
   readonly editing = signal(false);
@@ -36,7 +39,13 @@ export class BallForm {
   }
 
   private async load(id: string): Promise<void> {
-    const ball = await this.repo.getBall(id);
+    let ball: Ball | undefined;
+    try {
+      ball = await this.repo.getBall(id);
+    } catch {
+      this.toast.error('No se pudo cargar la bola.');
+      return;
+    }
     if (!ball) return;
     this.existing = ball;
     this.editing.set(true);
@@ -65,17 +74,25 @@ export class BallForm {
     const ball: Ball = this.existing
       ? { ...this.existing, ...patch }
       : createBall(patch);
-    await this.repo.saveBall(ball);
-    await this.router.navigate(['/arsenal']);
+    try {
+      await this.repo.saveBall(ball);
+      await this.router.navigate(['/arsenal']);
+    } catch {
+      this.toast.error('No se pudo guardar la bola.');
+    }
   }
 
   async toggleActive(): Promise<void> {
     if (!this.existing) return;
-    if (this.existing.active) {
-      await this.repo.deactivateBall(this.existing.id);
-    } else {
-      await this.repo.saveBall({ ...this.existing, active: true });
+    try {
+      if (this.existing.active) {
+        await this.repo.deactivateBall(this.existing.id);
+      } else {
+        await this.repo.saveBall({ ...this.existing, active: true });
+      }
+      await this.router.navigate(['/arsenal']);
+    } catch {
+      this.toast.error('No se pudo actualizar la bola.');
     }
-    await this.router.navigate(['/arsenal']);
   }
 }

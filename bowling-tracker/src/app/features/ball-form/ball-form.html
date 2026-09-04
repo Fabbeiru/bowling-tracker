@@ -1,4 +1,6 @@
 <section class="screen" *transloco="let t">
+  <app-back-link to="/arsenal" [label]="t('nav.arsenal')" />
+
   <header class="screen__head">
     <h1>{{ editing() ? t('ballForm.editTitle') : t('ballForm.newTitle') }}</h1>
   </header>
@@ -6,33 +8,39 @@
   <form [formGroup]="form" (ngSubmit)="save()" class="form">
     <div class="field">
       <label for="name">{{ t('ballForm.name') }}</label>
-      <input id="name" class="input" formControlName="name" autocomplete="off" />
+      <input id="name" class="input" formControlName="name" autocomplete="off" placeholder="Storm Phaze II" />
     </div>
 
     <div class="row2">
       <div class="field">
         <label for="brand">{{ t('ballForm.brand') }}</label>
-        <input id="brand" class="input" formControlName="brand" autocomplete="off" />
+        <input id="brand" class="input" formControlName="brand" autocomplete="off" placeholder="Storm" />
       </div>
       <div class="field">
         <label for="weight">{{ t('ballForm.weight') }}</label>
-        <input id="weight" class="input" type="number" inputmode="numeric" min="6" max="16" formControlName="weightLb" />
+        <input id="weight" class="input" type="number" inputmode="numeric" min="6" max="16" placeholder="15" formControlName="weightLb" />
       </div>
     </div>
 
     <div class="field">
       <label for="cover">{{ t('ballForm.coverstock') }}</label>
-      <input id="cover" class="input" formControlName="coverstock" autocomplete="off" />
+      <input id="cover" class="input" formControlName="coverstock" autocomplete="off" placeholder="Reactive solid" />
     </div>
 
     <div class="field">
       <label for="layout">{{ t('ballForm.layout') }}</label>
-      <input id="layout" class="input" formControlName="layout" autocomplete="off" />
+      <input id="layout" class="input" formControlName="layout" autocomplete="off" placeholder="60 x 4 ½ x 30" />
     </div>
 
     <div class="field">
       <label for="notes">{{ t('ballForm.notes') }}</label>
-      <textarea id="notes" class="input" rows="2" formControlName="notes"></textarea>
+      <textarea
+        id="notes"
+        class="input"
+        rows="2"
+        formControlName="notes"
+        [placeholder]="t('ballForm.notesPlaceholder')"
+      ></textarea>
     </div>
 
     <button type="submit" class="cta" [disabled]="form.invalid">{{ t('common.save') }}</button>

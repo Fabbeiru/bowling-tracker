@@ -13,13 +13,13 @@
             type="button"
             class="chip"
             [class.chip--on]="typeFilter() === opt"
-            (click)="typeFilter.set(opt)"
+            (click)="selectType(opt)"
           >
             {{ opt === 'all' ? t('stats.allTypes') : t('sessionType.' + opt) }}
           </button>
         }
       </div>
-      @if (competitions().length > 0) {
+      @if (competitions().length > 0 && (typeFilter() === 'league' || typeFilter() === 'tournament')) {
         <select
           class="comp-select"
           [attr.aria-label]="t('stats.allCompetitions')"

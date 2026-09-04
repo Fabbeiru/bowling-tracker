@@ -1,4 +1,6 @@
 <section class="screen" *transloco="let t">
+  <app-back-link to="/games" [label]="t('common.backToGames')" />
+
   <header class="screen__head">
     <h1>{{ t('gameNew.title') }}</h1>
   </header>
@@ -30,15 +32,17 @@
     @if (type() === 'league' || type() === 'tournament') {
       <div class="field">
         <label for="competition">{{ t('gameNew.competition') }}</label>
-        <select id="competition" class="input" formControlName="competitionId">
-          <option value="">{{ t('gameNew.none') }}</option>
-          @for (comp of relevantCompetitions(); track comp.id) {
-            <option [value]="comp.id">{{ comp.name }}</option>
-          }
-        </select>
-        @if (relevantCompetitions().length === 0) {
-          <a class="hint-link" routerLink="/arsenal/competitions/new">{{ t('gameNew.addCompetition') }}</a>
-        }
+        <div class="pick-row">
+          <select id="competition" class="input" formControlName="competitionId">
+            <option value="">{{ t('gameNew.none') }}</option>
+            @for (comp of relevantCompetitions(); track comp.id) {
+              <option [value]="comp.id">{{ comp.name }}</option>
+            }
+          </select>
+          <button type="button" class="pick-add" (click)="openQuickCreate()" [attr.aria-label]="t('gameNew.addCompetition')">
+            +
+          </button>
+        </div>
       </div>
     }
 
@@ -100,4 +104,47 @@
       {{ t('gameNew.start') }}
     </button>
   </form>
+
+  @if (showQuickCreate()) {
+    <div class="backdrop" (click)="showQuickCreate.set(false)">
+      <div class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+        <h2 class="dialog__title">{{ t('gameNew.newCompetitionTitle') }}</h2>
+        <div class="field">
+          <label for="qname">{{ t('competitionForm.name') }}</label>
+          <input
+            id="qname"
+            class="input"
+            placeholder="Liga Municipal 2026/27"
+            [ngModel]="quickName()"
+            (ngModelChange)="quickName.set($event)"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="field">
+          <label for="qseason">{{ t('competitionForm.season') }}</label>
+          <input
+            id="qseason"
+            class="input"
+            placeholder="2026/27"
+            [ngModel]="quickSeason()"
+            (ngModelChange)="quickSeason.set($event)"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="dialog__actions">
+          <button type="button" class="btn btn--ghost" (click)="showQuickCreate.set(false)">
+            {{ t('common.cancel') }}
+          </button>
+          <button
+            type="button"
+            class="btn"
+            [disabled]="!quickName().trim() || creatingCompetition()"
+            (click)="quickCreateCompetition()"
+          >
+            {{ t('common.save') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 </section>

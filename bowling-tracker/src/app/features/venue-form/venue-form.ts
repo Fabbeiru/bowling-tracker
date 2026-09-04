@@ -4,11 +4,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
+import { ToastService } from '../../core/errors/toast.service';
 import { createVenue, Venue } from '../../models';
+import { BackLink } from '../../shared/components/back-link/back-link';
 
 @Component({
   selector: 'app-venue-form',
-  imports: [ReactiveFormsModule, TranslocoDirective],
+  imports: [ReactiveFormsModule, TranslocoDirective, BackLink],
   templateUrl: './venue-form.html',
   styleUrl: '../ball-form/ball-form.scss',
 })
@@ -16,6 +18,7 @@ export class VenueForm {
   private readonly fb = inject(FormBuilder);
   private readonly repo = inject(Repository);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
 
   private existing: Venue | null = null;
   readonly editing = signal(false);
@@ -34,7 +37,13 @@ export class VenueForm {
   }
 
   private async load(id: string): Promise<void> {
-    const venue = await this.repo.getVenue(id);
+    let venue: Venue | undefined;
+    try {
+      venue = await this.repo.getVenue(id);
+    } catch {
+      this.toast.error('No se pudo cargar la bolera.');
+      return;
+    }
     if (!venue) return;
     this.existing = venue;
     this.editing.set(true);
@@ -57,14 +66,22 @@ export class VenueForm {
       notes: v.notes.trim() || undefined,
     };
     const venue: Venue = this.existing ? { ...this.existing, ...patch } : createVenue(patch);
-    await this.repo.saveVenue(venue);
-    await this.router.navigate(['/arsenal']);
+    try {
+      await this.repo.saveVenue(venue);
+      await this.router.navigate(['/arsenal']);
+    } catch {
+      this.toast.error('No se pudo guardar la bolera.');
+    }
   }
 
   async toggleActive(): Promise<void> {
     if (!this.existing) return;
-    if (this.existing.active) await this.repo.deactivateVenue(this.existing.id);
-    else await this.repo.saveVenue({ ...this.existing, active: true });
-    await this.router.navigate(['/arsenal']);
+    try {
+      if (this.existing.active) await this.repo.deactivateVenue(this.existing.id);
+      else await this.repo.saveVenue({ ...this.existing, active: true });
+      await this.router.navigate(['/arsenal']);
+    } catch {
+      this.toast.error('No se pudo actualizar la bolera.');
+    }
   }
 }

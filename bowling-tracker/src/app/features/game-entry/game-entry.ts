@@ -1,26 +1,31 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
+import { ToastService } from '../../core/errors/toast.service';
 import { SettingsStore } from '../../core/settings/settings-store';
 import { applyDelivery, entryPosition, isComplete, scoreGame, undoLastDelivery } from '../../core/scoring';
-import { Game } from '../../models';
+import { createGame, Game } from '../../models';
 import { Scoresheet } from '../../shared/components/scoresheet/scoresheet';
 import { PinPad } from '../../shared/components/pin-pad/pin-pad';
 import { PinRack, RackDelivery } from '../../shared/components/pin-rack/pin-rack';
 import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
+import { BackLink } from '../../shared/components/back-link/back-link';
+
+const SAVE_ERROR = 'No se pudo guardar. Comprueba la conexión e inténtalo de nuevo.';
 
 @Component({
   selector: 'app-game-entry',
-  imports: [FormsModule, RouterLink, TranslocoDirective, Scoresheet, PinPad, PinRack, ConfirmDialog],
+  imports: [FormsModule, TranslocoDirective, Scoresheet, PinPad, PinRack, ConfirmDialog, BackLink],
   templateUrl: './game-entry.html',
   styleUrl: './game-entry.scss',
 })
 export class GameEntry {
   private readonly repo = inject(Repository);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
   readonly settings = inject(SettingsStore);
 
   readonly game = signal<Game | null>(null);
@@ -29,6 +34,7 @@ export class GameEntry {
   readonly notes = signal('');
   readonly countMode = signal(false);
   readonly confirmingDelete = signal(false);
+  readonly addingGame = signal(false);
 
   readonly score = computed(() => {
     const g = this.game();
@@ -52,11 +58,16 @@ export class GameEntry {
   }
 
   private async load(id: string): Promise<void> {
-    const g = await this.repo.getGame(id);
-    this.game.set(g ?? null);
-    this.totalInput.set(g?.totalPins ?? null);
-    this.notes.set(g?.notes ?? '');
-    this.loading.set(false);
+    try {
+      const g = await this.repo.getGame(id);
+      this.game.set(g ?? null);
+      this.totalInput.set(g?.totalPins ?? null);
+      this.notes.set(g?.notes ?? '');
+    } catch {
+      this.toast.error('No se pudo cargar la partida.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   async record(pins: number): Promise<void> {
@@ -73,7 +84,11 @@ export class GameEntry {
     const updated = applyDelivery(g, delivery);
     this.game.set(updated);
     this.countMode.set(false);
-    await this.repo.saveGame(updated);
+    try {
+      await this.repo.saveGame(updated);
+    } catch {
+      this.toast.error(SAVE_ERROR);
+    }
   }
 
   async undo(): Promise<void> {
@@ -82,7 +97,11 @@ export class GameEntry {
     const updated = undoLastDelivery(g);
     this.game.set(updated);
     this.countMode.set(false);
-    await this.repo.saveGame(updated);
+    try {
+      await this.repo.saveGame(updated);
+    } catch {
+      this.toast.error(SAVE_ERROR);
+    }
   }
 
   async saveTotal(): Promise<void> {
@@ -101,16 +120,48 @@ export class GameEntry {
   }
 
   private async persist(updated: Game): Promise<void> {
-    await this.repo.saveGame(updated);
-    this.game.set(updated);
+    try {
+      await this.repo.saveGame(updated);
+      this.game.set(updated);
+    } catch {
+      this.toast.error(SAVE_ERROR);
+    }
   }
 
   async deleteGame(): Promise<void> {
     const g = this.game();
     this.confirmingDelete.set(false);
     if (!g) return;
-    await this.repo.deleteGame(g.id);
-    await this.router.navigate(['/games']);
+    try {
+      await this.repo.deleteGame(g.id);
+      await this.router.navigate(['/games']);
+    } catch {
+      this.toast.error('No se pudo borrar la partida.');
+    }
+  }
+
+  /** Starts a new game in the same session (e.g. the next game of a league series). */
+  async addAnotherGame(): Promise<void> {
+    const g = this.game();
+    if (!g || this.addingGame()) return;
+    this.addingGame.set(true);
+    try {
+      const siblings = await this.repo.listGamesBySession(g.sessionId);
+      const nextIndex = siblings.reduce((max, s) => Math.max(max, s.index), 0) + 1;
+      const next = createGame({
+        sessionId: g.sessionId,
+        index: nextIndex,
+        detailLevel: g.detailLevel,
+        primaryBallId: g.primaryBallId,
+        spareBallId: g.spareBallId,
+      });
+      await this.repo.saveGame(next);
+      await this.router.navigate(['/games', next.id]);
+    } catch {
+      this.toast.error('No se pudo añadir la partida.');
+    } finally {
+      this.addingGame.set(false);
+    }
   }
 
   async finish(): Promise<void> {

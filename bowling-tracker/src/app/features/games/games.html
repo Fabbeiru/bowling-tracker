@@ -7,6 +7,8 @@
     <a class="new" routerLink="/games/new">{{ t('games.new') }}</a>
   </header>
 
+  <a class="competitions-link" routerLink="/competitions">{{ t('games.competitions') }} ›</a>
+
   @if (loading()) {
     <p class="muted">{{ t('common.loading') }}</p>
   } @else if (rows().length === 0) {
@@ -16,30 +18,47 @@
       <a class="cta" routerLink="/games/new">{{ t('games.new') }}</a>
     </div>
   } @else {
-    <ul class="sessions">
-      @for (row of rows(); track row.session.id) {
-        <li class="session">
-          <div class="session__head">
-            <span class="session__date">{{ row.session.date }}</span>
-            <span class="session__type">
-              {{ row.competitionName || t('sessionType.' + row.session.type) }}
-            </span>
-            @if (row.venueName) {
-              <span class="session__venue">· {{ row.venueName }}</span>
-            }
-          </div>
-          <ul class="games">
-            @for (item of row.games; track item.game.id) {
-              <a class="game" [routerLink]="['/games', item.game.id]">
-                <span class="game__idx">{{ t('games.gameN', { n: item.game.index }) }}</span>
-                <span class="game__score" [class.game__score--wip]="!item.complete">
-                  {{ item.total }}{{ item.complete ? '' : '…' }}
-                </span>
-              </a>
-            }
-          </ul>
-        </li>
+    <div class="chips">
+      @for (opt of typeOptions; track opt) {
+        <button
+          type="button"
+          class="chip"
+          [class.chip--on]="typeFilter() === opt"
+          (click)="typeFilter.set(opt)"
+        >
+          {{ opt === 'all' ? t('stats.allTypes') : t('sessionType.' + opt) }}
+        </button>
       }
-    </ul>
+    </div>
+
+    @if (filteredRows().length === 0) {
+      <p class="muted">{{ t('games.emptyHint') }}</p>
+    } @else {
+      <ul class="sessions">
+        @for (row of filteredRows(); track row.session.id) {
+          <li class="session">
+            <div class="session__head">
+              <span class="session__date">{{ row.session.date }}</span>
+              <span class="session__type">
+                {{ row.competitionName || t('sessionType.' + row.session.type) }}
+              </span>
+              @if (row.venueName) {
+                <span class="session__venue">· {{ row.venueName }}</span>
+              }
+            </div>
+            <ul class="games">
+              @for (item of row.games; track item.game.id) {
+                <a class="game" [routerLink]="['/games', item.game.id]">
+                  <span class="game__idx">{{ t('games.gameN', { n: item.game.index }) }}</span>
+                  <span class="game__score" [class.game__score--wip]="!item.complete">
+                    {{ item.total }}{{ item.complete ? '' : '…' }}
+                  </span>
+                </a>
+              }
+            </ul>
+          </li>
+        }
+      </ul>
+    }
   }
 </section>
