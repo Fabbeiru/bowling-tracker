@@ -103,13 +103,16 @@ comportamiento transversal está decidido y documentado.
 - [x] **Primer arranque**: `StorageService` (`persist()`, `estimate()`) +
       `providePersistenceRequest()` como app initializer. Aviso de datos locales
       ya estaba en Inicio.
-- [ ] Estrategia de tests: `ng test` aún no verificado (necesita navegador
-      headless); decidir Karma vs Vitest y dejar nota
+- [x] **Test runner: Vitest** (ADR 0008 revisado). `angular.json` target `test`
+      con `@angular/build:unit-test` + `runner: vitest`; `src/test-setup.ts` con
+      `fake-indexeddb`; Karma/Jasmine eliminados. `docs/TESTING.md` con la
+      estrategia. **9 tests pasan** (`ng test`, ~3,5 s, sin navegador).
 - [ ] `ng add @angular/pwa` + `ngsw-config.json` → **sesión dedicada al SW**
 
-Comprobado: `ng build` pasa; app arranca sin errores de consola (Playwright).
-La BD IndexedDB se crea de forma perezosa en la primera lectura/escritura real.
-`npm audit`: 2 vulnerabilidades moderadas (transitivas de dev) por revisar.
+**Bloque 1 completo** salvo el PWA (sesión aparte). Comprobado: `ng build` y
+`ng test` pasan; app arranca sin errores de consola. La BD IndexedDB se crea de
+forma perezosa en la primera lectura/escritura real. `npm audit`: 2
+vulnerabilidades moderadas (transitivas de dev) por revisar.
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.

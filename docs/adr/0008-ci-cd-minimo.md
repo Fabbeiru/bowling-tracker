@@ -1,31 +1,42 @@
-# ADR 0008 — CI/CD mínimo
+# ADR 0008 — CI/CD mínimo y test runner
 
 - **Estado**: aceptado
-- **Fecha**: 2026-09-03
+- **Fecha**: 2026-09-03 (revisado 2026-09-04)
 
 ## Contexto
 
-El proyecto arranca como personal. No necesita una tubería elaborada. Los otros
-proyectos del workspace usan el flujo por defecto que GitHub genera al activar
-Pages.
+El proyecto arranca como personal. No necesita una tubería elaborada.
+
+Sobre tests: la propuesta inicial era **Karma** (por defecto de Angular), que
+corre en un navegador real. Inconvenientes: no hay navegador en el entorno de
+desarrollo actual y CI tendría que instalar Chrome. El grueso de los tests de
+este proyecto es lógica pura (motor de scoring, estadísticas).
 
 ## Decisión
 
-Mismo enfoque que el resto del workspace:
+**Test runner: Vitest** (soporte experimental de Angular 20 vía el builder
+`@angular/build:unit-test`).
 
-- Al activar **GitHub Pages** con "GitHub Actions" como fuente, GitHub propone un
-  workflow de build + deploy de Angular. Se parte de ese.
-- Se le añade un **paso de tests** (`ng test` en modo headless / CI) que debe
-  pasar antes del deploy.
-- Disparadores: push a `main` (build + test + deploy) y pull request
-  (build + test, sin deploy).
-- Sin Lighthouse CI, sin análisis de bundle automatizado, sin entornos de
-  preview por ahora. Se revisa el tamaño del bundle a mano con los *budgets* de
-  `angular.json`.
+- Corre en Node con `jsdom`; sin navegador.
+- `fake-indexeddb` (en `src/test-setup.ts`) da IndexedDB a los tests del
+  repositorio Dexie.
+- Config en `angular.json` → target `test` con `runner: "vitest"`.
+- Se eliminan Karma y Jasmine de las dependencias.
+- Coste asumido: el builder es "experimental" en Angular 20 (estable en 21).
+
+**CI/CD:**
+
+- Al activar GitHub Pages con "GitHub Actions", se parte del workflow de build +
+  deploy de Angular.
+- Se le añade un paso `ng test` (Vitest, headless por defecto) que debe pasar
+  antes del deploy.
+- Disparadores: push a `main` (build + test + deploy) y PR (build + test).
+- Sin Lighthouse CI ni análisis de bundle automatizado por ahora.
 
 ## Consecuencias
 
-- Si `ng test` falla, no se despliega. Es la red mínima para "que los números
-  no se rompan".
-- Ampliar la tubería (Lighthouse, budgets como *check*, dependabot) es aditivo y
+- Si `ng test` falla, no se despliega.
+- Ampliar la tubería (Lighthouse, budgets como check, Dependabot) es aditivo y
   tendrá su propio ADR si el proyecto lo justifica.
+- Si el soporte de Vitest diera problemas antes de estabilizarse, volver a Karma
+  es un cambio de config acotado.

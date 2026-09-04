@@ -15,6 +15,7 @@ my-bowling-tracker/
 │   ├── ESTADISTICAS.md     ← métricas v1, fórmulas y nivel de detalle
 │   ├── COMPORTAMIENTO-TRANSVERSAL.md ← reglas que afectan a toda la app
 │   ├── IDENTIDAD.md        ← logo (SVG), paleta y tipografía
+│   ├── TESTING.md          ← estrategia y runner de tests
 │   └── STATE.md            ← estado actual + próximos pasos + preguntas abiertas
 └── bowling-tracker/       ← la app (se crea al empezar la Fase 1)
 ```
