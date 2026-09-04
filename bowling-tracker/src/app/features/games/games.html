@@ -24,7 +24,7 @@
           type="button"
           class="chip"
           [class.chip--on]="typeFilter() === opt"
-          (click)="typeFilter.set(opt)"
+          (click)="selectType(opt)"
         >
           {{ opt === 'all' ? t('stats.allTypes') : t('sessionType.' + opt) }}
         </button>
@@ -35,7 +35,7 @@
       <p class="muted">{{ t('games.emptyHint') }}</p>
     } @else {
       <ul class="sessions">
-        @for (row of filteredRows(); track row.session.id) {
+        @for (row of pagedRows(); track row.session.id) {
           <li class="session">
             <div class="session__head">
               <span class="session__date">{{ row.session.date }}</span>
@@ -48,8 +48,15 @@
             </div>
             <ul class="games">
               @for (item of row.games; track item.game.id) {
-                <a class="game" [routerLink]="['/games', item.game.id]">
-                  <span class="game__idx">{{ t('games.gameN', { n: item.game.index }) }}</span>
+                <a class="game" [class.game--perfect]="item.perfect" [class.game--clean]="item.clean && !item.perfect" [routerLink]="['/games', item.game.id]">
+                  <span class="game__idx">
+                    {{ t('games.gameN', { n: item.game.index }) }}
+                    @if (item.perfect) {
+                      <span class="game__badge game__badge--perfect" [title]="t('games.perfectGame')">🏆 {{ t('games.perfectGame') }}</span>
+                    } @else if (item.clean) {
+                      <span class="game__badge" [title]="t('games.cleanGame')">✨ {{ t('games.cleanGame') }}</span>
+                    }
+                  </span>
                   <span class="game__score" [class.game__score--wip]="!item.complete">
                     {{ item.total }}{{ item.complete ? '' : '…' }}
                   </span>
@@ -59,6 +66,18 @@
           </li>
         }
       </ul>
+
+      @if (pageCount() > 1) {
+        <div class="pager">
+          <button type="button" class="pager__btn" [disabled]="page() === 1" (click)="prevPage()">
+            {{ t('games.prevPage') }}
+          </button>
+          <span class="pager__label">{{ t('games.pageOf', { page: page(), total: pageCount() }) }}</span>
+          <button type="button" class="pager__btn" [disabled]="page() === pageCount()" (click)="nextPage()">
+            {{ t('games.nextPage') }}
+          </button>
+        </div>
+      }
     }
   }
 </section>

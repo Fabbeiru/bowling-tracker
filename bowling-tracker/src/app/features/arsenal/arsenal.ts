@@ -5,10 +5,11 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
 import { Ball, Venue } from '../../models';
+import { BallAvatar } from '../../shared/components/ball-avatar/ball-avatar';
 
 @Component({
   selector: 'app-arsenal',
-  imports: [RouterLink, TranslocoDirective],
+  imports: [RouterLink, TranslocoDirective, BallAvatar],
   templateUrl: './arsenal.html',
   styleUrl: './arsenal.scss',
 })
@@ -33,7 +34,7 @@ export class Arsenal {
       this.balls.set(balls);
       this.venues.set(venues);
     } catch {
-      this.toast.error('No se pudo cargar el arsenal.');
+      this.toast.error('errors.loadArsenal');
     } finally {
       this.loading.set(false);
     }

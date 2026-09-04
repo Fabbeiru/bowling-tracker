@@ -102,6 +102,23 @@ textarea {
   margin-top: 0.25rem;
 }
 
+/* Etiqueta "obligatorio"/"opcional" junto al label de un campo (todos los formularios). */
+.field > label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+}
+.label-tag {
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  opacity: 0.75;
+}
+.label-tag--required {
+  color: var(--danger-text);
+  opacity: 1;
+}
+
 /* Estado vacío (ver docs/COMPORTAMIENTO-TRANSVERSAL.md §4) */
 .empty-state {
   display: flex;

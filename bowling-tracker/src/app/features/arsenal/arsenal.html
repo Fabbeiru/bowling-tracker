@@ -18,6 +18,7 @@
         <ul class="list">
           @for (ball of balls(); track ball.id) {
             <a class="row" [class.row--inactive]="!ball.active" [routerLink]="['/arsenal/balls', ball.id]">
+              <app-ball-avatar [imageUrl]="ball.imageUrl" [size]="36" />
               <span class="row__name">{{ ball.name }}</span>
               <span class="row__meta">
                 {{ ball.brand }}@if (ball.brand && ball.weightLb) {&nbsp;·&nbsp;}@if (ball.weightLb) {{{ ball.weightLb }} lb}

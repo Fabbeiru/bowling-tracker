@@ -74,7 +74,7 @@ export class GameNew {
       this.venues.set(venues);
       this.competitions.set(competitions);
     } catch {
-      this.toast.error('No se pudo cargar tu arsenal ni tus competiciones.');
+      this.toast.error('errors.loadPickers');
     }
   }
 
@@ -111,7 +111,7 @@ export class GameNew {
       this.form.controls.competitionId.setValue(competition.id);
       this.showQuickCreate.set(false);
     } catch {
-      this.toast.error('No se pudo crear la competición.');
+      this.toast.error('errors.createCompetition');
     } finally {
       this.creatingCompetition.set(false);
     }
@@ -142,7 +142,7 @@ export class GameNew {
 
       await this.router.navigate(['/games', game.id]);
     } catch {
-      this.toast.error('No se pudo crear la partida. Inténtalo de nuevo.');
+      this.toast.error('errors.createGame');
     } finally {
       this.saving.set(false);
     }

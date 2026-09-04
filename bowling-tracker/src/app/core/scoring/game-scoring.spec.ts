@@ -1,5 +1,5 @@
 import { Frame, Game } from '../../models';
-import { gameToRolls, scoreGame } from './game-scoring';
+import { gameToRolls, isCleanGame, scoreGame } from './game-scoring';
 
 function game(detailLevel: Game['detailLevel'], extra: Partial<Game>): Game {
   return {
@@ -106,5 +106,40 @@ describe('gameToRolls / scoreGame — throw detail', () => {
     const s = scoreGame(throwLevel(rows));
     expect(s.total).toBe(19);
     expect(s.complete).toBe(true);
+  });
+});
+
+describe('isCleanGame', () => {
+  it('is true for a perfect game', () => {
+    const rows: Array<Partial<Frame>> = [
+      ...Array<Partial<Frame>>(9).fill({ first: 10 }),
+      { first: 10, second: 10, third: 10 },
+    ];
+    expect(isCleanGame(frameLevel(rows))).toBe(true);
+  });
+
+  it('is true for an all-spares game with no strikes', () => {
+    const rows: Array<Partial<Frame>> = [
+      ...Array<Partial<Frame>>(9).fill({ first: 5, second: 5 }),
+      { first: 5, second: 5, third: 5 },
+    ];
+    expect(isCleanGame(frameLevel(rows))).toBe(true);
+  });
+
+  it('is false as soon as one frame is open', () => {
+    const rows: Array<Partial<Frame>> = [
+      { first: 4, second: 3 },
+      ...Array<Partial<Frame>>(8).fill({ first: 10 }),
+      { first: 10, second: 10, third: 10 },
+    ];
+    expect(isCleanGame(frameLevel(rows))).toBe(false);
+  });
+
+  it('is false while the game is still in progress', () => {
+    expect(isCleanGame(frameLevel([{ first: 10 }, { first: 10 }]))).toBe(false);
+  });
+
+  it('is false for total-detail games, even a 300', () => {
+    expect(isCleanGame(game('total', { totalPins: 300 }))).toBe(false);
   });
 });

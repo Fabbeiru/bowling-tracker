@@ -36,6 +36,19 @@ function clampScore(n: number): number {
   return Math.max(0, Math.min(300, Math.round(n)));
 }
 
+/**
+ * A finished frame/throw game with no open frame — every frame is a strike
+ * or a spare (a 300 game is the extreme case, but any "no leaves" game
+ * counts). Always `false` for total-detail games: there is no frame data to
+ * judge it from.
+ */
+export function isCleanGame(game: Game): boolean {
+  if (game.detailLevel === 'total') return false;
+  const score = scoreGame(game);
+  if (!score.complete) return false;
+  return score.frames.every((f) => f.mark === 'strike' || f.mark === 'spare');
+}
+
 /** Full score of a game: per-frame cumulative, total, completeness, ceiling. */
 export function scoreGame(game: Game): GameScore {
   if (game.detailLevel === 'total') {

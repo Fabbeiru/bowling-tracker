@@ -6,34 +6,89 @@
   </header>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="form">
+    <div class="avatar-row">
+      <app-ball-avatar [imageUrl]="form.controls.imageUrl.value" [size]="64" />
+      <div class="field field--grow">
+        <label for="image">
+          {{ t('ballForm.image') }}
+          <span class="label-tag">{{ t('form.optional') }}</span>
+        </label>
+        <input
+          id="image"
+          class="input"
+          formControlName="imageUrl"
+          autocomplete="off"
+          inputmode="url"
+          [placeholder]="t('ballForm.imagePlaceholder')"
+        />
+      </div>
+    </div>
+
     <div class="field">
-      <label for="name">{{ t('ballForm.name') }}</label>
-      <input id="name" class="input" formControlName="name" autocomplete="off" placeholder="Storm Phaze II" />
+      <label for="name">
+        {{ t('ballForm.name') }}
+        <span class="label-tag label-tag--required">{{ t('form.required') }}</span>
+      </label>
+      <input
+        id="name"
+        class="input"
+        formControlName="name"
+        autocomplete="off"
+        [placeholder]="t('ballForm.namePlaceholder')"
+      />
     </div>
 
     <div class="row2">
       <div class="field">
-        <label for="brand">{{ t('ballForm.brand') }}</label>
-        <input id="brand" class="input" formControlName="brand" autocomplete="off" placeholder="Storm" />
+        <label for="brand">
+          {{ t('ballForm.brand') }}
+          <span class="label-tag">{{ t('form.optional') }}</span>
+        </label>
+        <input id="brand" class="input" formControlName="brand" autocomplete="off" [placeholder]="t('ballForm.brandPlaceholder')" />
       </div>
       <div class="field">
-        <label for="weight">{{ t('ballForm.weight') }}</label>
-        <input id="weight" class="input" type="number" inputmode="numeric" min="6" max="16" placeholder="15" formControlName="weightLb" />
+        <label for="weight">
+          {{ t('ballForm.weight') }}
+          <span class="label-tag">{{ t('form.optional') }}</span>
+        </label>
+        <input
+          id="weight"
+          class="input"
+          type="number"
+          inputmode="numeric"
+          min="6"
+          max="16"
+          step="0.5"
+          [placeholder]="t('ballForm.weightPlaceholder')"
+          formControlName="weightLb"
+        />
+        @if (form.controls.weightLb.errors && (form.controls.weightLb.dirty || form.controls.weightLb.touched)) {
+          <p class="field__error">{{ t('form.onlyNumbers') }}</p>
+        }
       </div>
     </div>
 
     <div class="field">
-      <label for="cover">{{ t('ballForm.coverstock') }}</label>
-      <input id="cover" class="input" formControlName="coverstock" autocomplete="off" placeholder="Reactive solid" />
+      <label for="cover">
+        {{ t('ballForm.coverstock') }}
+        <span class="label-tag">{{ t('form.optional') }}</span>
+      </label>
+      <input id="cover" class="input" formControlName="coverstock" autocomplete="off" [placeholder]="t('ballForm.coverstockPlaceholder')" />
     </div>
 
     <div class="field">
-      <label for="layout">{{ t('ballForm.layout') }}</label>
-      <input id="layout" class="input" formControlName="layout" autocomplete="off" placeholder="60 x 4 ½ x 30" />
+      <label for="layout">
+        {{ t('ballForm.layout') }}
+        <span class="label-tag">{{ t('form.optional') }}</span>
+      </label>
+      <input id="layout" class="input" formControlName="layout" autocomplete="off" [placeholder]="t('ballForm.layoutPlaceholder')" />
     </div>
 
     <div class="field">
-      <label for="notes">{{ t('ballForm.notes') }}</label>
+      <label for="notes">
+        {{ t('ballForm.notes') }}
+        <span class="label-tag">{{ t('form.optional') }}</span>
+      </label>
       <textarea
         id="notes"
         class="input"

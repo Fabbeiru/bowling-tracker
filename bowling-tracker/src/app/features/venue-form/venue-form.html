@@ -7,23 +7,47 @@
 
   <form [formGroup]="form" (ngSubmit)="save()" class="form">
     <div class="field">
-      <label for="name">{{ t('venueForm.name') }}</label>
-      <input id="name" class="input" formControlName="name" autocomplete="off" placeholder="Bowling Vigo" />
+      <label for="name">
+        {{ t('venueForm.name') }}
+        <span class="label-tag label-tag--required">{{ t('form.required') }}</span>
+      </label>
+      <input id="name" class="input" formControlName="name" autocomplete="off" [placeholder]="t('venueForm.namePlaceholder')" />
     </div>
 
     <div class="row2">
       <div class="field">
-        <label for="city">{{ t('venueForm.city') }}</label>
-        <input id="city" class="input" formControlName="city" autocomplete="off" placeholder="Vigo" />
+        <label for="city">
+          {{ t('venueForm.city') }}
+          <span class="label-tag">{{ t('form.optional') }}</span>
+        </label>
+        <input id="city" class="input" formControlName="city" autocomplete="off" [placeholder]="t('venueForm.cityPlaceholder')" />
       </div>
       <div class="field">
-        <label for="lanes">{{ t('venueForm.lanes') }}</label>
-        <input id="lanes" class="input" type="number" inputmode="numeric" min="1" placeholder="12" formControlName="lanes" />
+        <label for="lanes">
+          {{ t('venueForm.lanes') }}
+          <span class="label-tag">{{ t('form.optional') }}</span>
+        </label>
+        <input
+          id="lanes"
+          class="input"
+          type="number"
+          inputmode="numeric"
+          min="1"
+          step="1"
+          [placeholder]="t('venueForm.lanesPlaceholder')"
+          formControlName="lanes"
+        />
+        @if (form.controls.lanes.errors && (form.controls.lanes.dirty || form.controls.lanes.touched)) {
+          <p class="field__error">{{ t('form.onlyNumbers') }}</p>
+        }
       </div>
     </div>
 
     <div class="field">
-      <label for="notes">{{ t('venueForm.notes') }}</label>
+      <label for="notes">
+        {{ t('venueForm.notes') }}
+        <span class="label-tag">{{ t('form.optional') }}</span>
+      </label>
       <textarea
         id="notes"
         class="input"

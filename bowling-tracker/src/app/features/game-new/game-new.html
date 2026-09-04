@@ -110,22 +110,28 @@
       <div class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
         <h2 class="dialog__title">{{ t('gameNew.newCompetitionTitle') }}</h2>
         <div class="field">
-          <label for="qname">{{ t('competitionForm.name') }}</label>
+          <label for="qname">
+            {{ t('competitionForm.name') }}
+            <span class="label-tag label-tag--required">{{ t('form.required') }}</span>
+          </label>
           <input
             id="qname"
             class="input"
-            placeholder="Liga Municipal 2026/27"
+            [placeholder]="t('gameNew.competitionNamePlaceholder')"
             [ngModel]="quickName()"
             (ngModelChange)="quickName.set($event)"
             [ngModelOptions]="{ standalone: true }"
           />
         </div>
         <div class="field">
-          <label for="qseason">{{ t('competitionForm.season') }}</label>
+          <label for="qseason">
+            {{ t('competitionForm.season') }}
+            <span class="label-tag">{{ t('form.optional') }}</span>
+          </label>
           <input
             id="qseason"
             class="input"
-            placeholder="2026/27"
+            [placeholder]="t('gameNew.seasonPlaceholder')"
             [ngModel]="quickSeason()"
             (ngModelChange)="quickSeason.set($event)"
             [ngModelOptions]="{ standalone: true }"

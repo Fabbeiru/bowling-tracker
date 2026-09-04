@@ -27,7 +27,7 @@ export class VenueForm {
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(80)]],
     city: [''],
-    lanes: this.fb.control<number | null>(null),
+    lanes: this.fb.control<number | null>(null, [Validators.min(1), Validators.max(200)]),
     notes: [''],
   });
 
@@ -41,7 +41,7 @@ export class VenueForm {
     try {
       venue = await this.repo.getVenue(id);
     } catch {
-      this.toast.error('No se pudo cargar la bolera.');
+      this.toast.error('errors.loadVenue');
       return;
     }
     if (!venue) return;
@@ -70,7 +70,7 @@ export class VenueForm {
       await this.repo.saveVenue(venue);
       await this.router.navigate(['/arsenal']);
     } catch {
-      this.toast.error('No se pudo guardar la bolera.');
+      this.toast.error('errors.saveVenue');
     }
   }
 
@@ -81,7 +81,7 @@ export class VenueForm {
       else await this.repo.saveVenue({ ...this.existing, active: true });
       await this.router.navigate(['/arsenal']);
     } catch {
-      this.toast.error('No se pudo actualizar la bolera.');
+      this.toast.error('errors.updateVenue');
     }
   }
 }

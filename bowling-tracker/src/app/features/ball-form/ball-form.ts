@@ -7,10 +7,11 @@ import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
 import { Ball, createBall } from '../../models';
 import { BackLink } from '../../shared/components/back-link/back-link';
+import { BallAvatar } from '../../shared/components/ball-avatar/ball-avatar';
 
 @Component({
   selector: 'app-ball-form',
-  imports: [ReactiveFormsModule, TranslocoDirective, BackLink],
+  imports: [ReactiveFormsModule, TranslocoDirective, BackLink, BallAvatar],
   templateUrl: './ball-form.html',
   styleUrl: './ball-form.scss',
 })
@@ -27,11 +28,15 @@ export class BallForm {
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(80)]],
     brand: [''],
-    weightLb: this.fb.control<number | null>(null),
+    weightLb: this.fb.control<number | null>(null, [Validators.min(6), Validators.max(16)]),
     coverstock: [''],
     layout: [''],
+    imageUrl: ['', [Validators.pattern(/^https?:\/\/.+/i)]],
     notes: [''],
   });
+
+  /** Live preview of the image URL field, so a bad link is obvious before saving. */
+  readonly imagePreviewError = signal(false);
 
   constructor() {
     const id = inject(ActivatedRoute).snapshot.paramMap.get('id');
@@ -43,7 +48,7 @@ export class BallForm {
     try {
       ball = await this.repo.getBall(id);
     } catch {
-      this.toast.error('No se pudo cargar la bola.');
+      this.toast.error('errors.loadBall');
       return;
     }
     if (!ball) return;
@@ -56,6 +61,7 @@ export class BallForm {
       weightLb: ball.weightLb ?? null,
       coverstock: ball.coverstock ?? '',
       layout: ball.layout ?? '',
+      imageUrl: ball.imageUrl ?? '',
       notes: ball.notes ?? '',
     });
   }
@@ -69,6 +75,7 @@ export class BallForm {
       weightLb: v.weightLb ?? undefined,
       coverstock: v.coverstock.trim() || undefined,
       layout: v.layout.trim() || undefined,
+      imageUrl: v.imageUrl.trim() || undefined,
       notes: v.notes.trim() || undefined,
     };
     const ball: Ball = this.existing
@@ -78,7 +85,7 @@ export class BallForm {
       await this.repo.saveBall(ball);
       await this.router.navigate(['/arsenal']);
     } catch {
-      this.toast.error('No se pudo guardar la bola.');
+      this.toast.error('errors.saveBall');
     }
   }
 
@@ -92,7 +99,7 @@ export class BallForm {
       }
       await this.router.navigate(['/arsenal']);
     } catch {
-      this.toast.error('No se pudo actualizar la bola.');
+      this.toast.error('errors.updateBall');
     }
   }
 }

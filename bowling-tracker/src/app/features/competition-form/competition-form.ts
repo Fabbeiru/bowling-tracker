@@ -44,7 +44,7 @@ export class CompetitionForm {
     try {
       c = await this.repo.getCompetition(id);
     } catch {
-      this.toast.error('No se pudo cargar la competición.');
+      this.toast.error('errors.loadCompetition');
       return;
     }
     if (!c) return;
@@ -83,7 +83,7 @@ export class CompetitionForm {
       await this.repo.saveCompetition(competition);
       await this.router.navigate(['/competitions']);
     } catch {
-      this.toast.error('No se pudo guardar la competición.');
+      this.toast.error('errors.saveCompetition');
     }
   }
 
@@ -94,7 +94,7 @@ export class CompetitionForm {
       else await this.repo.saveCompetition({ ...this.existing, active: true });
       await this.router.navigate(['/competitions']);
     } catch {
-      this.toast.error('No se pudo actualizar la competición.');
+      this.toast.error('errors.updateCompetition');
     }
   }
 }

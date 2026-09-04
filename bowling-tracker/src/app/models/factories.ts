@@ -48,6 +48,7 @@ export function createBall(input: { name: string } & Partial<Ball>): Ball {
     weightLb: input.weightLb,
     coverstock: input.coverstock,
     layout: input.layout,
+    imageUrl: input.imageUrl,
     notes: input.notes,
     active: input.active ?? true,
     createdAt: ts,

@@ -8,9 +8,18 @@
       <p class="empty-state__title">{{ t('gameEntry.notFound') }}</p>
     </div>
   } @else {
-    <header class="screen__head">
-      <h1>{{ t('gameEntry.title', { index: game()!.index }) }}</h1>
-      <p>{{ t('detailLevel.' + game()!.detailLevel + '.name') }}</p>
+    <header class="screen__head screen__head--game">
+      <div class="screen__head-row">
+        <h1>{{ t('gameEntry.title', { index: game()!.index }) }}</h1>
+        @if (game()!.detailLevel === 'total') {
+          <span class="screen__head-score" [class.screen__head-score--empty]="totalInput() === null">
+            {{ totalInput() ?? '–' }}
+          </span>
+        }
+      </div>
+      @if (game()!.detailLevel !== 'total') {
+        <p>{{ t('detailLevel.' + game()!.detailLevel + '.name') }}</p>
+      }
     </header>
 
     @if (score(); as s) {
@@ -38,7 +47,10 @@
     @switch (game()!.detailLevel) {
       @case ('total') {
         <div class="field">
-          <label for="total">{{ t('gameEntry.totalLabel') }}</label>
+          <label for="total">
+            {{ t('gameEntry.totalLabel') }}
+            <span class="label-tag label-tag--required">{{ t('form.required') }}</span>
+          </label>
           <input
             id="total"
             class="input"
@@ -46,7 +58,8 @@
             inputmode="numeric"
             min="0"
             max="300"
-            placeholder="0–300"
+            step="1"
+            [placeholder]="t('gameEntry.totalPlaceholder')"
             [ngModel]="totalInput()"
             (ngModelChange)="totalInput.set($event)"
             (blur)="saveTotal()"
@@ -88,7 +101,10 @@
     }
 
     <div class="field">
-      <label for="notes">{{ t('gameEntry.notesLabel') }}</label>
+      <label for="notes">
+        {{ t('gameEntry.notesLabel') }}
+        <span class="label-tag">{{ t('form.optional') }}</span>
+      </label>
       <textarea
         id="notes"
         class="input"

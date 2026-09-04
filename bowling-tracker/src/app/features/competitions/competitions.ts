@@ -28,7 +28,7 @@ export class Competitions {
     try {
       this.competitions.set(await this.repo.listCompetitions({ includeInactive: true }));
     } catch {
-      this.toast.error('No se pudieron cargar las competiciones.');
+      this.toast.error('errors.loadCompetitions');
     } finally {
       this.loading.set(false);
     }

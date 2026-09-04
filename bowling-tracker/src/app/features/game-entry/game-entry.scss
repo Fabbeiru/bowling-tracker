@@ -2,6 +2,28 @@
   color: var(--ink-soft);
 }
 
+.screen__head-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.screen__head-score {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  &--empty {
+    color: var(--ink-soft);
+    font-weight: 700;
+  }
+}
+
 .link {
   color: var(--secondary);
   text-decoration: none;

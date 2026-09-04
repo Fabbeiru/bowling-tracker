@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -14,7 +15,7 @@ import { PinRack, RackDelivery } from '../../shared/components/pin-rack/pin-rack
 import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
 import { BackLink } from '../../shared/components/back-link/back-link';
 
-const SAVE_ERROR = 'No se pudo guardar. Comprueba la conexión e inténtalo de nuevo.';
+const SAVE_ERROR = 'errors.saveGame';
 
 @Component({
   selector: 'app-game-entry',
@@ -52,19 +53,31 @@ export class GameEntry {
   });
 
   constructor() {
-    const id = inject(ActivatedRoute).snapshot.paramMap.get('id');
-    if (id) void this.load(id);
-    else this.loading.set(false);
+    // `games/:id` is the same route for every game, so navigating from one
+    // game to another (e.g. "add another game to this session") reuses this
+    // component instead of recreating it — a snapshot read here would only
+    // ever see the first id. Subscribe to paramMap so a route change always
+    // reloads.
+    inject(ActivatedRoute)
+      .paramMap.pipe(takeUntilDestroyed())
+      .subscribe((params) => {
+        const id = params.get('id');
+        if (id) void this.load(id);
+        else this.loading.set(false);
+      });
   }
 
   private async load(id: string): Promise<void> {
+    this.loading.set(true);
+    this.confirmingDelete.set(false);
+    this.countMode.set(false);
     try {
       const g = await this.repo.getGame(id);
       this.game.set(g ?? null);
       this.totalInput.set(g?.totalPins ?? null);
       this.notes.set(g?.notes ?? '');
     } catch {
-      this.toast.error('No se pudo cargar la partida.');
+      this.toast.error('errors.loadGame');
     } finally {
       this.loading.set(false);
     }
@@ -108,7 +121,8 @@ export class GameEntry {
     const g = this.game();
     if (!g) return;
     const raw = this.totalInput();
-    const totalPins = raw === null ? undefined : Math.max(0, Math.min(300, Math.round(raw)));
+    const totalPins =
+      raw === null || Number.isNaN(raw) ? undefined : Math.max(0, Math.min(300, Math.round(raw)));
     await this.persist({ ...g, totalPins });
   }
 
@@ -136,7 +150,7 @@ export class GameEntry {
       await this.repo.deleteGame(g.id);
       await this.router.navigate(['/games']);
     } catch {
-      this.toast.error('No se pudo borrar la partida.');
+      this.toast.error('errors.deleteGame');
     }
   }
 
@@ -158,7 +172,7 @@ export class GameEntry {
       await this.repo.saveGame(next);
       await this.router.navigate(['/games', next.id]);
     } catch {
-      this.toast.error('No se pudo añadir la partida.');
+      this.toast.error('errors.addGame');
     } finally {
       this.addingGame.set(false);
     }

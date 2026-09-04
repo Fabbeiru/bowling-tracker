@@ -75,7 +75,7 @@ export class Stats {
       this.sessions.set(sessions);
       this.competitions.set(competitions);
     } catch {
-      this.toast.error('No se pudieron cargar las estadísticas.');
+      this.toast.error('errors.loadStats');
     } finally {
       this.loading.set(false);
     }

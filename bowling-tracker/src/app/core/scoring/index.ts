@@ -1,7 +1,7 @@
 export * from './types';
 export { clampPins, scoreRolls, maxPossibleFromRolls } from './roll-scoring';
 export type { RollScore } from './roll-scoring';
-export { gameToRolls, scoreGame, framePins } from './game-scoring';
+export { gameToRolls, scoreGame, framePins, isCleanGame } from './game-scoring';
 export {
   ALL_PINS,
   entryPosition,

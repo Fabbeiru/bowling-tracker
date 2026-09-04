@@ -134,7 +134,30 @@
 }
 
 .game__idx {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.9rem;
+}
+
+.game__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--secondary);
+  border: 1px solid var(--secondary);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+
+  &--perfect {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: transparent;
+  }
 }
 
 .game__score {
@@ -146,4 +169,40 @@
   &--wip {
     color: var(--ink-soft);
   }
+}
+
+.game--clean {
+  background: color-mix(in srgb, var(--secondary) 10%, transparent);
+}
+
+.game--perfect {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.pager__btn {
+  min-height: 40px;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+.pager__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
 }

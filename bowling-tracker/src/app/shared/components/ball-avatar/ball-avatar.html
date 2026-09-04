@@ -1,0 +1,12 @@
+<span class="avatar" [style.width.px]="size()" [style.height.px]="size()">
+  @if (imageUrl() && !loadFailed()) {
+    <img [src]="imageUrl()" alt="" (error)="onError()" />
+  } @else {
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="26" class="avatar__ball" />
+      <circle cx="25.5" cy="24" r="2.8" class="avatar__hole" />
+      <circle cx="35" cy="25.5" r="2.8" class="avatar__hole" />
+      <circle cx="30" cy="32.5" r="2.8" class="avatar__hole" />
+    </svg>
+  }
+</span>
