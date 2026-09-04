@@ -97,11 +97,29 @@ textarea {
   margin: 0 auto;
 }
 .screen__head {
-  padding-block: 0.5rem 1.25rem;
+  padding-block: 0.5rem 1.1rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 1px solid var(--line);
 }
 .screen__head h1 {
+  position: relative;
+  padding-left: 0.65rem;
   font-size: 1.6rem;
   font-weight: 800;
+
+  /* Marca de sección: un trazo azul (no ámbar — el ámbar queda reservado a
+     la acción principal de cada pantalla, ver docs/IDENTIDAD.md). Separa
+     visualmente la cabecera del contenido sin competir con las CTA. */
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    bottom: 0.2em;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--secondary);
+  }
 }
 .screen__head p {
   color: var(--ink-soft);

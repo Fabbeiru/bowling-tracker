@@ -1,0 +1,39 @@
+<section class="screen" *transloco="let t">
+  <header class="screen__head">
+    <h1>{{ t('settings.title') }}</h1>
+    <p>{{ t('settings.subtitle') }}</p>
+  </header>
+
+  <section class="block">
+    <h2 class="block__title">{{ t('settings.storageTitle') }}</h2>
+
+    @if (loading()) {
+      <p class="muted">{{ t('common.loading') }}</p>
+    } @else {
+      @if (usageLabel(); as label) {
+        <div class="usage">
+          <div class="usage__bar"><div class="usage__fill" [style.width.%]="usagePct()"></div></div>
+          <p class="usage__label">{{ label }}</p>
+        </div>
+      } @else {
+        <p class="muted">{{ t('settings.storageUnknown') }}</p>
+      }
+
+      <p class="status" [class.status--ok]="persisted()">
+        <span class="status__dot"></span>
+        {{ persisted() ? t('settings.persistedYes') : t('settings.persistedNo') }}
+      </p>
+    }
+  </section>
+
+  <section class="block">
+    <h2 class="block__title">{{ t('settings.dataTitle') }}</h2>
+    <p class="note">{{ t('settings.dataNote') }}</p>
+  </section>
+
+  <section class="block about">
+    <h2 class="block__title">{{ t('settings.aboutTitle') }}</h2>
+    <p class="about__line">{{ t('settings.aboutAuthor') }}</p>
+    <p class="about__line about__disclaimer">{{ t('settings.aboutDisclaimer') }}</p>
+  </section>
+</section>

@@ -1,0 +1,84 @@
+.muted {
+  color: var(--ink-soft);
+}
+
+.block {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.block__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.7rem;
+}
+
+.usage__bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.usage__fill {
+  height: 100%;
+  background: var(--secondary);
+  border-radius: inherit;
+}
+
+.usage__label {
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.status__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--warn);
+  flex: none;
+}
+
+.status--ok {
+  color: var(--ink);
+
+  .status__dot {
+    background: var(--ok);
+  }
+}
+
+.note {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.about__line {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+
+  & + & {
+    margin-top: 0.4rem;
+  }
+}
+
+.about__disclaimer {
+  font-size: 0.76rem;
+  opacity: 0.85;
+}

@@ -36,6 +36,20 @@
   color: var(--accent);
 }
 
+.bottom-nav__pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 26px;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.bottom-nav__item.is-active .bottom-nav__pill {
+  background: var(--surface-2);
+}
+
 .bottom-nav__icon {
   width: 22px;
   height: 22px;

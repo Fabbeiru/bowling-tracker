@@ -7,7 +7,17 @@
     </div>
   </header>
 
-  <p class="local-note">{{ t('home.localNote') }}</p>
+  <div class="local-note">
+    <svg class="local-note__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 3 4 6v6c0 4.5 3 7.5 8 9 5-1.5 8-4.5 8-9V6z" />
+      <path d="M9.5 12.5 11.5 14.5 15 10.5" />
+    </svg>
+    <div>
+      <p class="local-note__title">{{ t('home.localNoteTitle') }}</p>
+      <p class="local-note__body">{{ t('home.localNote') }}</p>
+    </div>
+  </div>
 
   <a class="record" routerLink="/games/new">{{ t('home.record') }}</a>
 
@@ -17,6 +27,19 @@
     <div class="empty-state">
       <p class="empty-state__title">{{ t('home.emptyTitle') }}</p>
       <p class="empty-state__hint">{{ t('home.emptyHint') }}</p>
+    </div>
+
+    <div class="starter">
+      <p class="starter__title">{{ t('home.starterTitle') }}</p>
+      <a class="starter__item" routerLink="/arsenal/balls/new">
+        <span>{{ t('home.starterBall') }}</span><span class="starter__arrow">›</span>
+      </a>
+      <a class="starter__item" routerLink="/arsenal/venues/new">
+        <span>{{ t('home.starterVenue') }}</span><span class="starter__arrow">›</span>
+      </a>
+      <a class="starter__item" routerLink="/settings">
+        <span>{{ t('home.starterSettings') }}</span><span class="starter__arrow">›</span>
+      </a>
     </div>
   } @else {
     <div class="tiles">

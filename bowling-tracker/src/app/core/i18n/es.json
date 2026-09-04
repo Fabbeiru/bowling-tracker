@@ -39,11 +39,16 @@
   "home": {
     "title": "Bowling Tracker",
     "subtitle": "Registra tus partidas y mira cómo evolucionas.",
-    "localNote": "Tus datos se guardan solo en este dispositivo. Haz copias de seguridad desde Ajustes.",
+    "localNoteTitle": "Todo queda en tu dispositivo",
+    "localNote": "No hay cuenta ni servidor: tus partidas, arsenal y competiciones viven solo en este navegador. Aún no hay copia de seguridad automática — consulta el detalle en Ajustes.",
     "record": "Registrar partida",
     "lastGame": "Última",
     "emptyTitle": "Aún no hay partidas",
-    "emptyHint": "Cuando registres tu primera partida verás aquí tu media y tu evolución."
+    "emptyHint": "Cuando registres tu primera partida verás aquí tu media y tu evolución.",
+    "starterTitle": "Antes de tu primera partida",
+    "starterBall": "Añade tu bola al arsenal",
+    "starterVenue": "Añade tu bolera habitual",
+    "starterSettings": "Revisa dónde se guardan tus datos"
   },
   "games": {
     "title": "Partidas",
@@ -187,8 +192,15 @@
   "settings": {
     "title": "Ajustes",
     "subtitle": "Datos, almacenamiento y preferencias.",
-    "emptyTitle": "En construcción",
-    "emptyHint": "Aquí irán el uso de almacenamiento, la copia de seguridad y la opción de ocultar el máximo posible."
+    "storageTitle": "Almacenamiento",
+    "storageUnknown": "Tu navegador no permite consultar el espacio usado.",
+    "persistedYes": "Guardado persistente activado: el navegador no debería borrar estos datos bajo presión de espacio.",
+    "persistedNo": "Guardado persistente no concedido todavía. El navegador podría liberar espacio borrando estos datos si el dispositivo anda justo de memoria.",
+    "dataTitle": "Tus datos",
+    "dataNote": "Todo lo que registras (partidas, arsenal, competiciones) se guarda solo en este dispositivo, en este navegador. No hay cuenta ni servidor: nadie más lo ve, pero tampoco hay copia de seguridad automática todavía — si desinstalas la app, borras los datos del navegador o cambias de móvil, se pierde. La sincronización o exportación de datos está pensada para más adelante.",
+    "aboutTitle": "Acerca de",
+    "aboutAuthor": "Bowling Tracker — hecho por fabbeiru.",
+    "aboutDisclaimer": "Proyecto personal, sin garantías ni soporte formal. Úsalo bajo tu propio criterio."
   },
   "notFound": {
     "title": "Página no encontrada",
