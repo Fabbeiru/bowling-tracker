@@ -8,7 +8,7 @@ import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
 import { SettingsStore } from '../../core/settings/settings-store';
 import { applyDelivery, entryPosition, isComplete, scoreGame, undoLastDelivery } from '../../core/scoring';
-import { createGame, Game } from '../../models';
+import { createGame, Game, Session } from '../../models';
 import { Scoresheet } from '../../shared/components/scoresheet/scoresheet';
 import { PinPad } from '../../shared/components/pin-pad/pin-pad';
 import { PinRack, RackDelivery } from '../../shared/components/pin-rack/pin-rack';
@@ -36,6 +36,12 @@ export class GameEntry {
   readonly countMode = signal(false);
   readonly confirmingDelete = signal(false);
   readonly addingGame = signal(false);
+
+  /** Session context, so it's clear "add another game" stays in the same session. */
+  readonly session = signal<Session | null>(null);
+  readonly sessionGameCount = signal(1);
+  readonly competitionName = signal<string | undefined>(undefined);
+  readonly venueName = signal<string | undefined>(undefined);
 
   readonly score = computed(() => {
     const g = this.game();
@@ -76,11 +82,27 @@ export class GameEntry {
       this.game.set(g ?? null);
       this.totalInput.set(g?.totalPins ?? null);
       this.notes.set(g?.notes ?? '');
+      if (g) await this.loadSessionContext(g);
     } catch {
       this.toast.error('errors.loadGame');
     } finally {
       this.loading.set(false);
     }
+  }
+
+  private async loadSessionContext(g: Game): Promise<void> {
+    const [session, siblings] = await Promise.all([
+      this.repo.getSession(g.sessionId),
+      this.repo.listGamesBySession(g.sessionId),
+    ]);
+    this.session.set(session ?? null);
+    this.sessionGameCount.set(siblings.length);
+    const [competition, venue] = await Promise.all([
+      session?.competitionId ? this.repo.getCompetition(session.competitionId) : undefined,
+      session?.venueId ? this.repo.getVenue(session.venueId) : undefined,
+    ]);
+    this.competitionName.set(competition?.name);
+    this.venueName.set(venue?.name);
   }
 
   async record(pins: number): Promise<void> {

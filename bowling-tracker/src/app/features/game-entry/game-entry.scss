@@ -9,6 +9,22 @@
   gap: 0.75rem;
 }
 
+.session-context {
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--secondary);
+}
+
+.session-context__count {
+  color: var(--ink-soft);
+  text-transform: none;
+  letter-spacing: normal;
+  font-family: var(--font-body);
+}
+
 .screen__head-score {
   font-family: var(--font-display);
   font-weight: 800;

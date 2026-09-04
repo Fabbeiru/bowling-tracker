@@ -4,7 +4,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
-import { isCleanGame, scoreGame } from '../../core/scoring';
+import { gameToRolls, isCleanGame, scoreGame } from '../../core/scoring';
 import { Game, Session, SessionType } from '../../models';
 
 type TypeFilter = SessionType | 'all';
@@ -13,7 +13,13 @@ interface SessionRow {
   session: Session;
   competitionName?: string;
   venueName?: string;
-  games: { game: Game; total: number; complete: boolean; clean: boolean; perfect: boolean }[];
+  games: { game: Game; total: number; complete: boolean; started: boolean; clean: boolean; perfect: boolean }[];
+}
+
+/** Has anything at all been recorded for this game yet? */
+function isStarted(game: Game): boolean {
+  if (game.detailLevel === 'total') return game.totalPins !== undefined;
+  return gameToRolls(game).length > 0;
 }
 
 @Component({
@@ -89,6 +95,7 @@ export class Games {
                 game,
                 total: s.total,
                 complete: s.complete,
+                started: isStarted(game),
                 clean: isCleanGame(game),
                 perfect: s.complete && s.total === 300,
               };

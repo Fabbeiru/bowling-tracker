@@ -57,8 +57,12 @@
                       <span class="game__badge" [title]="t('games.cleanGame')">✨ {{ t('games.cleanGame') }}</span>
                     }
                   </span>
-                  <span class="game__score" [class.game__score--wip]="!item.complete">
-                    {{ item.total }}{{ item.complete ? '' : '…' }}
+                  <span class="game__score" [class.game__score--wip]="!item.complete" [class.game__score--empty]="!item.started">
+                    @if (!item.started) {
+                      {{ t('games.notStarted') }}
+                    } @else {
+                      {{ item.total }}{{ item.complete ? '' : '…' }}
+                    }
                   </span>
                 </a>
               }

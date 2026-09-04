@@ -20,6 +20,20 @@
       @if (game()!.detailLevel !== 'total') {
         <p>{{ t('detailLevel.' + game()!.detailLevel + '.name') }}</p>
       }
+      @if (session(); as s) {
+        <p class="session-context">
+          {{ s.date }}
+          @if (competitionName(); as c) {
+            · {{ c }}
+          } @else {
+            · {{ t('sessionType.' + s.type) }}
+          }
+          @if (venueName(); as v) { · {{ v }} }
+          @if (sessionGameCount() > 1) {
+            <span class="session-context__count">{{ t('gameEntry.gameOfSession', { n: game()!.index, total: sessionGameCount() }) }}</span>
+          }
+        </p>
+      }
     </header>
 
     @if (score(); as s) {
