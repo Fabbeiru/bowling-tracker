@@ -21,8 +21,8 @@ export function gameToRolls(game: Pick<Game, 'frames'>): number[] {
   return rolls;
 }
 
-/** Deliveries of a single frame, from either detail level. */
-function framePins(fr: Frame): number[] {
+/** Effective deliveries of a single frame, from either detail level (fouls 0). */
+export function framePins(fr: Frame): number[] {
   if (fr.throws && fr.throws.length > 0) {
     return [...fr.throws]
       .sort((a, b) => a.index - b.index)

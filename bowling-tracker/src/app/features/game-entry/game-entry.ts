@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
-import { scoreGame } from '../../core/scoring';
+import { applyDelivery, entryPosition, isComplete, scoreGame, undoLastDelivery } from '../../core/scoring';
 import { Game } from '../../models';
 import { Scoresheet } from '../../shared/components/scoresheet/scoresheet';
+import { PinPad } from '../../shared/components/pin-pad/pin-pad';
 
 @Component({
   selector: 'app-game-entry',
-  imports: [FormsModule, RouterLink, TranslocoDirective, Scoresheet],
+  imports: [FormsModule, RouterLink, TranslocoDirective, Scoresheet, PinPad],
   templateUrl: './game-entry.html',
   styleUrl: './game-entry.scss',
 })
@@ -27,6 +28,16 @@ export class GameEntry {
     return g ? scoreGame(g) : null;
   });
 
+  readonly position = computed(() => {
+    const g = this.game();
+    return g ? entryPosition(g) : null;
+  });
+
+  readonly complete = computed(() => {
+    const g = this.game();
+    return g ? isComplete(g) : false;
+  });
+
   constructor() {
     const id = inject(ActivatedRoute).snapshot.paramMap.get('id');
     if (id) void this.load(id);
@@ -40,6 +51,22 @@ export class GameEntry {
     this.loading.set(false);
   }
 
+  async record(pins: number): Promise<void> {
+    const g = this.game();
+    if (!g) return;
+    const updated = applyDelivery(g, { pinsKnocked: pins });
+    this.game.set(updated);
+    await this.repo.saveGame(updated);
+  }
+
+  async undo(): Promise<void> {
+    const g = this.game();
+    if (!g) return;
+    const updated = undoLastDelivery(g);
+    this.game.set(updated);
+    await this.repo.saveGame(updated);
+  }
+
   async saveTotal(): Promise<void> {
     const g = this.game();
     if (!g) return;
@@ -51,7 +78,7 @@ export class GameEntry {
   }
 
   async finish(): Promise<void> {
-    await this.saveTotal();
+    if (this.game()?.detailLevel === 'total') await this.saveTotal();
     await this.router.navigate(['/games']);
   }
 }

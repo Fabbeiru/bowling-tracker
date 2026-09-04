@@ -1,0 +1,9 @@
+<div class="pin-pad">
+  <button type="button" class="key key--muted" (click)="emit(0)">–</button>
+  @for (d of digits(); track d) {
+    <button type="button" class="key" (click)="emit(d)">{{ d }}</button>
+  }
+  <button type="button" class="key key--all" (click)="emit(standingCount())">
+    {{ allLabel() }}
+  </button>
+</div>

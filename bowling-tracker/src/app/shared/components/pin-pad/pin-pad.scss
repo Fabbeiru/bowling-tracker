@@ -1,0 +1,32 @@
+.pin-pad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.key {
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    background: var(--line);
+  }
+
+  &--muted {
+    color: var(--ink-soft);
+  }
+
+  &--all {
+    grid-column: 1 / -1;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: transparent;
+  }
+}

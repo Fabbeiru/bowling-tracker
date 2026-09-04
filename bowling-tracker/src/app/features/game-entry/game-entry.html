@@ -1,7 +1,7 @@
 <section class="screen" *transloco="let t">
   @if (loading()) {
     <p class="muted">{{ t('common.loading') }}</p>
-  } @else if (!game(); as g) {
+  } @else if (!game()) {
     <div class="empty-state">
       <p class="empty-state__title">{{ t('gameEntry.notFound') }}</p>
       <a class="link" routerLink="/games">{{ t('common.backToGames') }}</a>
@@ -14,7 +14,7 @@
 
     @if (score(); as s) {
       @if (game()!.detailLevel !== 'total') {
-        <app-scoresheet [frames]="s.frames" />
+        <app-scoresheet [frames]="s.frames" [currentFrame]="position()?.frame ?? null" />
       }
 
       <div class="live">
@@ -31,28 +31,44 @@
       </div>
     }
 
-    @if (game()!.detailLevel === 'total') {
-      <div class="field">
-        <label for="total">{{ t('gameEntry.totalLabel') }}</label>
-        <input
-          id="total"
-          class="input"
-          type="number"
-          inputmode="numeric"
-          min="0"
-          max="300"
-          [ngModel]="totalInput()"
-          (ngModelChange)="totalInput.set($event)"
-          (blur)="saveTotal()"
-        />
-      </div>
-    } @else {
-      <div class="soon">
-        <p class="soon__title">{{ t('gameEntry.entrySoonTitle') }}</p>
-        <p class="soon__hint">{{ t('gameEntry.entrySoonHint') }}</p>
-      </div>
+    @switch (game()!.detailLevel) {
+      @case ('total') {
+        <div class="field">
+          <label for="total">{{ t('gameEntry.totalLabel') }}</label>
+          <input
+            id="total"
+            class="input"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="300"
+            [ngModel]="totalInput()"
+            (ngModelChange)="totalInput.set($event)"
+            (blur)="saveTotal()"
+          />
+        </div>
+      }
+      @case ('frame') {
+        @if (position(); as pos) {
+          <div class="ball-line">
+            <span>{{ t('gameEntry.ballLine', { frame: pos.frame, ball: pos.ball }) }}</span>
+            <button type="button" class="undo" (click)="undo()">{{ t('gameEntry.undo') }}</button>
+          </div>
+          <app-pin-pad [standingCount]="pos.standingCount" (pins)="record($event)" />
+        } @else {
+          <p class="done">{{ t('gameEntry.gameComplete') }}</p>
+        }
+      }
+      @default {
+        <div class="soon">
+          <p class="soon__title">{{ t('gameEntry.rackSoonTitle') }}</p>
+          <p class="soon__hint">{{ t('gameEntry.rackSoonHint') }}</p>
+        </div>
+      }
     }
 
-    <button class="cta" type="button" (click)="finish()">{{ t('gameEntry.finish') }}</button>
+    <button class="cta" type="button" (click)="finish()">
+      {{ complete() ? t('gameEntry.finishDone') : t('gameEntry.finish') }}
+    </button>
   }
 </section>

@@ -139,11 +139,18 @@ moderadas (transitivas de dev) por revisar.
   - `features/games/` — lista real de sesiones con sus partidas y puntuación;
     botón "Nueva partida". Inicio con botón "Registrar partida".
   - Rutas: `/games/new`, `/games/:id`. i18n ampliado.
-- 44 tests pasan (añadido `factories.spec.ts`). Probado el flujo completo con
-  Playwright (crear → total 178 → guardar → aparece en la lista), sin errores.
-- **Falta del bloque 3**: entrada `por frame` (teclado numérico) y `por tiro`
-  (rack de pinos, el reto), décimo frame en la UI, anotaciones, equipamiento,
-  toggle de ocultar máximo, y editar/borrar partidas del histórico.
+- ✅ **`core/scoring/game-builder.ts`** — lógica de entrada pura:
+  `entryPosition(game)` (frame, bola, `standingCount`, `standingBefore`),
+  `applyDelivery(game, delivery)` (inmutable, valida, foul=0),
+  `undoLastDelivery`, `isComplete`. Reutiliza `framePins`.
+- ✅ **Entrada `por frame` funcional**: `shared/components/pin-pad/` (teclado
+  0-9 + "Pleno"/"Semipleno" según posición) integrado en `game-entry`. Cada
+  tirada se guarda al momento. Scoresheet resalta el frame actual. Botón
+  deshacer. Probado con Playwright (7/ X 9- → 48, sin errores).
+- 62 tests pasan (`game-builder.spec.ts` con 10º frame, undo, throw-detail).
+- **Falta del bloque 3**: entrada `por tiro` (rack de pinos, el reto), 10º
+  frame afinado en UI, anotaciones, equipamiento, toggle de ocultar máximo,
+  editar/borrar partidas del histórico.
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.

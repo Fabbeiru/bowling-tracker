@@ -59,9 +59,13 @@
     "score": "Puntuación",
     "maxPossible": "Máximo posible",
     "totalLabel": "Total de bolos",
-    "entrySoonTitle": "Entrada frame a frame",
-    "entrySoonHint": "El registro por frame y por tiro llega en el siguiente paso.",
-    "finish": "Guardar y volver"
+    "ballLine": "Frame {{frame}} · bola {{ball}}",
+    "undo": "Deshacer",
+    "gameComplete": "Partida completa.",
+    "rackSoonTitle": "Selector de pinos",
+    "rackSoonHint": "La entrada por tiro con el rack de pinos llega en el siguiente paso.",
+    "finish": "Guardar y volver",
+    "finishDone": "Terminar y volver"
   },
   "stats": {
     "title": "Estadísticas",
