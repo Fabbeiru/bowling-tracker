@@ -1,19 +1,19 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'inicio' },
+  { path: '', pathMatch: 'full', redirectTo: 'home' },
   {
-    path: 'inicio',
+    path: 'home',
     title: 'Inicio · Bowling Tracker',
     loadComponent: () => import('./features/home/home').then((m) => m.Home),
   },
   {
-    path: 'partidas',
+    path: 'games',
     title: 'Partidas · Bowling Tracker',
     loadComponent: () => import('./features/games/games').then((m) => m.Games),
   },
   {
-    path: 'estadisticas',
+    path: 'stats',
     title: 'Estadísticas · Bowling Tracker',
     loadComponent: () => import('./features/stats/stats').then((m) => m.Stats),
   },
@@ -23,7 +23,7 @@ export const routes: Routes = [
     loadComponent: () => import('./features/arsenal/arsenal').then((m) => m.Arsenal),
   },
   {
-    path: 'ajustes',
+    path: 'settings',
     title: 'Ajustes · Bowling Tracker',
     loadComponent: () => import('./features/settings/settings').then((m) => m.Settings),
   },

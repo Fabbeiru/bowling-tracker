@@ -1,12 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+
 import { App } from './app';
 import { routes } from './app.routes';
+import { translocoTestingModule } from '../testing/transloco-testing';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [App],
+      imports: [App, translocoTestingModule()],
       providers: [provideRouter(routes)],
     }).compileComponents();
   });
@@ -19,8 +21,7 @@ describe('App', () => {
   it('should render the bottom navigation with five items', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    const links = compiled.querySelectorAll('.bottom-nav__item');
+    const links = (fixture.nativeElement as HTMLElement).querySelectorAll('.bottom-nav__item');
     expect(links.length).toBe(5);
   });
 });

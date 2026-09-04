@@ -1,4 +1,4 @@
-<nav class="bottom-nav" aria-label="Navegación principal">
+<nav class="bottom-nav" aria-label="Navegación principal" *transloco="let t">
   @for (item of items; track item.path) {
     <a
       class="bottom-nav__item"
@@ -21,9 +21,7 @@
             <path d="M5 21V10M12 21V4M19 21v-7" />
           }
           @case ('arsenal') {
-            <circle cx="12" cy="12" r="8.5" />
-            <circle cx="9" cy="8.5" r="1.15" fill="currentColor" stroke="none" />
-            <circle cx="12.5" cy="8" r="1.15" fill="currentColor" stroke="none" />
+            <path d="M12 2.6c-1.9 0-3 1.4-2.7 3.1.16 1.2.5 1.6.5 2.9 0 1.6-1 2.5-1 4.6 0 2.1 1.1 3.2 1.1 5.4 0 1.9-.4 3 2 3s2-1.1 2-3c0-2.2 1.1-3.3 1.1-5.4 0-2.1-1-3-1-4.6 0-1.3.34-1.7.5-2.9.3-1.7-.8-3.1-2.7-3.1z" />
           }
           @case ('settings') {
             <circle cx="8" cy="8" r="2" />
@@ -33,7 +31,7 @@
           }
         }
       </svg>
-      <span class="bottom-nav__label">{{ item.label }}</span>
+      <span class="bottom-nav__label">{{ t(item.labelKey) }}</span>
     </a>
   }
 </nav>

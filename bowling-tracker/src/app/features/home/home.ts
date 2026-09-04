@@ -1,24 +1,21 @@
 import { Component } from '@angular/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-home',
+  imports: [TranslocoDirective],
   template: `
-    <section class="screen">
+    <section class="screen" *transloco="let t">
       <header class="screen__head">
-        <h1>Bowling Tracker</h1>
-        <p>Registra tus partidas y mira cómo evolucionas.</p>
+        <h1>{{ t('home.title') }}</h1>
+        <p>{{ t('home.subtitle') }}</p>
       </header>
 
-      <p class="local-note">
-        Tus datos se guardan solo en este dispositivo. Haz copias de seguridad
-        desde Ajustes.
-      </p>
+      <p class="local-note">{{ t('home.localNote') }}</p>
 
       <div class="empty-state">
-        <p class="empty-state__title">Aún no hay partidas</p>
-        <p class="empty-state__hint">
-          Cuando registres tu primera partida verás aquí tu media y tu evolución.
-        </p>
+        <p class="empty-state__title">{{ t('home.emptyTitle') }}</p>
+        <p class="empty-state__hint">{{ t('home.emptyHint') }}</p>
       </div>
     </section>
   `,
