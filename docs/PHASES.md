@@ -43,7 +43,11 @@ Bloques (orden aproximado de entrega; el alcance no se recorta):
 5. **Boleras**: ✅ alta/edición de Venue (`venue-form`). Wired en `game-new`.
 6. **Competiciones (básico)**: crear jornada/torneo y asociar partidas.
 7. **Histórico**: listar, editar y borrar sesiones/partidas.
-8. **Estadísticas v1**: lista cerrada en ESTADISTICAS.md, con filtros.
+8. **Estadísticas v1** (parcial): `core/stats/computeStats` (puro) + pantalla.
+   Resumen (partidas, media, mejor), evolución (sparkline), por frame (% plenos,
+   % semiplenos convertidos, % aperturas, % marca, media 1ª bola, clean games,
+   300). Umbral de muestra mínima (5). Home muestra media/mejor/última. Falta:
+   filtros, splits, carry, pinos problemáticos, por equipamiento.
 9. **Identidad**: ✅ cerrada 2026-09-04 → `IDENTIDAD.md` (logo bola+3 bolos,
    paleta Bruma azul modo-oscuro, Bricolage/Hanken/DM Mono). Falta al implementar:
    exportar iconos PNG del manifest + favicon + apple-touch-icon, y `theme-color`.

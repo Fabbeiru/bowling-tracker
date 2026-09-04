@@ -177,7 +177,21 @@ moderadas (transitivas de dev) por revisar.
 - **Falta**: competiciones (crear liga/torneo + asociar sesión), bola a nivel de
   tiro en el rack, análisis por bola (bloque de stats).
 
-## Siguiente: Bloque 6 — Competiciones básicas, y Bloque 8 — Estadísticas v1
+## Fase 1, bloque 8 — Estadísticas v1 (parcial)
+
+- `core/stats/stats.ts` — `computeStats(games)` puro: `summary` (partidas,
+  sesiones, media, mejor, peor), `frames` (% plenos/semiplenos/aperturas/marca,
+  media 1ª bola, clean games, 300; ocultas bajo 5 partidas por frame),
+  `evolution` (scores cronológicos). 7 tests.
+- `features/stats/` — tiles de resumen, sparkline de evolución (escala al rango),
+  lista de métricas por frame.
+- `features/home/` — muestra media / mejor / última con enlaces.
+- **69 tests pasan.**
+
+Nota operativa: el dev server (esbuild watch) a veces no detecta archivos nuevos
+→ reiniciar `ng serve` cuando se añaden componentes.
+
+## Siguiente: Bloque 6 (Competiciones), Bloque 10 (Datos + backup), o PWA
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.

@@ -1,0 +1,63 @@
+.local-note {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.record {
+  display: block;
+  margin-top: 1rem;
+  text-align: center;
+  text-decoration: none;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+}
+
+.muted {
+  color: var(--ink-soft);
+  margin-top: 1rem;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+}
+
+.tile {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.6rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.tile__lab {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+}
+
+.tile__val {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.45rem;
+  line-height: 1;
+  margin-top: 0.25rem;
+  font-variant-numeric: tabular-nums;
+
+  &--blue {
+    color: var(--secondary);
+  }
+}

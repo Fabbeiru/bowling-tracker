@@ -1,0 +1,104 @@
+.muted {
+  color: var(--ink-soft);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.tile {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.6rem;
+}
+
+.tile__lab {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.tile__val {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1;
+  margin-top: 0.25rem;
+  font-variant-numeric: tabular-nums;
+
+  &--blue {
+    color: var(--secondary);
+  }
+}
+
+.card {
+  margin-top: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+}
+
+.card__lab {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  margin-bottom: 0.7rem;
+}
+
+.spark {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 64px;
+}
+
+.spark i {
+  flex: 1;
+  min-width: 3px;
+  background: var(--secondary);
+  border-radius: 2px 2px 0 0;
+}
+
+.metrics {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.metrics > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.metrics > div:last-child {
+  border-bottom: 0;
+}
+
+.metrics dt {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.metrics dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.metrics__note {
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}

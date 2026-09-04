@@ -1,0 +1,56 @@
+<section class="screen" *transloco="let t">
+  <header class="screen__head">
+    <h1>{{ t('stats.title') }}</h1>
+  </header>
+
+  @if (loading()) {
+    <p class="muted">{{ t('common.loading') }}</p>
+  } @else if (stats().summary.games === 0) {
+    <div class="empty-state">
+      <p class="empty-state__title">{{ t('stats.emptyTitle') }}</p>
+      <p class="empty-state__hint">{{ t('stats.emptyHint') }}</p>
+    </div>
+  } @else {
+    <div class="tiles">
+      <div class="tile">
+        <div class="tile__lab">{{ t('stats.games') }}</div>
+        <div class="tile__val">{{ stats().summary.games }}</div>
+      </div>
+      <div class="tile">
+        <div class="tile__lab">{{ t('stats.average') }}</div>
+        <div class="tile__val">{{ stats().summary.average }}</div>
+      </div>
+      <div class="tile">
+        <div class="tile__lab">{{ t('stats.best') }}</div>
+        <div class="tile__val tile__val--blue">{{ stats().summary.best }}</div>
+      </div>
+    </div>
+
+    @if (bars().length > 1) {
+      <div class="card">
+        <div class="card__lab">{{ t('stats.evolution') }}</div>
+        <div class="spark" aria-hidden="true">
+          @for (h of bars(); track $index) {
+            <i [style.height.%]="h"></i>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="card">
+      <div class="card__lab">{{ t('stats.byFrame') }}</div>
+      <dl class="metrics">
+        <div><dt>{{ t('stats.strikePct') }}</dt><dd>{{ pct(stats().frames.strikePct) }}</dd></div>
+        <div><dt>{{ t('stats.sparePct') }}</dt><dd>{{ pct(stats().frames.sparePct) }}</dd></div>
+        <div><dt>{{ t('stats.openPct') }}</dt><dd>{{ pct(stats().frames.openPct) }}</dd></div>
+        <div><dt>{{ t('stats.markPct') }}</dt><dd>{{ pct(stats().frames.markPct) }}</dd></div>
+        <div><dt>{{ t('stats.firstBall') }}</dt><dd>{{ stats().frames.firstBallAverage ?? '—' }}</dd></div>
+        <div><dt>{{ t('stats.cleanGames') }}</dt><dd>{{ stats().frames.cleanGames }}</dd></div>
+        <div><dt>{{ t('stats.perfectGames') }}</dt><dd>{{ stats().frames.perfectGames }}</dd></div>
+      </dl>
+      @if (stats().frames.strikePct === null && stats().frames.games > 0) {
+        <p class="metrics__note">{{ t('stats.needMoreFrameGames') }}</p>
+      }
+    </div>
+  }
+</section>

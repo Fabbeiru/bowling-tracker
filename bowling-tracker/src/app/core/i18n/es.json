@@ -37,6 +37,7 @@
     "subtitle": "Registra tus partidas y mira cómo evolucionas.",
     "localNote": "Tus datos se guardan solo en este dispositivo. Haz copias de seguridad desde Ajustes.",
     "record": "Registrar partida",
+    "lastGame": "Última",
     "emptyTitle": "Aún no hay partidas",
     "emptyHint": "Cuando registres tu primera partida verás aquí tu media y tu evolución."
   },
@@ -81,7 +82,20 @@
     "title": "Estadísticas",
     "subtitle": "Media, plenos, semiplenos, splits y evolución.",
     "emptyTitle": "Sin datos todavía",
-    "emptyHint": "Registra algunas partidas para ver tus estadísticas."
+    "emptyHint": "Registra algunas partidas para ver tus estadísticas.",
+    "games": "Partidas",
+    "average": "Media",
+    "best": "Mejor",
+    "evolution": "Evolución",
+    "byFrame": "Por frame",
+    "strikePct": "Plenos",
+    "sparePct": "Semiplenos convertidos",
+    "openPct": "Cuadros abiertos",
+    "markPct": "Marca (pleno o semipleno)",
+    "firstBall": "Media de primera bola",
+    "cleanGames": "Clean games",
+    "perfectGames": "Partidas de 300",
+    "needMoreFrameGames": "Los porcentajes aparecen a partir de 5 partidas por frame o por tiro."
   },
   "arsenal": {
     "title": "Arsenal",
