@@ -128,4 +128,9 @@
   &--blue {
     color: var(--secondary);
   }
+
+  &--soft {
+    color: var(--ink-soft);
+    font-weight: 700;
+  }
 }

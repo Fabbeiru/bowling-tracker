@@ -13,10 +13,23 @@
   margin-bottom: 0.6rem;
 
   h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1.05rem;
   }
+}
+
+.group__icon {
+  width: 18px;
+  height: 18px;
+  color: var(--ink-soft);
+}
+
+.group--venues .group__icon {
+  color: var(--secondary);
 }
 
 .add {
@@ -64,6 +77,24 @@
 
   &--inactive {
     opacity: 0.5;
+  }
+}
+
+.row__icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--secondary);
+
+  svg {
+    width: 18px;
+    height: 18px;
   }
 }
 

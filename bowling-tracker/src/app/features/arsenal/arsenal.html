@@ -9,7 +9,16 @@
   } @else {
     <div class="group">
       <div class="group__head">
-        <h2>{{ t('arsenal.balls') }}</h2>
+        <h2>
+          <svg class="group__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <circle cx="9.5" cy="8.7" r="0.9" fill="currentColor" stroke="none" />
+            <circle cx="14" cy="9.6" r="0.9" fill="currentColor" stroke="none" />
+            <circle cx="11" cy="12.4" r="0.9" fill="currentColor" stroke="none" />
+          </svg>
+          {{ t('arsenal.balls') }}
+        </h2>
         <a class="add" routerLink="/arsenal/balls/new">{{ t('arsenal.addBall') }}</a>
       </div>
       @if (balls().length === 0) {
@@ -29,9 +38,16 @@
       }
     </div>
 
-    <div class="group">
+    <div class="group group--venues">
       <div class="group__head">
-        <h2>{{ t('arsenal.venues') }}</h2>
+        <h2>
+          <svg class="group__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 21s7-6.5 7-11.5a7 7 0 1 0-14 0C5 14.5 12 21 12 21z" />
+            <circle cx="12" cy="9.5" r="2.3" />
+          </svg>
+          {{ t('arsenal.venues') }}
+        </h2>
         <a class="add" routerLink="/arsenal/venues/new">{{ t('arsenal.addVenue') }}</a>
       </div>
       @if (venues().length === 0) {
@@ -40,6 +56,13 @@
         <ul class="list">
           @for (venue of venues(); track venue.id) {
             <a class="row" [class.row--inactive]="!venue.active" [routerLink]="['/arsenal/venues', venue.id]">
+              <span class="row__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 21s7-6.5 7-11.5a7 7 0 1 0-14 0C5 14.5 12 21 12 21z" />
+                  <circle cx="12" cy="9.5" r="2.3" />
+                </svg>
+              </span>
               <span class="row__name">{{ venue.name }}</span>
               <span class="row__meta">{{ venue.city }}</span>
             </a>

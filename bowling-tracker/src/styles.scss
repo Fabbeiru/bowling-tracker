@@ -164,3 +164,29 @@ textarea {
   font-size: 0.9rem;
   max-width: 30ch;
 }
+
+/* Cabecera con acción a la derecha (título+subtítulo a la izquierda). */
+.screen__head--row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Botón principal por defecto — algunas pantallas (games, ball-form…)
+   definen su propia variante local, que gana por especificidad; esta es
+   la base para las que no tienen una propia (p. ej. el CTA del estado
+   vacío en competitions, que usaba esta clase sin que existiera). */
+.cta {
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 0;
+}

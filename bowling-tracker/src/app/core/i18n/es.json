@@ -67,7 +67,8 @@
   },
   "competitions": {
     "title": "Competiciones",
-    "subtitle": "Tus ligas y torneos."
+    "subtitle": "Tus ligas y torneos.",
+    "add": "+ Nueva"
   },
   "gameNew": {
     "title": "Nueva partida",
