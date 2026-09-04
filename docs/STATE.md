@@ -88,15 +88,19 @@ comportamiento transversal está decidido y documentado.
 ## Fase 1, bloque 1 — Cimientos (EN CURSO)
 
 - [x] `git init` (rama `main`), commit de la Fase 0
-- [x] `ng new bowling-tracker` — Angular 20.3, standalone, SCSS, sin SSR, router
-      vacío. Commit 89b860e.
-- [ ] Estructura de carpetas (`core/`, `features/`, `shared/`, `models/`)
-- [ ] Router con lazy-load + navegación inferior (5 secciones, pantallas vacías)
-- [ ] Transloco (locale `es`) + `es.json` inicial
+- [x] `ng new bowling-tracker` — Angular 20.3, standalone, SCSS, sin SSR. Commit 89b860e.
+- [x] Estructura de carpetas (`core/`, `features/`, `shared/`, `models/`)
+- [x] Router con lazy-load + navegación inferior (5 secciones + not-found,
+      pantallas con estado vacío) + paleta/tipografía aplicadas. Commit 1216e9e.
+- [ ] Transloco (locale `es`) — extraer los textos ya escritos + `es.json`
 - [ ] Dexie: 6 stores, `schemaVersion` 1, interfaz `Repository` + impl IndexedDB
 - [ ] Primer arranque (`persist()` + aviso de datos locales)
-- [ ] Nota de estrategia de tests en los docs
+- [ ] Estrategia de tests: `ng test` aún no verificado (necesita navegador
+      headless); decidir Karma vs Vitest y dejar nota
 - [ ] `ng add @angular/pwa` + `ngsw-config.json` → **sesión dedicada al SW**
+
+Iconos de nav: SVG inline simples. El `build` (development) pasa; app probada en
+viewport móvil con Playwright (rutas + estado activo OK).
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.
