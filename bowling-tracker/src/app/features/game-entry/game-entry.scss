@@ -31,6 +31,18 @@
   color: var(--ink-soft);
 }
 
+.tile--btn {
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.tile__lab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .tile__val {
   font-family: var(--font-display);
   font-weight: 800;
@@ -145,4 +157,19 @@
   margin-top: 1rem;
   font-size: 0.8rem;
   color: var(--ink-soft);
+}
+
+textarea.input {
+  resize: vertical;
+  font-family: var(--font-body);
+}
+
+.delete {
+  margin-top: 0.7rem;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--danger);
+  font-size: 0.85rem;
+  padding: 0.5rem;
 }

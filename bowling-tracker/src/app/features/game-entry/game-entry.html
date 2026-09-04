@@ -23,10 +23,15 @@
           <div class="tile__val">{{ s.total }}</div>
         </div>
         @if (game()!.detailLevel !== 'total') {
-          <div class="tile">
-            <div class="tile__lab">{{ t('gameEntry.maxPossible') }}</div>
-            <div class="tile__val tile__val--blue">{{ s.maxPossible }}</div>
-          </div>
+          <button type="button" class="tile tile--btn" (click)="settings.toggleHideMaxProjection()">
+            <div class="tile__lab">
+              {{ t('gameEntry.maxPossible') }}
+              <span>{{ settings.hideMaxProjection() ? '🙈' : '👁' }}</span>
+            </div>
+            <div class="tile__val tile__val--blue">
+              {{ settings.hideMaxProjection() ? '···' : s.maxPossible }}
+            </div>
+          </button>
         }
       </div>
     }
@@ -82,6 +87,19 @@
       }
     }
 
+    <div class="field">
+      <label for="notes">{{ t('gameEntry.notesLabel') }}</label>
+      <textarea
+        id="notes"
+        class="input"
+        rows="2"
+        [placeholder]="t('gameEntry.notesPlaceholder')"
+        [ngModel]="notes()"
+        (ngModelChange)="notes.set($event)"
+        (blur)="saveNotes()"
+      ></textarea>
+    </div>
+
     <button
       class="cta"
       [class.cta--ghost]="game()!.detailLevel !== 'total' && !complete()"
@@ -90,5 +108,21 @@
     >
       {{ complete() ? t('gameEntry.finishDone') : t('gameEntry.finish') }}
     </button>
+
+    <button type="button" class="delete" (click)="confirmingDelete.set(true)">
+      {{ t('gameEntry.delete') }}
+    </button>
+  }
+
+  @if (confirmingDelete()) {
+    <app-confirm-dialog
+      [title]="t('gameEntry.deleteTitle')"
+      [message]="t('gameEntry.deleteMessage')"
+      [confirmLabel]="t('gameEntry.delete')"
+      [cancelLabel]="t('common.cancel')"
+      [danger]="true"
+      (confirmed)="deleteGame()"
+      (cancelled)="confirmingDelete.set(false)"
+    />
   }
 </section>

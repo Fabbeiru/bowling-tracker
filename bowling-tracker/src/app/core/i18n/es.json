@@ -1,7 +1,8 @@
 {
   "common": {
     "loading": "Cargando…",
-    "backToGames": "Volver a Partidas"
+    "backToGames": "Volver a Partidas",
+    "cancel": "Cancelar"
   },
   "nav": {
     "home": "Inicio",
@@ -63,8 +64,13 @@
     "undo": "Deshacer",
     "gameComplete": "Partida completa.",
     "countOnlyNote": "Registrando solo el número de bolos de este tiro.",
+    "notesLabel": "Anotaciones",
+    "notesPlaceholder": "Pista, condiciones, sensaciones…",
     "finish": "Guardar y volver",
-    "finishDone": "Terminar y volver"
+    "finishDone": "Terminar y volver",
+    "delete": "Borrar partida",
+    "deleteTitle": "¿Borrar esta partida?",
+    "deleteMessage": "Se eliminará la partida y todos sus tiros. No se puede deshacer."
   },
   "stats": {
     "title": "Estadísticas",

@@ -155,9 +155,16 @@ moderadas (transitivas de dev) por revisar.
   `throw`; si `standingBefore` es null (tiro anterior por conteo) o el usuario
   pulsa "solo el número", cae al `pin-pad`. Probado con Playwright (deja 7-10,
   convierte el 7 → 9 abierto, sin errores).
-- **Falta del bloque 3**: 10º frame afinado en UI (funciona pero sin pulir),
-  anotaciones, equipamiento, toggle de ocultar máximo, editar/borrar histórico,
-  presets de splits comunes en el rack.
+- ✅ **Flecos**: `SettingsStore` (meta) + toggle "ocultar máximo posible" en la
+  tarjeta (persiste); anotaciones de partida (textarea → `game.notes`);
+  **borrar partida** con `shared/components/confirm-dialog` (modal propio, nunca
+  `confirm()` nativo). Editar = entrar a la partida y seguir/corregir tiros
+  (ya funciona via `applyDelivery`/`undo`).
+- **Falta del bloque 3**: 10º frame afinado en UI, equipamiento (bola por
+  partida — necesita Arsenal), presets de splits comunes en el rack, borrar
+  sesión entera desde la lista.
+
+## Siguiente: Bloque 4 — Arsenal (bolas + boleras)
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.
