@@ -1,4 +1,8 @@
 {
+  "common": {
+    "loading": "Cargando…",
+    "backToGames": "Volver a Partidas"
+  },
   "nav": {
     "home": "Inicio",
     "games": "Partidas",
@@ -6,18 +10,58 @@
     "arsenal": "Arsenal",
     "settings": "Ajustes"
   },
+  "sessionType": {
+    "practice": "Práctica",
+    "league": "Liga",
+    "tournament": "Torneo",
+    "social": "Social"
+  },
+  "detailLevel": {
+    "total": {
+      "name": "Total",
+      "hint": "Solo el resultado final de la partida"
+    },
+    "frame": {
+      "name": "Por frame",
+      "hint": "Bolos de cada tiro, cuadro a cuadro"
+    },
+    "throw": {
+      "name": "Por tiro",
+      "hint": "Además, qué pinos quedan en pie"
+    }
+  },
   "home": {
     "title": "Bowling Tracker",
     "subtitle": "Registra tus partidas y mira cómo evolucionas.",
     "localNote": "Tus datos se guardan solo en este dispositivo. Haz copias de seguridad desde Ajustes.",
+    "record": "Registrar partida",
     "emptyTitle": "Aún no hay partidas",
     "emptyHint": "Cuando registres tu primera partida verás aquí tu media y tu evolución."
   },
   "games": {
     "title": "Partidas",
     "subtitle": "Tu histórico de sesiones y partidas.",
+    "new": "Nueva partida",
+    "gameN": "Partida {{n}}",
     "emptyTitle": "Aún no has registrado ninguna partida",
-    "emptyHint": "El registro por total, por frame o tiro a tiro llegará en el siguiente bloque."
+    "emptyHint": "Empieza una partida y elige cuánto detalle quieres registrar."
+  },
+  "gameNew": {
+    "title": "Nueva partida",
+    "sessionType": "Tipo de sesión",
+    "date": "Fecha",
+    "detailLevel": "Nivel de detalle",
+    "start": "Empezar partida"
+  },
+  "gameEntry": {
+    "title": "Partida {{index}}",
+    "notFound": "Partida no encontrada",
+    "score": "Puntuación",
+    "maxPossible": "Máximo posible",
+    "totalLabel": "Total de bolos",
+    "entrySoonTitle": "Entrada frame a frame",
+    "entrySoonHint": "El registro por frame y por tiro llega en el siguiente paso.",
+    "finish": "Guardar y volver"
   },
   "stats": {
     "title": "Estadísticas",

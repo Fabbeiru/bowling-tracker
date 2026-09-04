@@ -1,0 +1,12 @@
+<div class="scoresheet" role="table" aria-label="Puntuación">
+  @for (f of frames(); track f.index) {
+    <div class="frame" [class.frame--current]="f.index === currentFrame()" role="row">
+      <div class="frame__marks">
+        @for (m of marksFor(f); track $index) {
+          <span class="mark" [class.mark--fill]="m === 'X' || m === '/'">{{ m }}</span>
+        }
+      </div>
+      <div class="frame__cum">{{ f.cumulative ?? '' }}</div>
+    </div>
+  }
+</div>

@@ -5,3 +5,4 @@ export * from './competition';
 export * from './session';
 export * from './game';
 export * from './app-meta';
+export * from './factories';

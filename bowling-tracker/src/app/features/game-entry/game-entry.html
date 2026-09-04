@@ -1,0 +1,58 @@
+<section class="screen" *transloco="let t">
+  @if (loading()) {
+    <p class="muted">{{ t('common.loading') }}</p>
+  } @else if (!game(); as g) {
+    <div class="empty-state">
+      <p class="empty-state__title">{{ t('gameEntry.notFound') }}</p>
+      <a class="link" routerLink="/games">{{ t('common.backToGames') }}</a>
+    </div>
+  } @else {
+    <header class="screen__head">
+      <h1>{{ t('gameEntry.title', { index: game()!.index }) }}</h1>
+      <p>{{ t('detailLevel.' + game()!.detailLevel + '.name') }}</p>
+    </header>
+
+    @if (score(); as s) {
+      @if (game()!.detailLevel !== 'total') {
+        <app-scoresheet [frames]="s.frames" />
+      }
+
+      <div class="live">
+        <div class="tile">
+          <div class="tile__lab">{{ t('gameEntry.score') }}</div>
+          <div class="tile__val">{{ s.total }}</div>
+        </div>
+        @if (game()!.detailLevel !== 'total') {
+          <div class="tile">
+            <div class="tile__lab">{{ t('gameEntry.maxPossible') }}</div>
+            <div class="tile__val tile__val--blue">{{ s.maxPossible }}</div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (game()!.detailLevel === 'total') {
+      <div class="field">
+        <label for="total">{{ t('gameEntry.totalLabel') }}</label>
+        <input
+          id="total"
+          class="input"
+          type="number"
+          inputmode="numeric"
+          min="0"
+          max="300"
+          [ngModel]="totalInput()"
+          (ngModelChange)="totalInput.set($event)"
+          (blur)="saveTotal()"
+        />
+      </div>
+    } @else {
+      <div class="soon">
+        <p class="soon__title">{{ t('gameEntry.entrySoonTitle') }}</p>
+        <p class="soon__hint">{{ t('gameEntry.entrySoonHint') }}</p>
+      </div>
+    }
+
+    <button class="cta" type="button" (click)="finish()">{{ t('gameEntry.finish') }}</button>
+  }
+</section>

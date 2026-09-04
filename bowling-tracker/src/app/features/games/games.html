@@ -1,0 +1,40 @@
+<section class="screen" *transloco="let t">
+  <header class="screen__head screen__head--row">
+    <div>
+      <h1>{{ t('games.title') }}</h1>
+      <p>{{ t('games.subtitle') }}</p>
+    </div>
+    <a class="new" routerLink="/games/new">{{ t('games.new') }}</a>
+  </header>
+
+  @if (loading()) {
+    <p class="muted">{{ t('common.loading') }}</p>
+  } @else if (rows().length === 0) {
+    <div class="empty-state">
+      <p class="empty-state__title">{{ t('games.emptyTitle') }}</p>
+      <p class="empty-state__hint">{{ t('games.emptyHint') }}</p>
+      <a class="cta" routerLink="/games/new">{{ t('games.new') }}</a>
+    </div>
+  } @else {
+    <ul class="sessions">
+      @for (row of rows(); track row.session.id) {
+        <li class="session">
+          <div class="session__head">
+            <span class="session__date">{{ row.session.date }}</span>
+            <span class="session__type">{{ t('sessionType.' + row.session.type) }}</span>
+          </div>
+          <ul class="games">
+            @for (item of row.games; track item.game.id) {
+              <a class="game" [routerLink]="['/games', item.game.id]">
+                <span class="game__idx">{{ t('games.gameN', { n: item.game.index }) }}</span>
+                <span class="game__score" [class.game__score--wip]="!item.complete">
+                  {{ item.total }}{{ item.complete ? '' : '…' }}
+                </span>
+              </a>
+            }
+          </ul>
+        </li>
+      }
+    </ul>
+  }
+</section>

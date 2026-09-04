@@ -32,9 +32,12 @@ Bloques (orden aproximado de entrega; el alcance no se recorta):
    `scoreRolls`, `maxPossibleFromRolls`, `gameToRolls`, `scoreGame`. 31 tests
    (perfect 300, carta clásica 133, turkey, 10º frame, partida en curso, máximo
    posible). Los 3 niveles de detalle. Foul = 0.
-3. **Registro de partida**: flujo móvil para L1 / L2 / L3, décimo frame,
-   selector de pines en pie (L3), anotaciones, tipo de partida, equipamiento a
-   nivel partida, toggle de "ocultar máximo/proyección".
+3. **Registro de partida** (EN CURSO): bocetos hechos (artefacto Claude).
+   ✅ Vertical slice: `Nueva partida` (tipo + fecha + nivel) → crea Session+Game
+   → `Entrada` con scoresheet + puntuación/máximo en vivo → guarda → lista en
+   Partidas. Nivel `total` funcional. **Falta**: entrada `por frame` (teclado) y
+   `por tiro` (rack de pinos), décimo frame, anotaciones, equipamiento, toggle
+   de ocultar máximo.
 4. **Arsenal**: alta/edición de bolas.
 5. **Boleras**: alta/edición de Venue.
 6. **Competiciones (básico)**: crear jornada/torneo y asociar partidas.

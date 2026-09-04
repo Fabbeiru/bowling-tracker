@@ -1,0 +1,56 @@
+.scoresheet {
+  display: flex;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+
+.frame {
+  flex: 1 0 auto;
+  min-width: 34px;
+  border-right: 1px solid var(--line);
+  padding: 0.3rem 0.15rem 0.4rem;
+  text-align: center;
+
+  &:last-child {
+    border-right: 0;
+    min-width: 46px;
+  }
+
+  &--current {
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+  }
+}
+
+.frame__marks {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  min-height: 15px;
+}
+
+.mark {
+  width: 14px;
+  height: 15px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  line-height: 15px;
+  border: 1px solid var(--line);
+
+  &--fill {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: transparent;
+    font-weight: 700;
+  }
+}
+
+.frame__cum {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.2rem;
+  min-height: 1em;
+}

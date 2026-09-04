@@ -1,0 +1,53 @@
+<section class="screen" *transloco="let t">
+  <header class="screen__head">
+    <h1>{{ t('gameNew.title') }}</h1>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="start()" class="form">
+    <div class="field">
+      <label>{{ t('gameNew.sessionType') }}</label>
+      <div class="seg" role="radiogroup">
+        @for (type of sessionTypes; track type) {
+          <button
+            type="button"
+            role="radio"
+            [attr.aria-checked]="form.controls.type.value === type"
+            [class.seg__opt--on]="form.controls.type.value === type"
+            class="seg__opt"
+            (click)="select('type', type)"
+          >
+            {{ t('sessionType.' + type) }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="date">{{ t('gameNew.date') }}</label>
+      <input id="date" type="date" formControlName="date" class="input" />
+    </div>
+
+    <div class="field">
+      <label>{{ t('gameNew.detailLevel') }}</label>
+      <div class="options" role="radiogroup">
+        @for (level of detailLevels; track level) {
+          <button
+            type="button"
+            role="radio"
+            [attr.aria-checked]="form.controls.detailLevel.value === level"
+            [class.option--on]="form.controls.detailLevel.value === level"
+            class="option"
+            (click)="select('detailLevel', level)"
+          >
+            <b>{{ t('detailLevel.' + level + '.name') }}</b>
+            <small>{{ t('detailLevel.' + level + '.hint') }}</small>
+          </button>
+        }
+      </div>
+    </div>
+
+    <button type="submit" class="cta" [disabled]="saving()">
+      {{ t('gameNew.start') }}
+    </button>
+  </form>
+</section>

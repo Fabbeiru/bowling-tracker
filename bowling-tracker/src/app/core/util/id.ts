@@ -1,6 +1,4 @@
-import { Id } from '../../models';
-
 /** New client-side identifier. */
-export function newId(): Id {
+export function newId(): string {
   return crypto.randomUUID();
 }

@@ -126,6 +126,25 @@ comportamiento transversal está decidido y documentado.
 Comprobado: `ng build` y `ng test` pasan. `npm audit`: 2 vulnerabilidades
 moderadas (transitivas de dev) por revisar.
 
+## Fase 1, bloque 3 — Registro de partida (EN CURSO)
+
+- Bocetos: artefacto Claude "Registro de partida" (4 pantallas). Confirmados.
+- ✅ Vertical slice funcionando de punta a punta:
+  - `models/factories.ts` — `createSession`, `createGame`.
+  - `features/game-new/` — form (tipo de sesión + fecha + nivel de detalle) →
+    crea Session + Game vía Repository → navega a la entrada.
+  - `features/game-entry/` — carga la partida, `Scoresheet` compartido,
+    puntuación + máximo posible en vivo (motor de scoring). Nivel `total`:
+    input numérico que guarda. Niveles `frame`/`throw`: stub "próximamente".
+  - `features/games/` — lista real de sesiones con sus partidas y puntuación;
+    botón "Nueva partida". Inicio con botón "Registrar partida".
+  - Rutas: `/games/new`, `/games/:id`. i18n ampliado.
+- 44 tests pasan (añadido `factories.spec.ts`). Probado el flujo completo con
+  Playwright (crear → total 178 → guardar → aparece en la lista), sin errores.
+- **Falta del bloque 3**: entrada `por frame` (teclado numérico) y `por tiro`
+  (rack de pinos, el reto), décimo frame en la UI, anotaciones, equipamiento,
+  toggle de ocultar máximo, y editar/borrar partidas del histórico.
+
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.
 

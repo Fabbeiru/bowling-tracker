@@ -13,6 +13,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/games/games').then((m) => m.Games),
   },
   {
+    path: 'games/new',
+    title: 'Nueva partida · Bowling Tracker',
+    loadComponent: () => import('./features/game-new/game-new').then((m) => m.GameNew),
+  },
+  {
+    path: 'games/:id',
+    title: 'Partida · Bowling Tracker',
+    loadComponent: () => import('./features/game-entry/game-entry').then((m) => m.GameEntry),
+  },
+  {
     path: 'stats',
     title: 'Estadísticas · Bowling Tracker',
     loadComponent: () => import('./features/stats/stats').then((m) => m.Stats),
