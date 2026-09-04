@@ -164,7 +164,20 @@ moderadas (transitivas de dev) por revisar.
   partida — necesita Arsenal), presets de splits comunes en el rack, borrar
   sesión entera desde la lista.
 
-## Siguiente: Bloque 4 — Arsenal (bolas + boleras)
+## Fase 1, bloque 4 — Arsenal (HECHO en su base)
+
+- `features/arsenal/` — hub con lista de bolas y de boleras (activas + retiradas
+  atenuadas), botones de alta.
+- `features/ball-form/` y `features/venue-form/` — alta y edición; botón
+  retirar/devolver (soft-delete vía `active`).
+- `models/factories.ts`: `createBall`, `createVenue`, `createCompetition`.
+- Rutas `/arsenal/balls/new|:id`, `/arsenal/venues/new|:id`.
+- `game-new` muestra selectores de bolera y bola principal / de spare cuando
+  existen. Probado con Playwright (crear bola + bolera → aparecen en game-new).
+- **Falta**: competiciones (crear liga/torneo + asociar sesión), bola a nivel de
+  tiro en el rack, análisis por bola (bloque de stats).
+
+## Siguiente: Bloque 6 — Competiciones básicas, y Bloque 8 — Estadísticas v1
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.

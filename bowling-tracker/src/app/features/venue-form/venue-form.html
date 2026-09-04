@@ -1,0 +1,36 @@
+<section class="screen" *transloco="let t">
+  <header class="screen__head">
+    <h1>{{ editing() ? t('venueForm.editTitle') : t('venueForm.newTitle') }}</h1>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="form">
+    <div class="field">
+      <label for="name">{{ t('venueForm.name') }}</label>
+      <input id="name" class="input" formControlName="name" autocomplete="off" />
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="city">{{ t('venueForm.city') }}</label>
+        <input id="city" class="input" formControlName="city" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="lanes">{{ t('venueForm.lanes') }}</label>
+        <input id="lanes" class="input" type="number" inputmode="numeric" min="1" formControlName="lanes" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="notes">{{ t('venueForm.notes') }}</label>
+      <textarea id="notes" class="input" rows="2" formControlName="notes"></textarea>
+    </div>
+
+    <button type="submit" class="cta" [disabled]="form.invalid">{{ t('common.save') }}</button>
+  </form>
+
+  @if (editing()) {
+    <button type="button" class="toggle" (click)="toggleActive()">
+      {{ active() ? t('venueForm.deactivate') : t('venueForm.reactivate') }}
+    </button>
+  }
+</section>

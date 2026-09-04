@@ -28,6 +28,12 @@
   color-scheme: dark;
 }
 
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
 .seg {
   display: flex;
   gap: 4px;

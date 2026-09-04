@@ -2,7 +2,8 @@
   "common": {
     "loading": "Cargando…",
     "backToGames": "Volver a Partidas",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "save": "Guardar"
   },
   "nav": {
     "home": "Inicio",
@@ -51,6 +52,10 @@
     "title": "Nueva partida",
     "sessionType": "Tipo de sesión",
     "date": "Fecha",
+    "venue": "Bolera",
+    "primaryBall": "Bola principal",
+    "spareBall": "Bola de spare",
+    "none": "—",
     "detailLevel": "Nivel de detalle",
     "start": "Empezar partida"
   },
@@ -81,8 +86,34 @@
   "arsenal": {
     "title": "Arsenal",
     "subtitle": "Tus bolas y las boleras donde juegas.",
-    "emptyTitle": "Añade tu equipamiento",
-    "emptyHint": "Registra tus bolas para asociarlas a tus partidas y comparar resultados."
+    "balls": "Bolas",
+    "venues": "Boleras",
+    "addBall": "Añadir bola",
+    "addVenue": "Añadir bolera",
+    "noBalls": "Aún no has añadido ninguna bola.",
+    "noVenues": "Aún no has añadido ninguna bolera."
+  },
+  "ballForm": {
+    "newTitle": "Nueva bola",
+    "editTitle": "Editar bola",
+    "name": "Nombre",
+    "brand": "Marca",
+    "weight": "Peso (lb)",
+    "coverstock": "Coverstock",
+    "layout": "Layout",
+    "notes": "Notas",
+    "deactivate": "Retirar del arsenal",
+    "reactivate": "Devolver al arsenal"
+  },
+  "venueForm": {
+    "newTitle": "Nueva bolera",
+    "editTitle": "Editar bolera",
+    "name": "Nombre",
+    "city": "Ciudad",
+    "lanes": "Pistas",
+    "notes": "Notas",
+    "deactivate": "Ocultar bolera",
+    "reactivate": "Mostrar bolera"
   },
   "settings": {
     "title": "Ajustes",

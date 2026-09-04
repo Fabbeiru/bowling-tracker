@@ -1,0 +1,46 @@
+<section class="screen" *transloco="let t">
+  <header class="screen__head">
+    <h1>{{ editing() ? t('ballForm.editTitle') : t('ballForm.newTitle') }}</h1>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="form">
+    <div class="field">
+      <label for="name">{{ t('ballForm.name') }}</label>
+      <input id="name" class="input" formControlName="name" autocomplete="off" />
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="brand">{{ t('ballForm.brand') }}</label>
+        <input id="brand" class="input" formControlName="brand" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="weight">{{ t('ballForm.weight') }}</label>
+        <input id="weight" class="input" type="number" inputmode="numeric" min="6" max="16" formControlName="weightLb" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="cover">{{ t('ballForm.coverstock') }}</label>
+      <input id="cover" class="input" formControlName="coverstock" autocomplete="off" />
+    </div>
+
+    <div class="field">
+      <label for="layout">{{ t('ballForm.layout') }}</label>
+      <input id="layout" class="input" formControlName="layout" autocomplete="off" />
+    </div>
+
+    <div class="field">
+      <label for="notes">{{ t('ballForm.notes') }}</label>
+      <textarea id="notes" class="input" rows="2" formControlName="notes"></textarea>
+    </div>
+
+    <button type="submit" class="cta" [disabled]="form.invalid">{{ t('common.save') }}</button>
+  </form>
+
+  @if (editing()) {
+    <button type="button" class="toggle" (click)="toggleActive()">
+      {{ active() ? t('ballForm.deactivate') : t('ballForm.reactivate') }}
+    </button>
+  }
+</section>

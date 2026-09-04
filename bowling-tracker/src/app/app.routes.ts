@@ -33,6 +33,26 @@ export const routes: Routes = [
     loadComponent: () => import('./features/arsenal/arsenal').then((m) => m.Arsenal),
   },
   {
+    path: 'arsenal/balls/new',
+    title: 'Nueva bola · Bowling Tracker',
+    loadComponent: () => import('./features/ball-form/ball-form').then((m) => m.BallForm),
+  },
+  {
+    path: 'arsenal/balls/:id',
+    title: 'Bola · Bowling Tracker',
+    loadComponent: () => import('./features/ball-form/ball-form').then((m) => m.BallForm),
+  },
+  {
+    path: 'arsenal/venues/new',
+    title: 'Nueva bolera · Bowling Tracker',
+    loadComponent: () => import('./features/venue-form/venue-form').then((m) => m.VenueForm),
+  },
+  {
+    path: 'arsenal/venues/:id',
+    title: 'Bolera · Bowling Tracker',
+    loadComponent: () => import('./features/venue-form/venue-form').then((m) => m.VenueForm),
+  },
+  {
     path: 'settings',
     title: 'Ajustes · Bowling Tracker',
     loadComponent: () => import('./features/settings/settings').then((m) => m.Settings),

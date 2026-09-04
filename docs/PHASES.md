@@ -38,8 +38,9 @@ Bloques (orden aproximado de entrega; el alcance no se recorta):
    Partidas. Nivel `total` funcional. **Falta**: entrada `por frame` (teclado) y
    `por tiro` (rack de pinos), décimo frame, anotaciones, equipamiento, toggle
    de ocultar máximo.
-4. **Arsenal**: alta/edición de bolas.
-5. **Boleras**: alta/edición de Venue.
+4. **Arsenal**: ✅ alta/edición de bolas (`ball-form`), soft-delete
+   ("retirar del arsenal"). Wired en `game-new` (bola principal / de spare).
+5. **Boleras**: ✅ alta/edición de Venue (`venue-form`). Wired en `game-new`.
 6. **Competiciones (básico)**: crear jornada/torneo y asociar partidas.
 7. **Histórico**: listar, editar y borrar sesiones/partidas.
 8. **Estadísticas v1**: lista cerrada en ESTADISTICAS.md, con filtros.

@@ -27,6 +27,41 @@
       <input id="date" type="date" formControlName="date" class="input" />
     </div>
 
+    @if (venues().length > 0) {
+      <div class="field">
+        <label for="venue">{{ t('gameNew.venue') }}</label>
+        <select id="venue" class="input" formControlName="venueId">
+          <option value="">{{ t('gameNew.none') }}</option>
+          @for (venue of venues(); track venue.id) {
+            <option [value]="venue.id">{{ venue.name }}</option>
+          }
+        </select>
+      </div>
+    }
+
+    @if (balls().length > 0) {
+      <div class="row2">
+        <div class="field">
+          <label for="primary">{{ t('gameNew.primaryBall') }}</label>
+          <select id="primary" class="input" formControlName="primaryBallId">
+            <option value="">{{ t('gameNew.none') }}</option>
+            @for (ball of balls(); track ball.id) {
+              <option [value]="ball.id">{{ ball.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label for="spare">{{ t('gameNew.spareBall') }}</label>
+          <select id="spare" class="input" formControlName="spareBallId">
+            <option value="">{{ t('gameNew.none') }}</option>
+            @for (ball of balls(); track ball.id) {
+              <option [value]="ball.id">{{ ball.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    }
+
     <div class="field">
       <label>{{ t('gameNew.detailLevel') }}</label>
       <div class="options" role="radiogroup">

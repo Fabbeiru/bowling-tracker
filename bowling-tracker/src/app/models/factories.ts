@@ -1,8 +1,11 @@
 import { nowLocalIso, todayLocalIso } from '../core/util/dates';
 import { newId } from '../core/util/id';
-import { DetailLevel, Id, IsoDate, SessionType } from './common';
+import { Ball } from './ball';
+import { CompetitionType, DetailLevel, Id, IsoDate, SessionType } from './common';
+import { Competition } from './competition';
 import { Game } from './game';
 import { Session } from './session';
+import { Venue } from './venue';
 
 export interface NewSessionInput {
   type: SessionType;
@@ -34,6 +37,54 @@ export interface NewGameInput {
   detailLevel: DetailLevel;
   primaryBallId?: Id;
   spareBallId?: Id;
+}
+
+export function createBall(input: { name: string } & Partial<Ball>): Ball {
+  const ts = nowLocalIso();
+  return {
+    id: newId(),
+    name: input.name,
+    brand: input.brand,
+    weightLb: input.weightLb,
+    coverstock: input.coverstock,
+    layout: input.layout,
+    notes: input.notes,
+    active: input.active ?? true,
+    createdAt: ts,
+    updatedAt: ts,
+  };
+}
+
+export function createVenue(input: { name: string } & Partial<Venue>): Venue {
+  const ts = nowLocalIso();
+  return {
+    id: newId(),
+    name: input.name,
+    city: input.city,
+    lanes: input.lanes,
+    notes: input.notes,
+    active: input.active ?? true,
+    createdAt: ts,
+    updatedAt: ts,
+  };
+}
+
+export function createCompetition(
+  input: { type: CompetitionType; name: string } & Partial<Competition>,
+): Competition {
+  const ts = nowLocalIso();
+  return {
+    id: newId(),
+    type: input.type,
+    name: input.name,
+    season: input.season,
+    startDate: input.startDate,
+    endDate: input.endDate,
+    notes: input.notes,
+    active: input.active ?? true,
+    createdAt: ts,
+    updatedAt: ts,
+  };
 }
 
 export function createGame(input: NewGameInput): Game {

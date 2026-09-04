@@ -1,0 +1,50 @@
+<section class="screen" *transloco="let t">
+  <header class="screen__head">
+    <h1>{{ t('arsenal.title') }}</h1>
+    <p>{{ t('arsenal.subtitle') }}</p>
+  </header>
+
+  @if (loading()) {
+    <p class="muted">{{ t('common.loading') }}</p>
+  } @else {
+    <div class="group">
+      <div class="group__head">
+        <h2>{{ t('arsenal.balls') }}</h2>
+        <a class="add" routerLink="/arsenal/balls/new">{{ t('arsenal.addBall') }}</a>
+      </div>
+      @if (balls().length === 0) {
+        <p class="group__empty">{{ t('arsenal.noBalls') }}</p>
+      } @else {
+        <ul class="list">
+          @for (ball of balls(); track ball.id) {
+            <a class="row" [class.row--inactive]="!ball.active" [routerLink]="['/arsenal/balls', ball.id]">
+              <span class="row__name">{{ ball.name }}</span>
+              <span class="row__meta">
+                {{ ball.brand }}@if (ball.brand && ball.weightLb) {&nbsp;·&nbsp;}@if (ball.weightLb) {{{ ball.weightLb }} lb}
+              </span>
+            </a>
+          }
+        </ul>
+      }
+    </div>
+
+    <div class="group">
+      <div class="group__head">
+        <h2>{{ t('arsenal.venues') }}</h2>
+        <a class="add" routerLink="/arsenal/venues/new">{{ t('arsenal.addVenue') }}</a>
+      </div>
+      @if (venues().length === 0) {
+        <p class="group__empty">{{ t('arsenal.noVenues') }}</p>
+      } @else {
+        <ul class="list">
+          @for (venue of venues(); track venue.id) {
+            <a class="row" [class.row--inactive]="!venue.active" [routerLink]="['/arsenal/venues', venue.id]">
+              <span class="row__name">{{ venue.name }}</span>
+              <span class="row__meta">{{ venue.city }}</span>
+            </a>
+          }
+        </ul>
+      }
+    </div>
+  }
+</section>
