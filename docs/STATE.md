@@ -191,7 +191,21 @@ moderadas (transitivas de dev) por revisar.
 Nota operativa: el dev server (esbuild watch) a veces no detecta archivos nuevos
 → reiniciar `ng serve` cuando se añaden componentes.
 
-## Siguiente: Bloque 6 (Competiciones), Bloque 10 (Datos + backup), o PWA
+## Bloque 6 — Competiciones (HECHO)
+
+- `competition-form` (liga/torneo, temporada, fechas) + archivar. Sección en
+  Arsenal. `game-new` muestra selector de competición para sesiones de
+  liga/torneo. `games` muestra el nombre de competición y bolera en la tarjeta.
+
+## Pulido (HECHO)
+
+- **10º frame** en el scoresheet: 3 marcas + acumulado sin recortes; cabecera
+  scrollable si hace falta.
+- **Presets de resto** en el rack (bola 1): "Deja 10 / 7 / 7-10 / 4-6".
+- **Filtros de estadísticas**: chips por tipo de sesión + selector de
+  competición; `computeStats` sobre partidas filtradas.
+
+## Siguiente: Bloque 10 (Datos + backup) y PWA (sesión dedicada)
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.

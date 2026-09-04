@@ -37,6 +37,21 @@ export class PinRack {
     this.standingBefore().length === 10 ? 'Pleno' : 'Semipleno',
   );
 
+  /** Quick "leave" shortcuts on the first ball: knock everything but these pins. */
+  readonly leavePresets = computed<{ label: string; leave: number[] }[]>(() => {
+    if (this.ball() !== 1 || this.standingBefore().length !== 10) return [];
+    return [
+      { label: '10', leave: [10] },
+      { label: '7', leave: [7] },
+      { label: '7-10', leave: [7, 10] },
+      { label: '4-6', leave: [4, 6] },
+    ];
+  });
+
+  leave(pins: number[]): void {
+    this.knocked.set(new Set(this.standingBefore().filter((p) => !pins.includes(p))));
+  }
+
   stateOf(pin: number): 'gone' | 'standing' | 'knocked' {
     if (!this.standingBefore().includes(pin)) return 'gone';
     return this.knocked().has(pin) ? 'knocked' : 'standing';

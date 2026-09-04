@@ -4,18 +4,22 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.scoresheet::-webkit-scrollbar {
+  display: none;
 }
 
 .frame {
-  flex: 1 0 auto;
-  min-width: 34px;
+  flex: 1 0 30px;
   border-right: 1px solid var(--line);
-  padding: 0.3rem 0.15rem 0.4rem;
+  padding: 0.28rem 0.1rem 0.38rem;
   text-align: center;
 
   &:last-child {
+    flex: 1 0 52px;
     border-right: 0;
-    min-width: 46px;
   }
 
   &--current {
@@ -27,15 +31,16 @@
   display: flex;
   justify-content: center;
   gap: 2px;
-  min-height: 15px;
+  min-height: 14px;
 }
 
 .mark {
-  width: 14px;
-  height: 15px;
+  width: 13px;
+  height: 14px;
+  flex: none;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  line-height: 15px;
+  font-size: 0.58rem;
+  line-height: 14px;
   border: 1px solid var(--line);
 
   &--fill {
@@ -49,8 +54,8 @@
 .frame__cum {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
-  margin-top: 0.2rem;
+  margin-top: 0.22rem;
   min-height: 1em;
 }

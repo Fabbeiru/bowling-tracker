@@ -3,6 +3,9 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { computeStats } from '../../core/stats/stats';
+import { Competition, Game, Session, SessionType } from '../../models';
+
+type TypeFilter = SessionType | 'all';
 
 @Component({
   selector: 'app-stats',
@@ -14,10 +17,31 @@ export class Stats {
   private readonly repo = inject(Repository);
 
   readonly loading = signal(true);
-  readonly stats = signal(computeStats([]));
+  private readonly games = signal<Game[]>([]);
+  private readonly sessions = signal<Session[]>([]);
+  readonly competitions = signal<Competition[]>([]);
 
-  /** Sparkline bar heights (%), most recent last. Scaled to the score range so
-   *  real variation is visible. */
+  readonly typeFilter = signal<TypeFilter>('all');
+  readonly competitionFilter = signal<string>('all');
+  readonly typeOptions: TypeFilter[] = ['all', 'practice', 'league', 'tournament', 'social'];
+
+  private readonly sessionById = computed(() => new Map(this.sessions().map((s) => [s.id, s])));
+
+  private readonly filteredGames = computed(() => {
+    const type = this.typeFilter();
+    const comp = this.competitionFilter();
+    const byId = this.sessionById();
+    return this.games().filter((g) => {
+      const s = byId.get(g.sessionId);
+      if (!s) return false;
+      if (type !== 'all' && s.type !== type) return false;
+      if (comp !== 'all' && s.competitionId !== comp) return false;
+      return true;
+    });
+  });
+
+  readonly stats = computed(() => computeStats(this.filteredGames()));
+
   readonly bars = computed(() => {
     const scores = this.stats().evolution.slice(-24);
     if (scores.length === 0) return [];
@@ -31,13 +55,19 @@ export class Stats {
     void this.load();
   }
 
-  pct(value: number | null): string {
-    return value === null ? '—' : `${value}%`;
+  private async load(): Promise<void> {
+    const [games, sessions, competitions] = await Promise.all([
+      this.repo.listGames(),
+      this.repo.listSessions(),
+      this.repo.listCompetitions({ includeInactive: true }),
+    ]);
+    this.games.set(games);
+    this.sessions.set(sessions);
+    this.competitions.set(competitions);
+    this.loading.set(false);
   }
 
-  private async load(): Promise<void> {
-    const games = await this.repo.listGames();
-    this.stats.set(computeStats(games));
-    this.loading.set(false);
+  pct(value: number | null): string {
+    return value === null ? '—' : `${value}%`;
   }
 }

@@ -50,6 +50,10 @@
   border: 1px solid var(--line);
   background: transparent;
   color: var(--ink-soft);
+
+  &--leave {
+    font-size: 0.66rem;
+  }
 }
 
 .count-line {

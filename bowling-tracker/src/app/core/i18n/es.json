@@ -92,6 +92,8 @@
     "games": "Partidas",
     "average": "Media",
     "best": "Mejor",
+    "allTypes": "Todas",
+    "allCompetitions": "Todas las competiciones",
     "evolution": "Evolución",
     "byFrame": "Por frame",
     "strikePct": "Plenos",
