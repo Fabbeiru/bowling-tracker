@@ -28,10 +28,10 @@ export class CompetitionForm {
   readonly form = this.fb.nonNullable.group({
     type: this.fb.nonNullable.control<CompetitionType>('league'),
     name: ['', [Validators.required, Validators.maxLength(80)]],
-    season: [''],
+    season: ['', [Validators.maxLength(40)]],
     startDate: [''],
     endDate: [''],
-    notes: [''],
+    notes: ['', [Validators.maxLength(500)]],
   });
 
   constructor() {

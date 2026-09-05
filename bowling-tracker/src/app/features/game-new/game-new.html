@@ -118,6 +118,8 @@
           <input
             id="qname"
             class="input"
+            maxlength="80"
+            required
             [placeholder]="t('gameNew.competitionNamePlaceholder')"
             [ngModel]="quickName()"
             (ngModelChange)="quickName.set($event)"
@@ -129,6 +131,7 @@
           <input
             id="qseason"
             class="input"
+            maxlength="40"
             [placeholder]="t('gameNew.seasonPlaceholder')"
             [ngModel]="quickSeason()"
             (ngModelChange)="quickSeason.set($event)"
@@ -162,6 +165,8 @@
           <input
             id="vname"
             class="input"
+            maxlength="80"
+            required
             [placeholder]="t('venueForm.namePlaceholder')"
             [ngModel]="venueName()"
             (ngModelChange)="venueName.set($event)"
@@ -173,6 +178,7 @@
           <input
             id="vcity"
             class="input"
+            maxlength="60"
             [placeholder]="t('venueForm.cityPlaceholder')"
             [ngModel]="venueCity()"
             (ngModelChange)="venueCity.set($event)"

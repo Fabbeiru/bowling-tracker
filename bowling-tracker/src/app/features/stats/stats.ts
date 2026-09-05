@@ -15,7 +15,7 @@ interface NamedAverage {
   games: number;
 }
 
-/** SVG geometry for the evolution chart (viewBox 0 0 100 40). */
+/** SVG geometry for the evolution chart (viewBox 0 0 600 100). */
 interface Chart {
   /** Polyline points, most recent last. */
   line: string;
@@ -107,18 +107,22 @@ export class Stats {
   readonly chart = computed<Chart | null>(() => {
     const scores = this.stats().evolution.slice(-24);
     if (scores.length < 2) return null;
+    // viewBox 600 × 100 con relación de aspecto fija en el CSS: al escalar por
+    // igual en los dos ejes, la línea y los puntos no se deforman a ningún ancho.
+    const W = 600;
+    const H = 100;
     const avg = this.stats().summary.average ?? 0;
     const lo = Math.max(0, Math.min(...scores, avg) - 12);
     const hi = Math.min(300, Math.max(...scores, avg) + 12);
     const span = Math.max(1, hi - lo);
-    const x = (i: number) => (scores.length === 1 ? 50 : (i / (scores.length - 1)) * 100);
-    const y = (s: number) => 40 - ((s - lo) / span) * 40;
+    const x = (i: number) => (i / (scores.length - 1)) * W;
+    const y = (s: number) => H - ((s - lo) / span) * H;
     const pts = scores.map((s, i) => ({ x: x(i), y: y(s) }));
     const coords = pts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`);
     const line = coords.join(' ');
     const first = pts[0];
     const lastP = pts[pts.length - 1];
-    const area = `M${first.x.toFixed(1)},40 L${coords.join(' L')} L${lastP.x.toFixed(1)},40 Z`;
+    const area = `M${first.x.toFixed(1)},${H} L${coords.join(' L')} L${lastP.x.toFixed(1)},${H} Z`;
     return {
       line,
       area,

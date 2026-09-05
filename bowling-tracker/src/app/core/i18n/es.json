@@ -61,8 +61,8 @@
     "cleanGame": "Partida limpia",
     "perfectGame": "¡300!",
     "notStarted": "Sin empezar",
-    "prevPage": "‹ Anterior",
-    "nextPage": "Siguiente ›",
+    "prevPage": "< Anterior",
+    "nextPage": "Siguiente >",
     "pageOf": "Página {{page}} de {{total}}"
   },
   "competitions": {

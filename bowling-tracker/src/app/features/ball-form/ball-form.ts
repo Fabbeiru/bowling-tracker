@@ -27,16 +27,13 @@ export class BallForm {
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(80)]],
-    brand: [''],
+    brand: ['', [Validators.maxLength(60)]],
     weightLb: this.fb.control<number | null>(null, [Validators.min(6), Validators.max(16)]),
-    coverstock: [''],
-    layout: [''],
-    imageUrl: ['', [Validators.pattern(/^https?:\/\/.+/i)]],
-    notes: [''],
+    coverstock: ['', [Validators.maxLength(60)]],
+    layout: ['', [Validators.maxLength(60)]],
+    imageUrl: ['', [Validators.pattern(/^https?:\/\/.+/i), Validators.maxLength(500)]],
+    notes: ['', [Validators.maxLength(500)]],
   });
-
-  /** Live preview of the image URL field, so a bad link is obvious before saving. */
-  readonly imagePreviewError = signal(false);
 
   constructor() {
     const id = inject(ActivatedRoute).snapshot.paramMap.get('id');

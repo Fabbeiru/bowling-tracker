@@ -26,10 +26,6 @@ export class StorageService {
     return navigator.storage.persist();
   }
 
-  async isPersisted(): Promise<boolean> {
-    return navigator.storage?.persisted ? navigator.storage.persisted() : false;
-  }
-
   async estimate(): Promise<StorageEstimate | null> {
     if (!navigator.storage?.estimate) {
       return null;

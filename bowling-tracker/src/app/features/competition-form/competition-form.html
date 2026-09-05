@@ -28,12 +28,12 @@
 
     <div class="field">
       <label for="name">{{ t('competitionForm.name') }}<span class="req-mark">*</span></label>
-      <input id="name" class="input" formControlName="name" autocomplete="off" [placeholder]="t('competitionForm.namePlaceholder')" />
+      <input id="name" class="input" formControlName="name" autocomplete="off" maxlength="80" required [placeholder]="t('competitionForm.namePlaceholder')" />
     </div>
 
     <div class="field">
       <label for="season">{{ t('competitionForm.season') }}</label>
-      <input id="season" class="input" formControlName="season" [placeholder]="t('competitionForm.seasonPlaceholder')" autocomplete="off" />
+      <input id="season" class="input" formControlName="season" maxlength="40" [placeholder]="t('competitionForm.seasonPlaceholder')" autocomplete="off" />
     </div>
 
     <div class="row2">
@@ -43,7 +43,7 @@
       </div>
       <div class="field">
         <label for="end">{{ t('competitionForm.endDate') }}</label>
-        <input id="end" class="input" type="date" formControlName="endDate" />
+        <input id="end" class="input" type="date" formControlName="endDate" [attr.min]="form.controls.startDate.value || null" />
       </div>
     </div>
 
@@ -53,6 +53,7 @@
         id="notes"
         class="input"
         rows="2"
+        maxlength="500"
         formControlName="notes"
         [placeholder]="t('competitionForm.notesPlaceholder')"
       ></textarea>

@@ -26,9 +26,9 @@ export class VenueForm {
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(80)]],
-    city: [''],
+    city: ['', [Validators.maxLength(60)]],
     lanes: this.fb.control<number | null>(null, [Validators.min(1), Validators.max(200)]),
-    notes: [''],
+    notes: ['', [Validators.maxLength(500)]],
   });
 
   constructor() {

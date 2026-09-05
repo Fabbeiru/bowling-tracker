@@ -79,12 +79,12 @@
         <div class="card">
           <div class="card__lab">{{ t('stats.evolution') }}</div>
           <div class="chart">
-            <svg viewBox="0 0 100 40" preserveAspectRatio="none" class="chart__svg" aria-hidden="true">
-              <line x1="0" [attr.y1]="c.avgY" x2="100" [attr.y2]="c.avgY" class="chart__avg" />
+            <svg viewBox="0 0 600 100" preserveAspectRatio="xMidYMid meet" class="chart__svg" aria-hidden="true">
+              <line x1="0" [attr.y1]="c.avgY" x2="600" [attr.y2]="c.avgY" class="chart__avg" />
               <path [attr.d]="c.area" class="chart__area" />
               <polyline [attr.points]="c.line" class="chart__line" />
               @for (d of c.dots; track $index) {
-                <circle [attr.cx]="d.x" [attr.cy]="d.y" [attr.r]="d.last ? 2.4 : 1.3"
+                <circle [attr.cx]="d.x" [attr.cy]="d.y" [attr.r]="d.last ? 5 : 3"
                         [class.chart__dot--last]="d.last" class="chart__dot" />
               }
             </svg>

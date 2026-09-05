@@ -163,14 +163,19 @@
 
 .chart__svg {
   flex: 1;
-  height: 88px;
+  min-width: 0;
+  /* Alto fijo por breakpoint + preserveAspectRatio="meet": el viewBox 600×100
+     se escala por igual en ambos ejes (nada se estira) y se centra en la caja. */
+  height: clamp(72px, 15vw, 116px);
+  align-self: center;
   overflow: visible;
 }
 
 .chart__avg {
   stroke: var(--ink-soft);
-  stroke-width: 0.4;
-  stroke-dasharray: 1.5 1.5;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  vector-effect: non-scaling-stroke;
   opacity: 0.7;
 }
 
@@ -194,7 +199,8 @@
 .chart__dot--last {
   fill: var(--accent);
   stroke: var(--surface);
-  stroke-width: 0.6;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
 }
 
 .chart__scale {
