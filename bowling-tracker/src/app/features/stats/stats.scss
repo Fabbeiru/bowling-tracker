@@ -100,18 +100,123 @@
   margin-bottom: 0.7rem;
 }
 
-.spark {
+.trend {
+  margin-top: 1rem;
   display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
 }
 
-.spark i {
+.trend__now {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.trend__lab {
+  font-family: var(--font-label);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.trend__val {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.6rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.trend__delta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.trend--up .trend__delta { color: var(--ok); }
+.trend--down .trend__delta { color: var(--danger); }
+
+.trend__arrow { font-size: 0.7em; }
+
+.trend__vs {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+.chart {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.chart__svg {
   flex: 1;
-  min-width: 3px;
-  background: var(--secondary);
-  border-radius: 2px 2px 0 0;
+  height: 88px;
+  overflow: visible;
+}
+
+.chart__avg {
+  stroke: var(--ink-soft);
+  stroke-width: 0.4;
+  stroke-dasharray: 1.5 1.5;
+  opacity: 0.7;
+}
+
+.chart__area {
+  fill: color-mix(in srgb, var(--secondary) 18%, transparent);
+}
+
+.chart__line {
+  fill: none;
+  stroke: var(--secondary);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.chart__dot {
+  fill: var(--secondary);
+}
+
+.chart__dot--last {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 0.6;
+}
+
+.chart__scale {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: var(--font-label);
+  font-size: 0.58rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.chart__scale-avg {
+  color: var(--secondary);
+}
+
+.metrics__sub {
+  color: var(--ink-soft);
+  font-weight: 400;
+  font-size: 0.8em;
 }
 
 .metrics {

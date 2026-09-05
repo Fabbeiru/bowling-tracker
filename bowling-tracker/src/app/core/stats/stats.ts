@@ -22,11 +22,24 @@ export interface FrameStats {
   perfectGames: number;
 }
 
+export interface Trend {
+  /** How many games each side of the comparison uses. */
+  window: number;
+  /** Average of the most recent `window` games. */
+  recentAvg: number;
+  /** Average of the `window` games before those. */
+  priorAvg: number;
+  /** `recentAvg - priorAvg`, positive = improving. */
+  delta: number;
+}
+
 export interface StatsResult {
   summary: Summary;
   frames: FrameStats;
   /** Chronological scores of completed games. */
   evolution: number[];
+  /** Recent form vs the previous block. `null` until there are `2 * window` games. */
+  trend: Trend | null;
 }
 
 interface ScoredGame {
@@ -96,6 +109,8 @@ export function computeStats(games: Game[], opts: { minSample?: number } = {}): 
   const perfectGames = scored.filter((x) => x.total === 300).length;
   const enough = frameGames.length >= minSample;
 
+  const trend = computeTrend(totals, 5);
+
   const frames: FrameStats = {
     games: frameGames.length,
     framesCounted,
@@ -108,7 +123,17 @@ export function computeStats(games: Game[], opts: { minSample?: number } = {}): 
     perfectGames,
   };
 
-  return { summary, frames, evolution: totals };
+  return { summary, frames, evolution: totals, trend };
+}
+
+/** Compares the last `window` scores against the `window` before them. */
+function computeTrend(totals: number[], window: number): Trend | null {
+  if (totals.length < window * 2) return null;
+  const recent = totals.slice(-window);
+  const prior = totals.slice(-window * 2, -window);
+  const recentAvg = round(mean(recent));
+  const priorAvg = round(mean(prior));
+  return { window, recentAvg, priorAvg, delta: recentAvg - priorAvg };
 }
 
 function mean(xs: number[]): number {

@@ -90,3 +90,23 @@ describe('computeStats — evolution', () => {
     expect(evolution).toEqual([120, 180]);
   });
 });
+
+describe('computeStats — trend', () => {
+  it('is null until there are two full windows of games', () => {
+    const games = Array.from({ length: 9 }, () => totalGame(150));
+    expect(computeStats(games).trend).toBeNull();
+  });
+
+  it('compares the last 5 games against the previous 5', () => {
+    const prior = [140, 150, 160, 150, 150]; // avg 150
+    const recent = [170, 180, 160, 170, 170]; // avg 170
+    const games = [...prior, ...recent].map((s) => totalGame(s));
+    const { trend } = computeStats(games);
+    expect(trend).toEqual({ window: 5, recentAvg: 170, priorAvg: 150, delta: 20 });
+  });
+
+  it('reports a negative delta when form drops', () => {
+    const games = [...[180, 180, 180, 180, 180], ...[150, 150, 150, 150, 150]].map((s) => totalGame(s));
+    expect(computeStats(games).trend?.delta).toBe(-30);
+  });
+});

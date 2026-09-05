@@ -55,14 +55,53 @@
         </div>
       </div>
 
-      @if (bars().length > 1) {
+      @if (stats().trend; as tr) {
+        <div class="trend" [class.trend--up]="tr.delta > 0" [class.trend--down]="tr.delta < 0">
+          <div class="trend__now">
+            <span class="trend__lab">{{ t('stats.trendRecent', { n: tr.window }) }}</span>
+            <span class="trend__val">{{ tr.recentAvg }}</span>
+          </div>
+          <div class="trend__delta">
+            <span class="trend__arrow">{{ tr.delta > 0 ? '▲' : tr.delta < 0 ? '▼' : '=' }}</span>
+            <span>{{ tr.delta > 0 ? '+' : '' }}{{ tr.delta }}</span>
+            <span class="trend__vs">{{ t('stats.trendVsPrior', { n: tr.window }) }}</span>
+          </div>
+        </div>
+      }
+
+      @if (chart(); as c) {
         <div class="card">
           <div class="card__lab">{{ t('stats.evolution') }}</div>
-          <div class="spark" aria-hidden="true">
-            @for (h of bars(); track $index) {
-              <i [style.height.%]="h"></i>
-            }
+          <div class="chart">
+            <svg viewBox="0 0 100 40" preserveAspectRatio="none" class="chart__svg" aria-hidden="true">
+              <line x1="0" [attr.y1]="c.avgY" x2="100" [attr.y2]="c.avgY" class="chart__avg" />
+              <path [attr.d]="c.area" class="chart__area" />
+              <polyline [attr.points]="c.line" class="chart__line" />
+              @for (d of c.dots; track $index) {
+                <circle [attr.cx]="d.x" [attr.cy]="d.y" [attr.r]="d.last ? 2.4 : 1.3"
+                        [class.chart__dot--last]="d.last" class="chart__dot" />
+              }
+            </svg>
+            <div class="chart__scale">
+              <span>{{ c.hi }}</span>
+              <span class="chart__scale-avg">{{ t('stats.average') }} {{ c.avg }}</span>
+              <span>{{ c.lo }}</span>
+            </div>
           </div>
+        </div>
+      }
+
+      @if (byBall().length > 0) {
+        <div class="card">
+          <div class="card__lab">{{ t('stats.byBall') }}</div>
+          <dl class="metrics">
+            @for (b of byBall(); track b.name) {
+              <div>
+                <dt>{{ b.name }} <span class="metrics__sub">· {{ b.games }}</span></dt>
+                <dd>{{ b.average }}</dd>
+              </div>
+            }
+          </dl>
         </div>
       }
 
