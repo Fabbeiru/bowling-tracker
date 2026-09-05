@@ -107,8 +107,8 @@ describe('DexieRepository', () => {
 
   it('persists meta changes', async () => {
     const meta = await repo.getMeta();
-    await repo.saveMeta({ ...meta, settings: { ...meta.settings, hideMaxProjection: true } });
-    expect((await repo.getMeta()).settings.hideMaxProjection).toBe(true);
+    await repo.saveMeta({ ...meta, schemaVersion: 2 });
+    expect((await repo.getMeta()).schemaVersion).toBe(2);
   });
 
   it('stamps updatedAt on every save', async () => {

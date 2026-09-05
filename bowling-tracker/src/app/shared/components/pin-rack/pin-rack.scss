@@ -18,15 +18,19 @@
   display: grid;
   place-items: center;
   font-family: var(--font-label);
-  font-size: 0.9rem;
-  border: 2px solid transparent;
-  background: var(--ink);
-  color: #1a2036;
+  font-weight: 700;
+  font-size: 0.95rem;
+  /* Cara de bolo: blanca en los dos temas (es el color del objeto, no del
+     tema). El número siempre oscuro encima. */
+  background: #f4f5f7;
+  color: #1c2333;
+  border: 2px solid var(--line);
   -webkit-tap-highlight-color: transparent;
 
   &--knocked {
     background: var(--accent);
     color: var(--accent-ink);
+    border-color: transparent;
   }
 
   &--gone {
@@ -78,14 +82,14 @@
 }
 
 .count-toggle {
-  margin-top: 0.6rem;
-  width: 100%;
-  border: 1px dashed var(--line);
+  display: block;
+  margin: 0.7rem auto 0;
+  border: 0;
   background: transparent;
   color: var(--ink-soft);
-  border-radius: var(--radius-sm);
-  padding: 0.55rem;
-  font-size: 0.8rem;
+  padding: 0.25rem;
+  font-size: 0.78rem;
+  text-decoration: underline;
 }
 
 .confirm {

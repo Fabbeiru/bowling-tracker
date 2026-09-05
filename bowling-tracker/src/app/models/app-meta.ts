@@ -1,8 +1,6 @@
 import { IsoDateTime } from './common';
 
 export interface AppSettings {
-  /** Hide the "maximum possible score" projection during a game. */
-  hideMaxProjection: boolean;
   locale: 'es';
 }
 
@@ -20,7 +18,6 @@ export const DEFAULT_META: AppMeta = {
   id: 'app',
   schemaVersion: CURRENT_SCHEMA_VERSION,
   settings: {
-    hideMaxProjection: false,
     locale: 'es',
   },
 };

@@ -69,18 +69,6 @@
   color: var(--ink-soft);
 }
 
-.tile--btn {
-  text-align: left;
-  cursor: pointer;
-  font: inherit;
-}
-
-.tile__lab {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .tile__val {
   font-family: var(--font-display);
   font-weight: 800;
@@ -132,15 +120,27 @@
 }
 
 .undo {
-  border: 1px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border: 0;
   background: transparent;
   color: var(--ink-soft);
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
+  padding: 0.25rem 0;
   font-family: var(--font-label);
   font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
+}
+
+.link-btn {
+  display: block;
+  margin: 0.7rem auto 0;
+  border: 0;
+  background: transparent;
+  color: var(--secondary);
+  font-size: 0.8rem;
+  text-decoration: underline;
 }
 
 .done {

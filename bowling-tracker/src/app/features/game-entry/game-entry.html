@@ -45,15 +45,10 @@
             <div class="tile__lab">{{ t('gameEntry.score') }}</div>
             <div class="tile__val">{{ s.total }}</div>
           </div>
-          <button type="button" class="tile tile--btn" (click)="settings.toggleHideMaxProjection()">
-            <div class="tile__lab">
-              {{ t('gameEntry.maxPossible') }}
-              <span>{{ settings.hideMaxProjection() ? '🙈' : '👁' }}</span>
-            </div>
-            <div class="tile__val tile__val--blue">
-              {{ settings.hideMaxProjection() ? '···' : s.maxPossible }}
-            </div>
-          </button>
+          <div class="tile">
+            <div class="tile__lab">{{ t('gameEntry.maxPossible') }}</div>
+            <div class="tile__val tile__val--blue">{{ s.maxPossible }}</div>
+          </div>
         </div>
       }
     }
@@ -82,7 +77,12 @@
         @if (position(); as pos) {
           <div class="ball-line">
             <span>{{ t('gameEntry.ballLine', { frame: pos.frame, ball: pos.ball }) }}</span>
-            <button type="button" class="undo" (click)="undo()">{{ t('gameEntry.undo') }}</button>
+            @if (game()!.frames?.length) {
+              <button type="button" class="undo" (click)="undo()" [attr.aria-label]="t('gameEntry.undo')">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-1"/></svg>
+                {{ t('gameEntry.undo') }}
+              </button>
+            }
           </div>
           <app-pin-pad [standingCount]="pos.standingCount" [freshRack]="pos.freshRack" (pins)="record($event)" />
         } @else {
@@ -93,7 +93,12 @@
         @if (position(); as pos) {
           <div class="ball-line">
             <span>{{ t('gameEntry.ballLine', { frame: pos.frame, ball: pos.ball }) }}</span>
-            <button type="button" class="undo" (click)="undo()">{{ t('gameEntry.undo') }}</button>
+            @if (game()!.frames?.length) {
+              <button type="button" class="undo" (click)="undo()" [attr.aria-label]="t('gameEntry.undo')">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-1"/></svg>
+                {{ t('gameEntry.undo') }}
+              </button>
+            }
           </div>
           @if (!countMode() && pos.standingBefore; as standing) {
             <app-pin-rack
@@ -103,8 +108,12 @@
               (countOnly)="countMode.set(true)"
             />
           } @else {
-            <p class="count-note">{{ t('gameEntry.countOnlyNote') }}</p>
             <app-pin-pad [standingCount]="pos.standingCount" [freshRack]="pos.freshRack" (pins)="record($event)" />
+            @if (countMode()) {
+              <button type="button" class="link-btn" (click)="countMode.set(false)">
+                {{ t('gameEntry.markPinsInstead') }}
+              </button>
+            }
           }
         } @else {
           <p class="done">{{ t('gameEntry.gameComplete') }}</p>
@@ -112,22 +121,26 @@
       }
     }
 
-    <div class="field">
-      <label for="notes">{{ t('gameEntry.notesLabel') }}</label>
-      <textarea
-        id="notes"
-        class="input"
-        rows="2"
-        [placeholder]="t('gameEntry.notesPlaceholder')"
-        [ngModel]="notes()"
-        (ngModelChange)="notes.set($event)"
-        (blur)="saveNotes()"
-      ></textarea>
-    </div>
+    @if (game()!.detailLevel === 'total' || complete()) {
+      <div class="field">
+        <label for="notes">{{ t('gameEntry.notesLabel') }}</label>
+        <textarea
+          id="notes"
+          class="input"
+          rows="2"
+          [placeholder]="t('gameEntry.notesPlaceholder')"
+          [ngModel]="notes()"
+          (ngModelChange)="notes.set($event)"
+          (blur)="saveNotes()"
+        ></textarea>
+      </div>
+    }
 
-    <button type="button" class="add-game" [disabled]="addingGame() || !complete()" (click)="addAnotherGame()">
-      {{ t('gameEntry.addAnotherGame') }}
-    </button>
+    @if (complete()) {
+      <button type="button" class="add-game" [disabled]="addingGame()" (click)="addAnotherGame()">
+        {{ t('gameEntry.addAnotherGame') }}
+      </button>
+    }
 
     <button
       class="cta"

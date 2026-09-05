@@ -99,6 +99,7 @@
     "undo": "Deshacer",
     "gameComplete": "Partida completa.",
     "countOnlyNote": "Registrando solo el número de bolos de este tiro.",
+    "markPinsInstead": "Marcar los pinos en el triángulo",
     "notesLabel": "Anotaciones",
     "notesPlaceholder": "Pista, condiciones, sensaciones…",
     "finish": "Guardar y volver",

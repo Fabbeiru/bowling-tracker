@@ -6,7 +6,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
-import { SettingsStore } from '../../core/settings/settings-store';
 import { applyDelivery, entryPosition, isComplete, scoreGame, undoLastDelivery } from '../../core/scoring';
 import { createGame, Game, Session } from '../../models';
 import { Scoresheet } from '../../shared/components/scoresheet/scoresheet';
@@ -27,7 +26,6 @@ export class GameEntry {
   private readonly repo = inject(Repository);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
-  readonly settings = inject(SettingsStore);
 
   readonly game = signal<Game | null>(null);
   readonly loading = signal(true);
