@@ -258,6 +258,18 @@ Ya forma parte de la v1 a publicar. Añadido:
 - `game-entry`: el "volver" apunta a la sesión cuando la hay.
 - `core/stats/stats.ts`: `sessionTotals(games)` (serie + media), con tests.
 
+### Borrar bola / bolera / competición (2026-09-05)
+
+- `Repository`: `deleteBall` / `deleteVenue` / `deleteCompetition` (hard delete).
+- Los formularios comprueban al cargar si hay partidas/sesiones asociadas:
+  - **sin** historial → botón "Borrar …" (rojo) + modal `confirm-dialog` →
+    borrado real.
+  - **con** historial → botón de retirar/ocultar/archivar + modal que explica
+    que es un soft-delete y se puede revertir.
+- Listado de partidas: enlaces sin subrayado (regla global en `styles.scss`),
+  total de la serie al extremo derecho de cada sesión, distintivo limpia/300
+  sin emoji (verde para limpia) centrado entre nº de partida y resultado.
+
 ## Siguiente: Bloque 10 (Datos + backup) y PWA (sesión dedicada)
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
