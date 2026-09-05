@@ -11,7 +11,7 @@
 
 .session-context {
   margin-top: 0.4rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -62,7 +62,7 @@
 }
 
 .tile__lab {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.58rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -102,7 +102,7 @@
 }
 
 .field > label {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -116,7 +116,6 @@
   padding: 0.6rem 0.7rem;
   font: inherit;
   color: var(--ink);
-  color-scheme: dark;
 }
 
 .ball-line {
@@ -125,7 +124,7 @@
   justify-content: space-between;
   margin-top: 1.1rem;
   margin-bottom: 0.6rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -138,7 +137,7 @@
   color: var(--ink-soft);
   border-radius: 999px;
   padding: 0.25rem 0.7rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;

@@ -1,36 +1,50 @@
-# Identidad visual v1
+# Identidad visual
 
-Cerrada 2026-09-04. **Diseño comprometido con modo oscuro** — no hay modo claro
-en Fase 1.
+**v2 (2026-09-05)**: la app tiene **tema claro y oscuro** con selector en
+Ajustes — ver `adr/0010`. La paleta "Bruma azul" de la v1 se descartó (los
+tonos de fondo no se distinguían entre sí; ver el diagnóstico en `adr/0010`).
+La paleta actual viene del portfolio del autor (`fabbeiru.github.io/Portfolio`).
 
-Exploración completa (7 iteraciones, con las alternativas descartadas):
+Exploración v1 (7 iteraciones, descartada):
 - Archivo local: [`assets/identidad-exploracion.html`](assets/identidad-exploracion.html)
-  (abrir en el navegador)
-- Artefacto Claude: https://claude.ai/code/artifact/e7ed5506-eb75-429a-b292-76b385aee573
+- Artefacto Claude v1: https://claude.ai/code/artifact/e7ed5506-eb75-429a-b292-76b385aee573
 
-## Paleta "Bruma azul" (modo oscuro)
+Exploración v2 (5 rondas de comparación de paleta):
+- Artefacto Claude v2: https://claude.ai/code/artifact/7bc2c9f3-372f-48a4-abcb-458a0ef6f0a4
+
+## Paleta v2 (del portfolio) — claro / oscuro
+
+| Token | Claro | Oscuro | Uso |
+|-------|-------|--------|-----|
+| `--bg` | `#EEF3FA` | `#0B0D12` | fondo de la app |
+| `--surface` | `#FFFFFF` | `#151E2A` | tarjetas |
+| `--surface-2` | `#DCE7F3` | `#1F2C3D` | cabeceras, elementos elevados |
+| `--ink` | `#1C2333` | `#E7ECF3` | texto principal |
+| `--ink-soft` | `#56607A` | `#9AA7BC` | texto secundario |
+| `--line` | `#C9D6E8` | `#44536A` | bordes y separadores |
+| `--secondary` | `#1A63A8` | `#5FA0F0` | azul: métricas secundarias, marca de sección |
+| `--danger` / `--danger-text` | `#DC2626` / `#C81E1E` | `#F87171` / `#F4938A` | error |
+| `--ok` | `#0F766E` | `#34D399` | correcto |
+| `--warn` | `#B9791A` | `#E0A33F` | aviso |
+
+**El ámbar es igual en los dos temas** y no viene del portfolio — es lo que
+ata la app a su logo:
 
 | Token | Hex | Uso |
 |-------|-----|-----|
-| `--bg` | `#222A44` | fondo de la app |
-| `--surface` | `#2B3556` | tarjetas |
-| `--surface-2` | `#333E63` | elementos elevados, contenedor del icono |
-| `--ink` | `#ECEEF5` | texto principal |
-| `--ink-soft` | `#A2AAC6` | texto secundario |
-| `--line` | `#414D77` | bordes y separadores |
 | `--accent` | `#F2A93B` | acento principal (ámbar) — **una cosa por pantalla** |
 | `--accent-ink` | `#1B1406` | texto sobre ámbar |
-| `--secondary` | `#8FB6FF` | azul cobalto: métricas secundarias, rachas, microgáficos |
 | (contorno logo) | `#14101B` | borde fino de las piezas del logo |
-
-Semánticos (pendientes de fijar en implementación): verde OK, ámbar aviso,
-rojo error — distintos del acento.
 
 ## Tipografía
 
 - **Bricolage Grotesque** (700–800) — titulares y cifras grandes.
-- **Hanken Grotesk** (400–600) — texto de lectura.
-- **DM Mono** (400–500) — datos, etiquetas, fechas (evoca el marcador de bolera).
+- **Hanken Grotesk** (400–700) — todo lo demás: texto de lectura y también
+  etiquetas/datos/fechas (en mayúsculas y con `letter-spacing`), vía el token
+  `--font-label`.
+
+DM Mono se retiró (2026-09-05): su aire de máquina de escribir chocaba con el
+resto y añadía una tercera familia sin necesidad. Dos tipografías en total.
 
 Todas de Google Fonts. Fechas y números con `Intl` en locale `es`.
 

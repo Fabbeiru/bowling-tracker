@@ -1,34 +1,70 @@
 /* Bowling Tracker — estilos globales.
-   Identidad: docs/IDENTIDAD.md. Comprometido con modo oscuro (Fase 1). */
+   Identidad: docs/IDENTIDAD.md. Claro/oscuro con selector — misma paleta y
+   mismo mecanismo (data-theme + localStorage) que fabbeiru.github.io/Portfolio,
+   con el ámbar de los bolos como acento propio de esta app (ADR 0010). */
 
 :root {
-  /* Paleta "Bruma azul" */
-  --bg: #222a44;
-  --surface: #2b3556;
-  --surface-2: #333e63;
-  --ink: #eceef5;
-  --ink-soft: #a2aac6;
-  --line: #414d77;
+  /* Claro (por defecto) — tokens de fabbeiru.github.io/Portfolio */
+  --bg: #eef3fa;
+  --surface: #ffffff;
+  --surface-2: #dce7f3;
+  --ink: #1c2333;
+  --ink-soft: #56607a;
+  --line: #c9d6e8;
+  --secondary: #1a63a8;
+  --color-scheme: light;
+
+  /* Semánticos */
+  --ok: #0f766e;
+  --warn: #b9791a;
+  --danger: #dc2626;
+  --danger-text: #c81e1e;
+
+  /* Acento propio de Bowling Tracker — igual en los dos temas */
   --accent: #f2a93b;
   --accent-ink: #1b1406;
-  --secondary: #8fb6ff;
-
-  /* Semánticos (provisionales) */
-  --ok: #57b26f;
-  --warn: #e0a33f;
-  --danger: #e2685d;
-  --danger-text: #f4938a;
 
   /* Tipografía */
   --font-display: "Bricolage Grotesque", "Hanken Grotesk", system-ui, sans-serif;
   --font-body: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
-  --font-mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --font-label: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
 
   /* Métricas */
   --nav-height: 60px;
   --radius: 14px;
   --radius-sm: 10px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0d12;
+    --surface: #151e2a;
+    --surface-2: #1f2c3d;
+    --ink: #e7ecf3;
+    --ink-soft: #9aa7bc;
+    --line: #44536a;
+    --color-scheme: dark;
+    --secondary: #5fa0f0;
+    --ok: #34d399;
+    --warn: #e0a33f;
+    --danger: #f87171;
+    --danger-text: #f4938a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b0d12;
+  --surface: #151e2a;
+  --surface-2: #1f2c3d;
+  --ink: #e7ecf3;
+  --ink-soft: #9aa7bc;
+  --line: #44536a;
+    --color-scheme: dark;
+  --secondary: #5fa0f0;
+  --ok: #34d399;
+  --warn: #e0a33f;
+  --danger: #f87171;
+  --danger-text: #f4938a;
 }
 
 * { box-sizing: border-box; }
@@ -40,6 +76,9 @@ html {
      panel inferior fijo (backdrop-filter), el rebote provocaba un repintado
      muy rápido y visible ("vibración") justo al llegar al final del contenido. */
   overscroll-behavior-y: none;
+  /* Hereda a todo — así los controles nativos (inputs, scrollbars) siguen
+     el tema sin declararlo en cada componente. */
+  color-scheme: var(--color-scheme);
 }
 
 body {
@@ -62,6 +101,10 @@ h1, h2, h3, h4 {
 }
 
 a { color: inherit; }
+
+/* Palabras muy largas (URLs, compuestos con "/") no desbordan su contenedor,
+   sobre todo con texto ampliado por zoom o preferencia del sistema. */
+p, li, span, label { overflow-wrap: break-word; }
 
 button {
   font: inherit;
@@ -168,9 +211,10 @@ textarea {
 /* Cabecera con acción a la derecha (título+subtítulo a la izquierda). */
 .screen__head--row {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.6rem 1rem;
 }
 
 /* Botón principal por defecto — algunas pantallas (games, ball-form…)

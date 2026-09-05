@@ -25,6 +25,11 @@
   color: var(--danger-text);
 }
 
+.field__hint {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
 .avatar-row {
   display: flex;
   align-items: flex-end;
@@ -32,7 +37,7 @@
 }
 
 .field > label {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -46,7 +51,6 @@
   padding: 0.6rem 0.7rem;
   font: inherit;
   color: var(--ink);
-  color-scheme: dark;
 }
 
 textarea.input {

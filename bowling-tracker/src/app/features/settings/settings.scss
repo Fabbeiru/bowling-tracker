@@ -2,6 +2,31 @@
   color: var(--ink-soft);
 }
 
+.seg {
+  display: flex;
+  gap: 4px;
+  background: var(--surface-2);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.seg__opt {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  border-radius: 7px;
+  min-height: 40px;
+  padding: 0.5rem 0.2rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+
+  &--on {
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+}
+
 .block {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -18,7 +43,7 @@
 }
 
 .usage__label {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.85rem;
   color: var(--ink);
   font-variant-numeric: tabular-nums;
@@ -29,6 +54,7 @@
   color: var(--ink-soft);
   font-size: 0.88rem;
   line-height: 1.55;
+  overflow-wrap: break-word;
 
   & + & {
     margin-top: 0.6rem;

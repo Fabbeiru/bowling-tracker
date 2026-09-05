@@ -5,6 +5,32 @@
   </header>
 
   <section class="block">
+    <h2 class="block__title">{{ t('settings.themeTitle') }}</h2>
+    <div class="seg" role="radiogroup" [attr.aria-label]="t('settings.themeTitle')">
+      <button
+        type="button"
+        role="radio"
+        class="seg__opt"
+        [attr.aria-checked]="theme() === 'light'"
+        [class.seg__opt--on]="theme() === 'light'"
+        (click)="setTheme('light')"
+      >
+        {{ t('settings.themeLight') }}
+      </button>
+      <button
+        type="button"
+        role="radio"
+        class="seg__opt"
+        [attr.aria-checked]="theme() === 'dark'"
+        [class.seg__opt--on]="theme() === 'dark'"
+        (click)="setTheme('dark')"
+      >
+        {{ t('settings.themeDark') }}
+      </button>
+    </div>
+  </section>
+
+  <section class="block">
     <h2 class="block__title">{{ t('settings.storageTitle') }}</h2>
 
     @if (loading()) {

@@ -21,7 +21,7 @@ import { RouterLink } from '@angular/router';
       color: var(--ink-soft);
       text-decoration: none;
       font-size: 0.85rem;
-      font-family: var(--font-mono);
+      font-family: var(--font-label);
     }
     .back-link span {
       font-size: 1.1rem;

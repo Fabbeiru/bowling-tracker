@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { StorageEstimate, StorageService } from '../../core/storage/storage.service';
+import { Theme, ThemeService } from '../../core/theme/theme.service';
 
 /** Human-readable size, e.g. 1536 -> "1,5 KB". Locale `es` per app convention. */
 function formatBytes(bytes: number): string {
@@ -20,9 +21,15 @@ function formatBytes(bytes: number): string {
 })
 export class Settings {
   private readonly storage = inject(StorageService);
+  private readonly themeService = inject(ThemeService);
 
+  readonly theme = this.themeService.theme;
   readonly loading = signal(true);
   readonly usage = signal<StorageEstimate | null>(null);
+
+  setTheme(theme: Theme): void {
+    this.themeService.set(theme);
+  }
 
   /** Just the space used — the browser's "quota" figure is an estimate of
    * free disk space, not a meaningful promise, and varies wildly by device

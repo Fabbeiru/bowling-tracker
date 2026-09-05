@@ -17,7 +17,7 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.9rem;
   border: 2px solid transparent;
   background: var(--ink);
@@ -43,7 +43,7 @@
 }
 
 .preset {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.7rem;
   padding: 0.4rem 0.7rem;
   border-radius: 999px;
@@ -64,7 +64,7 @@
 }
 
 .count-line__k {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;

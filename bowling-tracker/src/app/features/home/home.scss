@@ -45,7 +45,7 @@
 }
 
 .starter__title {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -95,7 +95,7 @@
 
 .tiles {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
   gap: 0.6rem;
   margin-top: 1.2rem;
 }
@@ -110,7 +110,7 @@
 }
 
 .tile__lab {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 0.55rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;

@@ -18,8 +18,10 @@
           formControlName="imageUrl"
           autocomplete="off"
           inputmode="url"
+          aria-describedby="image-hint"
           [placeholder]="t('ballForm.imagePlaceholder')"
         />
+        <p id="image-hint" class="field__hint">{{ t('ballForm.imageHint') }}</p>
       </div>
     </div>
 
