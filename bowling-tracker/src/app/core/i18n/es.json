@@ -97,8 +97,11 @@
     "maxPossible": "Máximo posible",
     "totalLabel": "Total de bolos",
     "totalPlaceholder": "0 - 300",
-    "ballLine": "Frame {{frame}} · bola {{ball}}",
+    "ballLine": "Frame {{frame}} · Tiro {{ball}} · Bola:",
     "gameOfSession": "· partida {{n}} de {{total}}",
+    "ballSelectLabel": "Bola usada en este tiro",
+    "ballGroupStrike": "De strike",
+    "ballGroupSpare": "De spare",
     "undo": "Deshacer",
     "gameComplete": "Partida completa.",
     "notesLabel": "Anotaciones",
@@ -178,7 +181,8 @@
     "addCompetition": "Añadir competición",
     "noBalls": "Aún no has añadido ninguna bola.",
     "noVenues": "Aún no has añadido ninguna bolera.",
-    "noCompetitions": "Aún no has añadido ninguna liga ni torneo."
+    "noCompetitions": "Aún no has añadido ninguna liga ni torneo.",
+    "ballRoleSpare": "Spare"
   },
   "venues": {
     "title": "Boleras",
@@ -212,6 +216,9 @@
     "editTitle": "Editar bola",
     "name": "Nombre",
     "namePlaceholder": "Storm Phaze II",
+    "role": "Tipo",
+    "role_strike": "De strike",
+    "role_spare": "De spare",
     "brand": "Marca",
     "brandPlaceholder": "Storm",
     "weight": "Peso (lb)",

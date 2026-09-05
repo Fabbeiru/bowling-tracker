@@ -56,67 +56,67 @@
       }
     }
 
-    @switch (game()!.detailLevel) {
-      @case ('total') {
-        <p class="form-legend"><span class="req-mark">*</span>{{ t('form.requiredLegend') }}</p>
-        <div class="field">
-          <label for="total">{{ t('gameEntry.totalLabel') }}<span class="req-mark">*</span></label>
-          <input
-            id="total"
-            class="input"
-            type="number"
-            inputmode="numeric"
-            min="0"
-            max="300"
-            step="1"
-            [placeholder]="t('gameEntry.totalPlaceholder')"
-            [ngModel]="totalInput()"
-            (ngModelChange)="totalInput.set($event)"
-            (blur)="saveTotal()"
-          />
-        </div>
-      }
-      @case ('frame') {
-        @if (position(); as pos) {
-          <div class="ball-line">
-            <span>{{ t('gameEntry.ballLine', { frame: pos.frame, ball: pos.ball }) }}</span>
-            @if (game()!.frames?.length) {
-              <button type="button" class="undo" (click)="undo()" [attr.aria-label]="t('gameEntry.undo')">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-1"/></svg>
-                {{ t('gameEntry.undo') }}
-              </button>
+    @if (game()!.detailLevel === 'total') {
+      <p class="form-legend"><span class="req-mark">*</span>{{ t('form.requiredLegend') }}</p>
+      <div class="field">
+        <label for="total">{{ t('gameEntry.totalLabel') }}<span class="req-mark">*</span></label>
+        <input
+          id="total"
+          class="input"
+          type="number"
+          inputmode="numeric"
+          min="0"
+          max="300"
+          step="1"
+          [placeholder]="t('gameEntry.totalPlaceholder')"
+          [ngModel]="totalInput()"
+          (ngModelChange)="totalInput.set($event)"
+          (blur)="saveTotal()"
+        />
+      </div>
+    } @else if (position(); as pos) {
+      <div class="ball-line">
+        <span class="ball-line__pos">{{ t('gameEntry.ballLine', { frame: pos.frame, ball: pos.ball }) }}</span>
+
+        @if (arsenalBalls().length) {
+          <select
+            class="ball-line__select"
+            [attr.aria-label]="t('gameEntry.ballSelectLabel')"
+            [value]="selectedBallId() ?? ''"
+            (change)="chooseBall($any($event.target).value)"
+          >
+            <optgroup [label]="t('gameEntry.ballGroupStrike')">
+              @for (b of strikeBalls(); track b.id) {
+                <option [value]="b.id">{{ b.name }}</option>
+              }
+            </optgroup>
+            @if (spareBalls().length) {
+              <optgroup [label]="t('gameEntry.ballGroupSpare')">
+                @for (b of spareBalls(); track b.id) {
+                  <option [value]="b.id">{{ b.name }}</option>
+                }
+              </optgroup>
             }
-          </div>
-          <app-pin-pad [standingCount]="pos.standingCount" [freshRack]="pos.freshRack" (pins)="record($event)" />
-        } @else {
-          <p class="done">{{ t('gameEntry.gameComplete') }}</p>
+          </select>
         }
-      }
-      @default {
-        @if (position(); as pos) {
-          <div class="ball-line">
-            <span>{{ t('gameEntry.ballLine', { frame: pos.frame, ball: pos.ball }) }}</span>
-            @if (game()!.frames?.length) {
-              <button type="button" class="undo" (click)="undo()" [attr.aria-label]="t('gameEntry.undo')">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-1"/></svg>
-                {{ t('gameEntry.undo') }}
-              </button>
-            }
-          </div>
-          @if (pos.standingBefore; as standing) {
-            <app-pin-rack
-              [standingBefore]="standing"
-              [ball]="pos.ball"
-              (delivery)="recordRack($event)"
-            />
-          } @else {
-            <!-- partidas antiguas guardadas sin marcar pinos: solo el número -->
-            <app-pin-pad [standingCount]="pos.standingCount" [freshRack]="pos.freshRack" (pins)="record($event)" />
-          }
-        } @else {
-          <p class="done">{{ t('gameEntry.gameComplete') }}</p>
+
+        @if (game()!.frames?.length) {
+          <button type="button" class="undo" (click)="undo()" [attr.aria-label]="t('gameEntry.undo')" [attr.title]="t('gameEntry.undo')">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-1"/></svg>
+          </button>
         }
+      </div>
+
+      @if (game()!.detailLevel === 'frame') {
+        <app-pin-pad [standingCount]="pos.standingCount" [freshRack]="pos.freshRack" (pins)="record($event)" />
+      } @else if (pos.standingBefore; as standing) {
+        <app-pin-rack [standingBefore]="standing" [ball]="pos.ball" (delivery)="recordRack($event)" />
+      } @else {
+        <!-- partidas antiguas guardadas sin marcar pinos: solo el número -->
+        <app-pin-pad [standingCount]="pos.standingCount" [freshRack]="pos.freshRack" (pins)="record($event)" />
       }
+    } @else {
+      <p class="done">{{ t('gameEntry.gameComplete') }}</p>
     }
 
     @if (game()!.detailLevel === 'total' || complete()) {

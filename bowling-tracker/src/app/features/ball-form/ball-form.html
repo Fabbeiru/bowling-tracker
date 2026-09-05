@@ -39,6 +39,24 @@
       />
     </div>
 
+    <div class="field">
+      <label>{{ t('ballForm.role') }}</label>
+      <div class="seg" role="radiogroup">
+        @for (r of roles; track r) {
+          <button
+            type="button"
+            role="radio"
+            [attr.aria-checked]="form.controls.role.value === r"
+            [class.seg__opt--on]="form.controls.role.value === r"
+            class="seg__opt"
+            (click)="setRole(r)"
+          >
+            {{ t('ballForm.role_' + r) }}
+          </button>
+        }
+      </div>
+    </div>
+
     <div class="row2">
       <div class="field">
         <label for="brand">{{ t('ballForm.brand') }}</label>

@@ -8,6 +8,7 @@ export {
   isComplete,
   applyDelivery,
   undoLastDelivery,
+  resolveDefaultBall,
 } from './game-builder';
 export type { EntryPosition, Delivery } from './game-builder';
 export { isSplit } from './pins';

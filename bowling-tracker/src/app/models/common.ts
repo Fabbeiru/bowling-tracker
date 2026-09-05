@@ -17,4 +17,7 @@ export type DetailLevel = 'total' | 'frame' | 'throw';
 
 export type SessionType = 'practice' | 'league' | 'tournament' | 'social';
 
+/** What a ball is mainly for. Drives the defaults when starting a game. */
+export type BallRole = 'strike' | 'spare';
+
 export type CompetitionType = 'league' | 'tournament';

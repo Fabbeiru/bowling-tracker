@@ -109,9 +109,10 @@
 .ball-line {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.6rem;
   margin-top: 1.1rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.35rem;
   font-family: var(--font-label);
   font-size: 0.72rem;
   text-transform: uppercase;
@@ -119,18 +120,43 @@
   color: var(--ink-soft);
 }
 
+.ball-line__pos {
+  flex: none;
+}
+
+.ball-line__select {
+  min-width: 0;
+  max-width: 12rem;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Aire entre la fila "Frame x · Tiro x · Bola:" y la diana. */
+app-pin-pad,
+app-pin-rack {
+  display: block;
+  margin-top: 0.9rem;
+}
+
 .undo {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  border: 0;
+  justify-content: center;
+  flex: none;
+  margin-left: auto; /* siempre al extremo derecho de la fila */
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
   background: transparent;
   color: var(--ink-soft);
-  padding: 0.25rem 0;
-  font-family: var(--font-label);
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
 

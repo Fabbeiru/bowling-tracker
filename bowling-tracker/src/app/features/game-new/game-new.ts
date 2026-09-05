@@ -79,6 +79,18 @@ export class GameNew {
       this.balls.set(balls);
       this.venues.set(venues);
       this.competitions.set(competitions);
+      // Pre-selecciona por defecto: la primera bola de strike como principal y
+      // la primera de spare como bola de spare (listas ya sólo activas y por
+      // nombre). Así la media por bola y la bola por tiro arrancan con un valor
+      // sensato sin que el usuario tenga que elegir cada vez.
+      const firstStrike = balls.find((b) => (b.role ?? 'strike') === 'strike') ?? balls[0];
+      const firstSpare = balls.find((b) => b.role === 'spare');
+      if (firstStrike && !this.form.controls.primaryBallId.value) {
+        this.form.controls.primaryBallId.setValue(firstStrike.id);
+      }
+      if (firstSpare && !this.form.controls.spareBallId.value) {
+        this.form.controls.spareBallId.setValue(firstSpare.id);
+      }
     } catch {
       this.toast.error('errors.loadPickers');
     }

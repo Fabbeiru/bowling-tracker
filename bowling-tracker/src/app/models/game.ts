@@ -9,7 +9,9 @@ export interface Throw {
   /** Pin numbers (1..10) left standing after this throw. Optional — enables
    *  split detection and first-ball accuracy. */
   pinsStanding?: number[];
-  /** Ball used, only when different from the game's primary/spare ball. */
+  /** Ball used on this delivery (resolved: the user's pick, or the default —
+   *  primary ball, or spare ball when < 5 pins were standing). Undefined only
+   *  when the arsenal is empty. */
   ballId?: Id;
   foul?: boolean;
 }
@@ -22,6 +24,11 @@ export interface Frame {
   second?: number;
   /** Frame 10 only. */
   third?: number;
+  /** `frame` detail level: ball used per delivery (mirrors first/second/third).
+   *  `throw` detail carries this on each `Throw` instead. */
+  firstBallId?: Id;
+  secondBallId?: Id;
+  thirdBallId?: Id;
   /** `throw` detail level: per-delivery detail. */
   throws?: Throw[];
 }

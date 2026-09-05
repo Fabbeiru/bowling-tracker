@@ -108,6 +108,20 @@
   font-size: 0.95rem;
 }
 
+.row__badge {
+  margin-left: 0.4rem;
+  font-family: var(--font-label);
+  font-size: 0.56rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 16%, var(--surface));
+  border-radius: 999px;
+  padding: 0.1rem 0.4rem;
+  white-space: nowrap;
+}
+
 .row__meta {
   font-family: var(--font-label);
   font-size: 0.72rem;

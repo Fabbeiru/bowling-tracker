@@ -1,8 +1,29 @@
-import { Frame, Game, Throw } from '../../models';
+import { Frame, Game, Id, Throw } from '../../models';
 import { framePins } from './game-scoring';
 import { clampPins } from './roll-scoring';
 
 export const ALL_PINS: readonly number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+/**
+ * Default ball for a delivery, before the user overrides it:
+ * fewer than 5 pins standing → the spare ball (a small pickup); otherwise —
+ * a full rack included — the primary ball.
+ *
+ * When the game has no primary/spare set, falls back to the game's other ball
+ * and finally to the first arsenal ball, so there is always a sensible pick as
+ * long as the arsenal is not empty (only then is it `undefined`).
+ */
+export function resolveDefaultBall(
+  standingCount: number,
+  game: Pick<Game, 'primaryBallId' | 'spareBallId'>,
+  arsenalBallIds: readonly Id[],
+): Id | undefined {
+  if (arsenalBallIds.length === 0) return undefined;
+  const fallback = arsenalBallIds[0];
+  const primary = game.primaryBallId ?? game.spareBallId ?? fallback;
+  const spare = game.spareBallId ?? game.primaryBallId ?? fallback;
+  return standingCount < 5 ? spare : primary;
+}
 
 export interface EntryPosition {
   /** 1..10. */
@@ -30,6 +51,8 @@ export interface Delivery {
   pinsKnocked: number;
   /** Pins still standing after this ball (throw-level detail). */
   pinsStanding?: number[];
+  /** Ball used on this delivery (already resolved by the caller). */
+  ballId?: Id;
   foul?: boolean;
 }
 
@@ -142,12 +165,20 @@ export function applyDelivery(game: Game, delivery: Delivery): Game {
     target.throws = [...(target.throws ?? [])];
     const entry: Throw = { index: pos.ball, pinsKnocked };
     if (delivery.pinsStanding) entry.pinsStanding = [...delivery.pinsStanding].sort((a, b) => a - b);
+    if (delivery.ballId) entry.ballId = delivery.ballId;
     if (delivery.foul) entry.foul = true;
     target.throws.push(entry);
   } else {
-    if (pos.ball === 1) target.first = pinsKnocked;
-    else if (pos.ball === 2) target.second = pinsKnocked;
-    else target.third = pinsKnocked;
+    if (pos.ball === 1) {
+      target.first = pinsKnocked;
+      target.firstBallId = delivery.ballId;
+    } else if (pos.ball === 2) {
+      target.second = pinsKnocked;
+      target.secondBallId = delivery.ballId;
+    } else {
+      target.third = pinsKnocked;
+      target.thirdBallId = delivery.ballId;
+    }
   }
 
   return { ...game, frames };
@@ -167,10 +198,12 @@ export function undoLastDelivery(game: Game): Game {
     }
     if (fr.third !== undefined) {
       fr.third = undefined;
+      fr.thirdBallId = undefined;
       return { ...game, frames };
     }
     if (fr.second !== undefined) {
       fr.second = undefined;
+      fr.secondBallId = undefined;
       return { ...game, frames };
     }
     if (fr.first !== undefined) {

@@ -44,6 +44,7 @@ export function createBall(input: { name: string } & Partial<Ball>): Ball {
   return {
     id: newId(),
     name: input.name,
+    role: input.role ?? 'strike',
     brand: input.brand,
     weightLb: input.weightLb,
     coverstock: input.coverstock,

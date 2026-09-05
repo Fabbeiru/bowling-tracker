@@ -5,7 +5,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
-import { Ball, createBall } from '../../models';
+import { Ball, BallRole, createBall } from '../../models';
 import { BackLink } from '../../shared/components/back-link/back-link';
 import { BallAvatar } from '../../shared/components/ball-avatar/ball-avatar';
 import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
@@ -28,9 +28,11 @@ export class BallForm {
   /** Whether any game was played with this ball — decides retire vs. hard delete. */
   readonly hasGames = signal(false);
   readonly confirming = signal<'retire' | 'delete' | null>(null);
+  readonly roles: BallRole[] = ['strike', 'spare'];
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(80)]],
+    role: this.fb.nonNullable.control<BallRole>('strike'),
     brand: ['', [Validators.maxLength(60)]],
     weightLb: this.fb.control<number | null>(null, [Validators.min(6), Validators.max(16)]),
     coverstock: ['', [Validators.maxLength(60)]],
@@ -42,6 +44,10 @@ export class BallForm {
   constructor() {
     const id = inject(ActivatedRoute).snapshot.paramMap.get('id');
     if (id) void this.load(id);
+  }
+
+  setRole(role: BallRole): void {
+    this.form.controls.role.setValue(role);
   }
 
   private async load(id: string): Promise<void> {
@@ -67,6 +73,7 @@ export class BallForm {
     this.active.set(ball.active);
     this.form.patchValue({
       name: ball.name,
+      role: ball.role ?? 'strike',
       brand: ball.brand ?? '',
       weightLb: ball.weightLb ?? null,
       coverstock: ball.coverstock ?? '',
@@ -81,6 +88,7 @@ export class BallForm {
     const v = this.form.getRawValue();
     const patch = {
       name: v.name.trim(),
+      role: v.role,
       brand: v.brand.trim() || undefined,
       weightLb: v.weightLb ?? undefined,
       coverstock: v.coverstock.trim() || undefined,

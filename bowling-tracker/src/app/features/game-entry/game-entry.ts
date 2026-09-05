@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -6,8 +6,15 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
-import { applyDelivery, entryPosition, isComplete, scoreGame, undoLastDelivery } from '../../core/scoring';
-import { createGame, Game, Session } from '../../models';
+import {
+  applyDelivery,
+  entryPosition,
+  isComplete,
+  resolveDefaultBall,
+  scoreGame,
+  undoLastDelivery,
+} from '../../core/scoring';
+import { Ball, createGame, Game, Session } from '../../models';
 import { Scoresheet } from '../../shared/components/scoresheet/scoresheet';
 import { PinPad } from '../../shared/components/pin-pad/pin-pad';
 import { PinRack, RackDelivery } from '../../shared/components/pin-rack/pin-rack';
@@ -34,6 +41,13 @@ export class GameEntry {
   readonly confirmingDelete = signal(false);
   readonly addingGame = signal(false);
 
+  /** Arsenal balls, for tagging which ball was used on each delivery. */
+  readonly arsenalBalls = signal<Ball[]>([]);
+  readonly strikeBalls = computed(() =>
+    this.arsenalBalls().filter((b) => (b.role ?? 'strike') === 'strike'),
+  );
+  readonly spareBalls = computed(() => this.arsenalBalls().filter((b) => b.role === 'spare'));
+
   /** Session context, so it's clear "add another game" stays in the same session. */
   readonly session = signal<Session | null>(null);
   readonly sessionGameCount = signal(1);
@@ -54,6 +68,31 @@ export class GameEntry {
     const g = this.game();
     return g ? isComplete(g) : false;
   });
+
+  /**
+   * Ball selected for the current delivery. Recomputes to the default whenever
+   * the entry position changes (i.e. after each recorded ball); the user can
+   * override it via the picker until the next ball is recorded.
+   */
+  readonly selectedBallId = linkedSignal<
+    { pos: ReturnType<typeof entryPosition>; ballCount: number },
+    string | undefined
+  >({
+    // Recompute the default whenever the entry position changes (i.e. after each
+    // recorded ball) or the arsenal finishes loading; a manual pick via the
+    // dropdown overrides it until the next ball is recorded.
+    source: () => ({ pos: this.position(), ballCount: this.arsenalBalls().length }),
+    computation: ({ pos }) => {
+      const g = this.game();
+      if (!pos || !g) return undefined;
+      return resolveDefaultBall(
+        pos.standingCount,
+        g,
+        this.arsenalBalls().map((b) => b.id),
+      );
+    },
+  });
+
 
   /** Whether the total-detail input holds a value worth saving (0..300). */
   readonly validTotal = computed(() => {
@@ -84,9 +123,13 @@ export class GameEntry {
     this.loading.set(true);
     this.confirmingDelete.set(false);
     try {
-      const g = await this.repo.getGame(id);
+      const [g, balls] = await Promise.all([
+        this.repo.getGame(id),
+        this.repo.listBalls({ includeInactive: true }),
+      ]);
       if (this.loadingId !== id) return; // a newer navigation has since started loading
       this.game.set(g ?? null);
+      this.arsenalBalls.set(balls);
       this.totalInput.set(g?.totalPins ?? null);
       this.notes.set(g?.notes ?? '');
       if (g) await this.loadSessionContext(g, id);
@@ -114,15 +157,27 @@ export class GameEntry {
     this.venueName.set(venue?.name);
   }
 
+  chooseBall(id: string): void {
+    if (id) this.selectedBallId.set(id);
+  }
+
   async record(pins: number): Promise<void> {
-    await this.apply({ pinsKnocked: pins });
+    await this.apply({ pinsKnocked: pins, ballId: this.selectedBallId() });
   }
 
   async recordRack(d: RackDelivery): Promise<void> {
-    await this.apply({ pinsKnocked: d.pinsKnocked, pinsStanding: d.pinsStanding });
+    await this.apply({
+      pinsKnocked: d.pinsKnocked,
+      pinsStanding: d.pinsStanding,
+      ballId: this.selectedBallId(),
+    });
   }
 
-  private async apply(delivery: { pinsKnocked: number; pinsStanding?: number[] }): Promise<void> {
+  private async apply(delivery: {
+    pinsKnocked: number;
+    pinsStanding?: number[];
+    ballId?: string;
+  }): Promise<void> {
     const g = this.game();
     if (!g) return;
     const updated = applyDelivery(g, delivery);

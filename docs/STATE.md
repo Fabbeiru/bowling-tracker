@@ -308,6 +308,26 @@ Ya forma parte de la v1 a publicar. Añadido:
   lo arregla. (`manifest-src 'self'` ya estaba en la CSP.)
 - Los iconos PNG siguen pendientes de regenerar desde el logo recentrado.
 
+### Bola usada en cada tiro (2026-09-05)
+
+- **Se guarda con qué bola se lanzó cada tiro** — `Throw.ballId` (nivel "por
+  tiro") y `Frame.firstBallId/secondBallId/thirdBallId` (nivel "por frame").
+  Sin migración: son campos opcionales de objetos embebidos.
+- **`Ball.role`** (`'strike' | 'spare'`, `undefined` = strike): segmentado
+  "Tipo" en el formulario de bola, etiqueta "SPARE" en la lista del arsenal.
+- **game-new** pre-selecciona la primera bola de strike como principal y la
+  primera de spare como bola de spare.
+- **Valor por defecto por tiro** (`resolveDefaultBall`): < 5 bolos en pie → bola
+  de spare; 5 o más (rack completo incluido) → principal. Cadena de respaldo:
+  bola de la partida → la otra → primera del arsenal. El usuario lo cambia con
+  un desplegable en la fila "Frame n · Tiro n · Bola:" (con `<optgroup>` strike
+  / spare). El override dura hasta el siguiente tiro.
+- **Pendiente / siguiente paso**: estadísticas por bola reales (spares
+  convertidos con la de spare, plenos por bola…) — ahora con datos de verdad.
+  Las partidas anteriores a esto no tienen `ballId`.
+- `game-entry.spec.ts` nuevo: cubre la auto-selección (era lógica de componente
+  sin test).
+
 ## Siguiente: Bloque 10 (Datos + backup) y PWA (sesión dedicada)
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
