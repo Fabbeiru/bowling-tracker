@@ -5,11 +5,11 @@ import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
 import { computeStats } from '../../core/stats/stats';
 import { scoreGame } from '../../core/scoring';
-import { Ball, Competition, Game, Session, SessionType } from '../../models';
+import { Ball, Competition, Game, Session, SessionType, Venue } from '../../models';
 
 type TypeFilter = SessionType | 'all';
 
-interface BallAverage {
+interface NamedAverage {
   name: string;
   average: number;
   games: number;
@@ -44,6 +44,7 @@ export class Stats {
   private readonly games = signal<Game[]>([]);
   private readonly sessions = signal<Session[]>([]);
   private readonly balls = signal<Ball[]>([]);
+  private readonly venues = signal<Venue[]>([]);
   readonly competitions = signal<Competition[]>([]);
 
   readonly typeFilter = signal<TypeFilter>('all');
@@ -67,26 +68,41 @@ export class Stats {
 
   readonly stats = computed(() => computeStats(this.filteredGames()));
 
-  /** Average final score per ball, for balls used in at least 3 finished games. */
-  readonly byBall = computed<BallAverage[]>(() => {
-    const names = new Map(this.balls().map((b) => [b.id, b.name]));
+  /** Average final score per ball (primary ball), for balls used in 3+ finished games. */
+  readonly byBall = computed<NamedAverage[]>(() =>
+    this.averageBy(
+      new Map(this.balls().map((b) => [b.id, b.name])),
+      (g) => g.primaryBallId,
+    ),
+  );
+
+  /** Average final score per venue, for venues played in 3+ finished games. */
+  readonly byVenue = computed<NamedAverage[]>(() => {
+    const byId = this.sessionById();
+    return this.averageBy(
+      new Map(this.venues().map((v) => [v.id, v.name])),
+      (g) => byId.get(g.sessionId)?.venueId,
+    );
+  });
+
+  private averageBy(names: Map<string, string>, keyOf: (g: Game) => string | undefined): NamedAverage[] {
     const acc = new Map<string, { sum: number; n: number }>();
     for (const g of this.filteredGames()) {
-      const ballId = g.primaryBallId;
-      if (!ballId) continue;
+      const key = keyOf(g);
+      if (!key) continue;
       const s = scoreGame(g);
       const done = g.detailLevel === 'total' ? g.totalPins !== undefined : s.complete;
       if (!done) continue;
-      const cur = acc.get(ballId) ?? { sum: 0, n: 0 };
+      const cur = acc.get(key) ?? { sum: 0, n: 0 };
       cur.sum += s.total;
       cur.n += 1;
-      acc.set(ballId, cur);
+      acc.set(key, cur);
     }
     return [...acc.entries()]
       .filter(([, v]) => v.n >= 3)
       .map(([id, v]) => ({ name: names.get(id) ?? '—', average: Math.round(v.sum / v.n), games: v.n }))
       .sort((a, b) => b.average - a.average);
-  });
+  }
 
   readonly chart = computed<Chart | null>(() => {
     const scores = this.stats().evolution.slice(-24);
@@ -127,16 +143,18 @@ export class Stats {
 
   private async load(): Promise<void> {
     try {
-      const [games, sessions, competitions, balls] = await Promise.all([
+      const [games, sessions, competitions, balls, venues] = await Promise.all([
         this.repo.listGames(),
         this.repo.listSessions(),
         this.repo.listCompetitions({ includeInactive: true }),
         this.repo.listBalls({ includeInactive: true }),
+        this.repo.listVenues({ includeInactive: true }),
       ]);
       this.games.set(games);
       this.sessions.set(sessions);
       this.competitions.set(competitions);
       this.balls.set(balls);
+      this.venues.set(venues);
     } catch {
       this.toast.error('errors.loadStats');
     } finally {

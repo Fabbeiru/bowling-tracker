@@ -111,6 +111,20 @@
         </div>
       }
 
+      @if (byVenue().length > 0) {
+        <div class="card">
+          <div class="card__lab">{{ t('stats.byVenue') }}</div>
+          <dl class="metrics">
+            @for (v of byVenue(); track v.name) {
+              <div>
+                <dt>{{ v.name }} <span class="metrics__sub">· {{ v.games }}</span></dt>
+                <dd>{{ v.average }}</dd>
+              </div>
+            }
+          </dl>
+        </div>
+      }
+
       <div class="card">
         <div class="card__lab">{{ t('stats.byFrame') }}</div>
         @if (stats().frames.games === 0) {
@@ -120,6 +134,8 @@
           <div><dt>{{ t('stats.strikePct') }}</dt><dd>{{ pct(stats().frames.strikePct) }}</dd></div>
           <div><dt>{{ t('stats.sparePct') }}</dt><dd>{{ pct(stats().frames.sparePct) }}</dd></div>
           <div><dt>{{ t('stats.singlePinSparePct') }}</dt><dd>{{ pct(stats().frames.singlePinSparePct) }}</dd></div>
+          <div><dt>{{ t('stats.splitPct') }}</dt><dd>{{ pct(stats().frames.splitPct) }}</dd></div>
+          <div><dt>{{ t('stats.splitConversionPct') }}</dt><dd>{{ pct(stats().frames.splitConversionPct) }}</dd></div>
           <div><dt>{{ t('stats.markPct') }}</dt><dd>{{ pct(stats().frames.markPct) }}</dd></div>
           <div><dt>{{ t('stats.openPct') }}</dt><dd>{{ pct(stats().frames.openPct) }}</dd></div>
           <div><dt>{{ t('stats.openPerGame') }}</dt><dd>{{ stats().frames.openPerGame ?? '—' }}</dd></div>

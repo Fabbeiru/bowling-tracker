@@ -1,5 +1,5 @@
 import { Game } from '../../models';
-import { scoreGame } from '../scoring';
+import { isSplit, scoreGame } from '../scoring';
 
 export interface Summary {
   games: number;
@@ -20,6 +20,10 @@ export interface FrameStats {
   openPct: number | null;
   markPct: number | null;
   firstBallAverage: number | null;
+  /** % of non-strike first balls that leave a split (throw detail only). */
+  splitPct: number | null;
+  /** % of splits converted to a spare (throw detail only). */
+  splitConversionPct: number | null;
   /** Average open frames per game. */
   openPerGame: number | null;
   /** Longest run of consecutive strike frames within a single game. */
@@ -96,6 +100,9 @@ export function computeStats(games: Game[], opts: { minSample?: number } = {}): 
   let singlePinAttempts = 0;
   let singlePinConverted = 0;
   let bestStrikeStreak = 0;
+  let firstBallsWithPins = 0;
+  let splitsLeft = 0;
+  let splitsConverted = 0;
 
   for (const { game } of frameGames) {
     const frames = scoreGame(game).frames;
@@ -130,6 +137,21 @@ export function computeStats(games: Game[], opts: { minSample?: number } = {}): 
       }
     }
     if (!anyOpen) cleanGames++;
+
+    // Splits need the exact pins standing after ball 1 — throw detail only.
+    if (game.detailLevel === 'throw') {
+      for (const fr of game.frames ?? []) {
+        if (fr.index >= 10) continue;
+        const t1 = fr.throws?.find((x) => x.index === 1);
+        const t2 = fr.throws?.find((x) => x.index === 2);
+        if (!t1 || t1.pinsStanding === undefined || t1.pinsKnocked === 10) continue;
+        firstBallsWithPins++;
+        if (isSplit(t1.pinsStanding)) {
+          splitsLeft++;
+          if (t2 && t1.pinsKnocked + t2.pinsKnocked === 10) splitsConverted++;
+        }
+      }
+    }
   }
 
   const perfectGames = scored.filter((x) => x.total === 300).length;
@@ -147,6 +169,8 @@ export function computeStats(games: Game[], opts: { minSample?: number } = {}): 
     openPct: enough && framesCounted ? round((opens / framesCounted) * 100) : null,
     markPct: enough && framesCounted ? round(((strikes + spares) / framesCounted) * 100) : null,
     firstBallAverage: enough && firstBallCount ? round(firstBallSum / firstBallCount, 1) : null,
+    splitPct: enough && firstBallsWithPins >= 10 ? round((splitsLeft / firstBallsWithPins) * 100, 1) : null,
+    splitConversionPct: enough && splitsLeft >= 3 ? round((splitsConverted / splitsLeft) * 100) : null,
     openPerGame: enough && frameGames.length ? round(opens / frameGames.length, 1) : null,
     bestStrikeStreak: frameGames.length ? bestStrikeStreak : null,
     cleanGames,

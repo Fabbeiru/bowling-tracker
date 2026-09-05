@@ -24,7 +24,7 @@
     {{ standingBefore().length === 10 ? 'Nada' : 'Fallo' }}
   </button>
   @for (p of leavePresets(); track p.label) {
-    <button type="button" class="preset preset--leave" (click)="leave(p.leave)">
+    <button type="button" class="preset" (click)="leave(p.leave)">
       Deja {{ p.label }}
     </button>
   }
