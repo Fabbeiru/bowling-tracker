@@ -296,6 +296,18 @@ Ya forma parte de la v1 a publicar. Añadido:
 - Verificado en local sirviendo el build de prod: sin violaciones de CSP, tema y
   fuentes OK, rutas profundas vía `404.html`.
 
+### Manifest / instalable (2026-09-05)
+
+- `public/manifest.webmanifest` (`display: standalone`, `scope`/`start_url` = la
+  carpeta de la app) + `<link rel="manifest">` y metas `apple-mobile-web-app-*`
+  en `index.html`. **Sin service worker todavía** (eso es la PWA completa).
+- Motivo: en iOS, al "Añadir a pantalla de inicio" sin manifest, iOS deduce el
+  ámbito de la app de la URL exacta desde la que se añadió. Como las rutas son
+  hermanas planas (`/home`, `/games`, …), navegar de una a otra se salía del
+  ámbito y iOS abría la barra del navegador incrustado. El `scope` del manifest
+  lo arregla. (`manifest-src 'self'` ya estaba en la CSP.)
+- Los iconos PNG siguen pendientes de regenerar desde el logo recentrado.
+
 ## Siguiente: Bloque 10 (Datos + backup) y PWA (sesión dedicada)
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
