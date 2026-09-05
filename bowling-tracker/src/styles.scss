@@ -90,6 +90,9 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Quita el doble-toque-para-hacer-zoom de iOS (y el retardo de 300 ms al
+     tocar). El pinch-zoom manual sigue funcionando. */
+  touch-action: manipulation;
 }
 
 h1, h2, h3, h4 {

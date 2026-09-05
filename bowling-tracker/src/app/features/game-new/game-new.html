@@ -112,6 +112,7 @@
     <div class="backdrop" (click)="showQuickCreate.set(false)">
       <div class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
         <h2 class="dialog__title">{{ t('gameNew.newCompetitionTitle') }}</h2>
+        <p class="form-legend"><span class="req-mark">*</span>{{ t('form.requiredLegend') }}</p>
         <div class="field">
           <label for="qname">{{ t('competitionForm.name') }}<span class="req-mark">*</span></label>
           <input
@@ -155,6 +156,7 @@
     <div class="backdrop" (click)="showVenueCreate.set(false)">
       <div class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
         <h2 class="dialog__title">{{ t('venueForm.newTitle') }}</h2>
+        <p class="form-legend"><span class="req-mark">*</span>{{ t('form.requiredLegend') }}</p>
         <div class="field">
           <label for="vname">{{ t('venueForm.name') }}<span class="req-mark">*</span></label>
           <input
