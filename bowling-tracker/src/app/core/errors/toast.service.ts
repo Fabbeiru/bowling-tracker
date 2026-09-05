@@ -7,14 +7,6 @@ export interface Toast {
   kind: 'error' | 'info';
 }
 
-/**
- * Visible feedback for failures (COMPORTAMIENTO-TRANSVERSAL §6): a write that
- * fails must never fail silently.
- *
- * `error`/`info` take an i18n key (e.g. `'errors.saveBall'`), not literal
- * text — the toast text stays in `core/i18n/es.json` like every other
- * user-visible string (ADR 0009).
- */
 @Injectable({ providedIn: 'root' })
 export class ToastService {
   private readonly i18n = inject(TranslocoService);
