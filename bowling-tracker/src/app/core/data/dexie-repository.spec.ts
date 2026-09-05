@@ -124,4 +124,43 @@ describe('DexieRepository', () => {
     await repo.saveBall(b);
     expect((await repo.getBall(b.id))?.updatedAt).not.toBe('2000-01-01T00:00');
   });
+
+  it('exports every content table', async () => {
+    const s = session();
+    await repo.saveSession(s);
+    await repo.saveGame(game(s.id, 1));
+    await repo.saveBall(ball('Storm'));
+
+    const data = await repo.exportData();
+    expect(data.balls.length).toBe(1);
+    expect(data.sessions.length).toBe(1);
+    expect(data.games.length).toBe(1);
+    expect(Object.keys(data).sort()).toEqual(['balls', 'competitions', 'games', 'sessions', 'venues']);
+  });
+
+  it('replaceData wipes and reloads atomically', async () => {
+    await repo.saveBall(ball('Old'));
+    const s = session();
+    const g = game(s.id, 1);
+    await repo.replaceData({
+      balls: [ball('New')],
+      venues: [],
+      competitions: [],
+      sessions: [s],
+      games: [g],
+    });
+    const balls = await repo.listBalls();
+    expect(balls.map((b) => b.name)).toEqual(['New']);
+    expect((await repo.listGames()).length).toBe(1);
+  });
+
+  it('clearData empties content but keeps meta', async () => {
+    await repo.saveBall(ball('Storm'));
+    await repo.saveMeta({ ...(await repo.getMeta()), schemaVersion: 7 });
+
+    await repo.clearData();
+
+    expect(await repo.listBalls({ includeInactive: true })).toEqual([]);
+    expect((await repo.getMeta()).schemaVersion).toBe(7);
+  });
 });

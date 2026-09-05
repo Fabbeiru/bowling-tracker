@@ -7,6 +7,7 @@ import {
   Session,
   Venue,
 } from '../../models';
+import { AppData } from './data-transfer';
 
 /**
  * Data access contract. Features depend on this, never on Dexie directly, so a
@@ -59,4 +60,11 @@ export abstract class Repository {
   // --- Meta ---
   abstract getMeta(): Promise<AppMeta>;
   abstract saveMeta(meta: AppMeta): Promise<void>;
+
+  // --- Import / export (all content, `meta` excluded) ---
+  abstract exportData(): Promise<AppData>;
+  /** Wipe all content and load `data` in its place, atomically. */
+  abstract replaceData(data: AppData): Promise<void>;
+  /** Wipe all content (`meta` kept). */
+  abstract clearData(): Promise<void>;
 }

@@ -328,7 +328,31 @@ Ya forma parte de la v1 a publicar. Añadido:
 - `game-entry.spec.ts` nuevo: cubre la auto-selección (era lógica de componente
   sin test).
 
-## Siguiente: Bloque 10 (Datos + backup) y PWA (sesión dedicada)
+### Gestión de datos — export / import / borrar (v0.2, 2026-09-05)
+
+- **`core/data/data-transfer.ts`**: funciones puras `serializeExport` /
+  `parseImport`. El import valida en capas (archivo → contenido → formato →
+  registro → integridad referencial) y **reconstruye cada registro campo a
+  campo** (whitelist, inmune a prototype pollution). Nada toca la BD hasta que
+  todo pasa. 18 tests.
+- **`Repository`**: `exportData` / `replaceData` (transacción atómica: borra +
+  bulkAdd) / `clearData` (`meta` se conserva).
+- **Ajustes → "Tus datos"**: Exportar copia (`navigator.share` en iOS, descarga
+  en escritorio), Importar copia (selector de archivo → diálogo con el resumen →
+  reemplaza), Borrar todos mis datos (diálogo rojo con botón "Exportar antes").
+- `confirm-dialog` admite una acción terciaria opcional (`tertiaryLabel`).
+- Tras import/clear: `navigateByUrl('/home')` + `location.reload()` para tirar
+  todo el estado en memoria.
+- **Nit conocido**: el resumen dice "1 sesiones / 1 partidas" (sin plural). Se
+  arregla con el plugin de plurales de Transloco si molesta.
+
+## Siguiente
+
+- **v0.3 → PWA**: service worker (offline + aviso de actualización), iconos
+  maskable regenerados desde el logo, `ngsw-config.json`, CSP.
+- **v1.0 → pulido**: fechas con `Intl`, CSS duplicado (`.seg`, modal, `.tile`),
+  README raíz, degradado en el scoresheet, decidir `AppMeta` / `Game.startedAt`.
+  (El "borrar todos mis datos" se adelantó a v0.2.)
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.

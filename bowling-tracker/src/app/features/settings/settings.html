@@ -21,7 +21,30 @@
     <h2 class="block__title">{{ t('settings.dataTitle') }}</h2>
     <p class="note">{{ t('settings.dataWhere') }}</p>
     <p class="note">{{ t('settings.dataNote') }}</p>
-    <p class="note">{{ t('settings.dataSyncSoon') }}</p>
+
+    <div class="data-actions">
+      <button type="button" class="data-btn" [disabled]="busy() !== null" (click)="exportData()">
+        {{ t('settings.dataExport') }}
+      </button>
+      <button type="button" class="data-btn" [disabled]="busy() !== null" (click)="pickFile()">
+        {{ t('settings.dataImport') }}
+      </button>
+      <input
+        #fileInput
+        type="file"
+        accept="application/json,.json"
+        hidden
+        (change)="onFileSelected($event)"
+      />
+      <button
+        type="button"
+        class="data-btn data-btn--danger"
+        [disabled]="busy() !== null"
+        (click)="confirmingClear.set(true)"
+      >
+        {{ t('settings.dataClear') }}
+      </button>
+    </div>
   </section>
 
   <section class="block">
@@ -55,4 +78,38 @@
     <strong>fabbeiru</strong>
     <img src="icons/fabbeiru-96.png" alt="" width="20" height="20" />
   </footer>
+
+  @if (pendingImport(); as p) {
+    <app-confirm-dialog
+      [title]="t('settings.importConfirmTitle')"
+      [message]="
+        t('settings.importConfirmMessage', {
+          balls: p.summary.balls,
+          venues: p.summary.venues,
+          competitions: p.summary.competitions,
+          sessions: p.summary.sessions,
+          games: p.summary.games
+        })
+      "
+      [confirmLabel]="t('settings.importConfirm')"
+      [cancelLabel]="t('common.cancel')"
+      [danger]="true"
+      (confirmed)="confirmImport()"
+      (cancelled)="pendingImport.set(null)"
+    />
+  }
+
+  @if (confirmingClear()) {
+    <app-confirm-dialog
+      [title]="t('settings.clearTitle')"
+      [message]="t('settings.clearMessage')"
+      [confirmLabel]="t('settings.clearConfirm')"
+      [cancelLabel]="t('common.cancel')"
+      [tertiaryLabel]="t('settings.clearExportFirst')"
+      [danger]="true"
+      (confirmed)="clearData()"
+      (cancelled)="confirmingClear.set(false)"
+      (tertiary)="exportData()"
+    />
+  }
 </section>

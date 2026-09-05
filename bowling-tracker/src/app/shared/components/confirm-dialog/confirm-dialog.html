@@ -10,6 +10,11 @@
     @if (message()) {
       <p class="dialog__msg">{{ message() }}</p>
     }
+    @if (tertiaryLabel()) {
+      <button type="button" class="btn btn--ghost dialog__tertiary" (click)="tertiary.emit()">
+        {{ tertiaryLabel() }}
+      </button>
+    }
     <div class="dialog__actions">
       <button type="button" class="btn btn--ghost" (click)="cancelled.emit()">
         {{ cancelLabel() }}

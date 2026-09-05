@@ -11,8 +11,11 @@ export class ConfirmDialog {
   readonly message = input<string>('');
   readonly confirmLabel = input('Confirmar');
   readonly cancelLabel = input('Cancelar');
+  /** Optional extra action (e.g. "Export first"); shown only when set. Does not close the dialog. */
+  readonly tertiaryLabel = input('');
   readonly danger = input(false);
 
   readonly confirmed = output<void>();
   readonly cancelled = output<void>();
+  readonly tertiary = output<void>();
 }

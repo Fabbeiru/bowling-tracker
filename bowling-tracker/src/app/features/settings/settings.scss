@@ -61,6 +61,35 @@
   }
 }
 
+.data-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+.data-btn {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-family: var(--font-label);
+  font-size: 0.88rem;
+  padding: 0.6rem;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &--danger {
+    background: transparent;
+    border-color: color-mix(in srgb, var(--danger) 45%, var(--surface));
+    color: var(--danger-text);
+  }
+}
+
 .footer-note {
   display: flex;
   align-items: center;

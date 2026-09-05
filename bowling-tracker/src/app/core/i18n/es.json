@@ -274,8 +274,17 @@
     "storageOk": "Guardado activado: no se perderán los datos si cierras la pestaña o el navegador.",
     "dataTitle": "Tus datos",
     "dataWhere": "Los datos se guardan solo en este dispositivo, usando el almacenamiento propio del navegador.",
-    "dataNote": "No hay cuenta ni servidor: nadie más tiene acceso a tus datos, pero tampoco existe todavía una copia persistente — si desinstalas el navegador que estás usando, borras sus datos o cambias de dispositivo, pierdes la información introducida en la app.",
-    "dataSyncSoon": "Se está trabajando en un sistema de exportación/sincronización de datos.",
+    "dataNote": "No hay cuenta ni servidor. Exporta una copia de vez en cuando: si borras los datos del navegador, cambias de móvil o pasa algo raro, es tu única forma de recuperarla.",
+    "dataExport": "Exportar copia",
+    "dataImport": "Importar copia",
+    "dataClear": "Borrar todos mis datos",
+    "importConfirmTitle": "¿Reemplazar tus datos?",
+    "importConfirmMessage": "Se sustituirán tus datos actuales por los de la copia: {{balls}} bolas, {{venues}} boleras, {{competitions}} competiciones, {{sessions}} sesiones y {{games}} partidas. Lo que tengas ahora se perderá.",
+    "importConfirm": "Reemplazar",
+    "clearTitle": "¿Borrar todos tus datos?",
+    "clearMessage": "Se borrarán todas tus bolas, boleras, competiciones, sesiones y partidas. No se puede deshacer.",
+    "clearConfirm": "Borrar todo",
+    "clearExportFirst": "Exportar una copia antes",
     "footerCredit": "Bowling Tracker · hecho por"
   },
   "notFound": {
@@ -314,6 +323,20 @@
     "loadSession": "No se pudo cargar la sesión.",
     "saveSession": "No se pudo guardar la sesión.",
     "deleteSession": "No se pudo borrar la sesión.",
-    "loadStats": "No se pudieron cargar las estadísticas."
+    "loadStats": "No se pudieron cargar las estadísticas.",
+    "exportFailed": "No se pudo exportar la copia.",
+    "importEmpty": "El archivo está vacío.",
+    "importTooBig": "El archivo es demasiado grande para ser una copia de Bowling Tracker.",
+    "importNotJson": "El archivo no es un JSON válido.",
+    "importWrongFormat": "Este archivo no es una copia de Bowling Tracker.",
+    "importWrongVersion": "La copia es de una versión incompatible de la app.",
+    "importNoData": "La copia no contiene datos.",
+    "importBadStructure": "La copia tiene una estructura inválida.",
+    "importBadRecord": "La copia contiene datos con un formato incorrecto.",
+    "importDuplicateId": "La copia tiene identificadores repetidos.",
+    "importBrokenRef": "La copia tiene referencias rotas entre partidas y sesiones o bolas.",
+    "importTooMany": "La copia contiene demasiadas partidas.",
+    "importFailed": "No se pudo importar. Tus datos no se han modificado.",
+    "clearFailed": "No se pudieron borrar los datos."
   }
 }

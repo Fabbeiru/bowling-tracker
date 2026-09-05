@@ -12,6 +12,7 @@ import {
 } from '../../models';
 import { nowLocalIso } from '../util/dates';
 import { APP_DB } from '../db/app-db';
+import { AppData } from './data-transfer';
 import { Repository } from './repository';
 
 @Injectable({ providedIn: 'root' })
@@ -113,6 +114,41 @@ export class DexieRepository extends Repository {
   }
   async saveMeta(meta: AppMeta): Promise<void> {
     await this.db.meta.put({ ...meta, id: 'app' });
+  }
+
+  // --- Import / export ---
+  private get contentTables() {
+    return [this.db.balls, this.db.venues, this.db.competitions, this.db.sessions, this.db.games];
+  }
+
+  async exportData(): Promise<AppData> {
+    const [balls, venues, competitions, sessions, games] = await Promise.all([
+      this.db.balls.toArray(),
+      this.db.venues.toArray(),
+      this.db.competitions.toArray(),
+      this.db.sessions.toArray(),
+      this.db.games.toArray(),
+    ]);
+    return { balls, venues, competitions, sessions, games };
+  }
+
+  async replaceData(data: AppData): Promise<void> {
+    await this.db.transaction('rw', this.contentTables, async () => {
+      await Promise.all(this.contentTables.map((t) => t.clear()));
+      await Promise.all([
+        this.db.balls.bulkAdd(data.balls),
+        this.db.venues.bulkAdd(data.venues),
+        this.db.competitions.bulkAdd(data.competitions),
+        this.db.sessions.bulkAdd(data.sessions),
+        this.db.games.bulkAdd(data.games),
+      ]);
+    });
+  }
+
+  async clearData(): Promise<void> {
+    await this.db.transaction('rw', this.contentTables, async () => {
+      await Promise.all(this.contentTables.map((t) => t.clear()));
+    });
   }
 
   // --- helpers ---
