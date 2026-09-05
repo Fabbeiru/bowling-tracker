@@ -281,6 +281,21 @@ Ya forma parte de la v1 a publicar. Añadido:
 - `game-entry`: al terminar o borrar una partida vuelve a **su sesión** (antes
   siempre al listado).
 
+## Despliegue (2026-09-05)
+
+- `.github/workflows/deploy.yml`: push a `main` → `npm ci` + `npm test` + build
+  de producción + `404.html` (copia de `index.html`) + deploy a Pages. Los PR
+  solo corren build + test.
+- `angular.json` prod: `baseHref: /bowling-tracker/`, `optimization.styles.
+  inlineCritical: false` (beasties metía un `<link ... onload="...">` que la CSP
+  `script-src 'self'` bloqueaba).
+- `index.html`: meta CSP + el script de tema movido a `public/theme-init.js`.
+- `public/.nojekyll`.
+- **Pendiente de activar por el usuario**: repo Settings → Pages → Source =
+  "GitHub Actions". URL final: `https://fabbeiru.github.io/bowling-tracker/`.
+- Verificado en local sirviendo el build de prod: sin violaciones de CSP, tema y
+  fuentes OK, rutas profundas vía `404.html`.
+
 ## Siguiente: Bloque 10 (Datos + backup) y PWA (sesión dedicada)
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)

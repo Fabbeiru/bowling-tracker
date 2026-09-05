@@ -1,59 +1,30 @@
-# BowlingTracker
+# Bowling Tracker
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.36.
+App web (PWA en camino) para registrar partidas de bowling, equipamiento,
+competiciones y estadísticas. **Local-first**: sin cuenta, sin servidor — los
+datos viven en IndexedDB, en tu navegador.
 
-## Development server
+- Código en inglés, interfaz en español (ADR 0009).
+- Angular 20 (standalone + signals), Dexie, Transloco.
+- Documentación del proyecto: [`../docs`](../docs) (ADRs, modelo de datos,
+  identidad, estadísticas, estado actual).
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Desarrollo
 
 ```bash
-ng generate component component-name
+npm install
+npm start        # ng serve -> http://localhost:4200
+npm test         # ng test (Vitest, headless)
+npm run build    # build de producción -> dist/bowling-tracker/browser
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Despliegue
 
-```bash
-ng generate --help
-```
+GitHub Pages vía GitHub Actions (`../.github/workflows/deploy.yml`): cada push a
+`main` corre los tests, hace el build de producción (`--base-href
+/bowling-tracker/`), genera `404.html` para las rutas de la SPA y publica.
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- CSP declarada por `<meta http-equiv>` en `index.html` (Pages no permite
+  cabeceras propias; ADR 0006).
+- El tema (claro/oscuro) se fija antes de la primera pintura con
+  `public/theme-init.js` (archivo aparte para que la CSP sea `script-src 'self'`).

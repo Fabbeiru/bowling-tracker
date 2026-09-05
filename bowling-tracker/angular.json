@@ -38,6 +38,15 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/bowling-tracker/",
+              "optimization": {
+                "scripts": true,
+                "fonts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                }
+              },
               "budgets": [
                 {
                   "type": "initial",
