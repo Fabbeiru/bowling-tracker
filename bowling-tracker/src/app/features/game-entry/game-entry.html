@@ -1,5 +1,8 @@
 <section class="screen" *transloco="let t">
-  <app-back-link to="/games" [label]="t('common.backToGames')" />
+  <app-back-link
+    [to]="session() ? ['/sessions', session()!.id] : '/games'"
+    [label]="session() ? t('common.backToSession') : t('common.backToGames')"
+  />
 
   @if (loading()) {
     <p class="muted">{{ t('common.loading') }}</p>

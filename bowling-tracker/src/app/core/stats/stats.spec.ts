@@ -1,5 +1,5 @@
 import { Game } from '../../models';
-import { computeStats } from './stats';
+import { computeStats, sessionTotals } from './stats';
 
 let seq = 0;
 function totalGame(total: number, sessionId = 's'): Game {
@@ -54,6 +54,39 @@ describe('computeStats — summary', () => {
     const { summary, evolution } = computeStats([]);
     expect(summary).toEqual({ games: 0, sessions: 0, average: null, best: null, worst: null });
     expect(evolution).toEqual([]);
+  });
+});
+
+describe('sessionTotals', () => {
+  it('sums the series and averages the completed games', () => {
+    const t = sessionTotals([totalGame(180), totalGame(210), totalGame(150)]);
+    expect(t.games).toBe(3);
+    expect(t.startedGames).toBe(3);
+    expect(t.completeGames).toBe(3);
+    expect(t.series).toBe(540);
+    expect(t.average).toBe(180);
+    expect(t.allComplete).toBe(true);
+  });
+
+  it('ignores games not started and marks the session incomplete', () => {
+    const notStarted = { ...totalGame(0), totalPins: undefined };
+    const t = sessionTotals([totalGame(200), notStarted]);
+    expect(t.startedGames).toBe(1);
+    expect(t.completeGames).toBe(1);
+    expect(t.series).toBe(200);
+    expect(t.average).toBe(200);
+    expect(t.allComplete).toBe(false);
+  });
+
+  it('is all zeros / null for an empty session', () => {
+    expect(sessionTotals([])).toEqual({
+      games: 0,
+      startedGames: 0,
+      completeGames: 0,
+      series: 0,
+      average: null,
+      allComplete: false,
+    });
   });
 });
 

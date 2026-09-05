@@ -240,9 +240,23 @@ móvil. Aparecieron varios problemas reales, todos corregidos:
 `game-builder.spec.ts`).
 
 **Pendiente / backlog anotado**: paginación de la lista de partidas (no urge
-con el volumen actual), presets de splits comunes en el rack, editar sesión
-tras crearla, pantalla de sesión dedicada (de momento resuelto de forma ligera
-con "+ añadir partida").
+con el volumen actual), presets de splits comunes en el rack.
+
+## Pantalla de sesión (2026-09-05)
+
+Ya forma parte de la v1 a publicar. Añadido:
+- `features/session-detail/` (`/sessions/:id`) — serie (suma), media, lista de
+  partidas enlazadas a `/games/:id`, "+ añadir partida" (usa
+  `defaultDetailLevel` de la sesión, que deja de estar sin uso), y **borrar
+  sesión** con `confirm-dialog` → `Repository.deleteSession()` (ya existía,
+  ahora tiene UI).
+- `features/session-form/` (`/sessions/:id/edit`) — editar tipo/fecha/
+  competición/bolera/pistas/notas, populado con los datos actuales (patrón de
+  bola/bolera). La creación sigue en `game-new`.
+- Lista de Partidas: la tarjeta de sesión entera enlaza a `/sessions/:id`; las
+  partidas ya no se tocan individualmente desde ahí.
+- `game-entry`: el "volver" apunta a la sesión cuando la hay.
+- `core/stats/stats.ts`: `sessionTotals(games)` (serie + media), con tests.
 
 ## Siguiente: Bloque 10 (Datos + backup) y PWA (sesión dedicada)
 

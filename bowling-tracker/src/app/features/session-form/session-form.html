@@ -1,0 +1,93 @@
+<section class="screen" *transloco="let t">
+  <app-back-link
+    [to]="sessionId() ? ['/sessions', sessionId()] : '/games'"
+    [label]="t('common.backToSession')"
+  />
+
+  <header class="screen__head">
+    <h1>{{ t('sessionForm.title') }}</h1>
+  </header>
+
+  @if (loading()) {
+    <p class="muted">{{ t('common.loading') }}</p>
+  } @else if (!sessionId()) {
+    <div class="empty-state">
+      <p class="empty-state__title">{{ t('session.notFound') }}</p>
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="save()" class="form">
+      <div class="field">
+        <label>{{ t('sessionForm.type') }}</label>
+        <div class="seg" role="radiogroup">
+          @for (st of sessionTypes; track st) {
+            <button
+              type="button"
+              role="radio"
+              [attr.aria-checked]="type() === st"
+              [class.seg__opt--on]="type() === st"
+              class="seg__opt"
+              (click)="selectType(st)"
+            >
+              {{ t('sessionType.' + st) }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="date">{{ t('sessionForm.date') }}</label>
+        <input id="date" type="date" formControlName="date" class="input" required />
+      </div>
+
+      @if (type() === 'league' || type() === 'tournament') {
+        <div class="field">
+          <label for="competition">{{ t('sessionForm.competition') }}</label>
+          <select id="competition" class="input" formControlName="competitionId">
+            <option value="">{{ t('sessionForm.none') }}</option>
+            @for (comp of relevantCompetitions(); track comp.id) {
+              <option [value]="comp.id">{{ comp.name }}</option>
+            }
+          </select>
+        </div>
+      }
+
+      <div class="field">
+        <label for="venue">{{ t('sessionForm.venue') }}</label>
+        <select id="venue" class="input" formControlName="venueId">
+          <option value="">{{ t('sessionForm.none') }}</option>
+          @for (venue of venues(); track venue.id) {
+            <option [value]="venue.id">{{ venue.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="lanes">{{ t('sessionForm.lanes') }}</label>
+        <input
+          id="lanes"
+          class="input"
+          formControlName="lanes"
+          autocomplete="off"
+          maxlength="40"
+          [placeholder]="t('sessionForm.lanesPlaceholder')"
+        />
+      </div>
+
+      <div class="field">
+        <label for="notes">{{ t('sessionForm.notes') }}</label>
+        <textarea
+          id="notes"
+          class="input"
+          rows="2"
+          maxlength="500"
+          formControlName="notes"
+          [placeholder]="t('sessionForm.notesPlaceholder')"
+        ></textarea>
+      </div>
+
+      <button type="submit" class="cta" [disabled]="form.invalid || saving()">
+        {{ t('common.save') }}
+      </button>
+    </form>
+  }
+</section>

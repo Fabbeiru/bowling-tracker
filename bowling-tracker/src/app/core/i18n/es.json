@@ -2,6 +2,7 @@
   "common": {
     "loading": "Cargando…",
     "backToGames": "Volver a Partidas",
+    "backToSession": "Volver a la sesión",
     "cancel": "Cancelar",
     "save": "Guardar"
   },
@@ -106,6 +107,31 @@
     "delete": "Borrar partida",
     "deleteTitle": "¿Borrar esta partida?",
     "deleteMessage": "Se eliminará la partida y todos sus tiros. No se puede deshacer."
+  },
+  "session": {
+    "title": "Sesión",
+    "notFound": "Sesión no encontrada",
+    "series": "Serie",
+    "average": "Media de la sesión",
+    "gamesTitle": "Partidas",
+    "addGame": "+ Añadir partida a esta sesión",
+    "edit": "Editar datos de la sesión",
+    "delete": "Borrar sesión",
+    "deleteTitle": "¿Borrar esta sesión?",
+    "deleteMessage": "Se eliminarán la sesión y sus {{n}} partidas. No se puede deshacer.",
+    "empty": "Esta sesión no tiene partidas."
+  },
+  "sessionForm": {
+    "title": "Editar sesión",
+    "type": "Tipo de sesión",
+    "date": "Fecha",
+    "competition": "Competición",
+    "venue": "Bolera",
+    "lanes": "Pistas",
+    "lanesPlaceholder": "12-13",
+    "notes": "Notas",
+    "notesPlaceholder": "Patrón de aceite, sensaciones, resultado…",
+    "none": "—"
   },
   "stats": {
     "title": "Estadísticas",
@@ -252,6 +278,9 @@
     "deleteGame": "No se pudo borrar la partida.",
     "addGame": "No se pudo añadir la partida.",
     "loadGames": "No se pudieron cargar tus partidas.",
+    "loadSession": "No se pudo cargar la sesión.",
+    "saveSession": "No se pudo guardar la sesión.",
+    "deleteSession": "No se pudo borrar la sesión.",
     "loadStats": "No se pudieron cargar las estadísticas."
   }
 }

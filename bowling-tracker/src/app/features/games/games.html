@@ -37,36 +37,39 @@
       <ul class="sessions">
         @for (row of pagedRows(); track row.session.id) {
           <li class="session">
-            <div class="session__head">
-              <span class="session__date">{{ row.session.date }}</span>
-              <span class="session__type">
-                {{ row.competitionName || t('sessionType.' + row.session.type) }}
-              </span>
-              @if (row.venueName) {
-                <span class="session__venue">· {{ row.venueName }}</span>
-              }
-            </div>
-            <ul class="games">
-              @for (item of row.games; track item.game.id) {
-                <a class="game" [class.game--perfect]="item.perfect" [class.game--clean]="item.clean && !item.perfect" [routerLink]="['/games', item.game.id]">
-                  <span class="game__idx">
-                    {{ t('games.gameN', { n: item.game.index }) }}
-                    @if (item.perfect) {
-                      <span class="game__badge game__badge--perfect" [title]="t('games.perfectGame')">🏆 {{ t('games.perfectGame') }}</span>
-                    } @else if (item.clean) {
-                      <span class="game__badge" [title]="t('games.cleanGame')">✨ {{ t('games.cleanGame') }}</span>
-                    }
-                  </span>
-                  <span class="game__score" [class.game__score--wip]="!item.complete" [class.game__score--empty]="!item.started">
-                    @if (!item.started) {
-                      {{ t('games.notStarted') }}
-                    } @else {
-                      {{ item.total }}{{ item.complete ? '' : '…' }}
-                    }
-                  </span>
-                </a>
-              }
-            </ul>
+            <a class="session__link" [routerLink]="['/sessions', row.session.id]">
+              <div class="session__head">
+                <span class="session__date">{{ row.session.date }}</span>
+                <span class="session__type">
+                  {{ row.competitionName || t('sessionType.' + row.session.type) }}
+                </span>
+                @if (row.venueName) {
+                  <span class="session__venue">· {{ row.venueName }}</span>
+                }
+                <span class="session__chev" aria-hidden="true">›</span>
+              </div>
+              <ul class="games">
+                @for (item of row.games; track item.game.id) {
+                  <li class="game" [class.game--perfect]="item.perfect" [class.game--clean]="item.clean && !item.perfect">
+                    <span class="game__idx">
+                      {{ t('games.gameN', { n: item.game.index }) }}
+                      @if (item.perfect) {
+                        <span class="game__badge game__badge--perfect" [title]="t('games.perfectGame')">🏆 {{ t('games.perfectGame') }}</span>
+                      } @else if (item.clean) {
+                        <span class="game__badge" [title]="t('games.cleanGame')">✨ {{ t('games.cleanGame') }}</span>
+                      }
+                    </span>
+                    <span class="game__score" [class.game__score--wip]="!item.complete" [class.game__score--empty]="!item.started">
+                      @if (!item.started) {
+                        {{ t('games.notStarted') }}
+                      } @else {
+                        {{ item.total }}{{ item.complete ? '' : '…' }}
+                      }
+                    </span>
+                  </li>
+                }
+              </ul>
+            </a>
           </li>
         }
       </ul>

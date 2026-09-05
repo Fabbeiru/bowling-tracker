@@ -1,0 +1,96 @@
+<section class="screen" *transloco="let t">
+  <app-back-link to="/games" [label]="t('common.backToGames')" />
+
+  @if (loading()) {
+    <p class="muted">{{ t('common.loading') }}</p>
+  } @else if (!session()) {
+    <div class="empty-state">
+      <p class="empty-state__title">{{ t('session.notFound') }}</p>
+    </div>
+  } @else {
+    <header class="screen__head">
+      <h1>{{ session()!.date }}</h1>
+      <p>
+        {{ competitionName() || t('sessionType.' + session()!.type) }}
+        @if (venueName()) { · {{ venueName() }} }
+        @if (session()!.lanes) { · {{ t('sessionForm.lanes') }} {{ session()!.lanes }} }
+      </p>
+    </header>
+
+    <a class="edit-link" [routerLink]="['/sessions', session()!.id, 'edit']">
+      {{ t('session.edit') }} ›
+    </a>
+
+    <div class="tiles">
+      <div class="tile">
+        <div class="tile__lab">{{ t('session.series') }}</div>
+        <div class="tile__val">{{ totals().series }}</div>
+        <div class="tile__sub">{{ t('session.gamesTitle') }}: {{ totals().games }}</div>
+      </div>
+      <div class="tile">
+        <div class="tile__lab">{{ t('session.average') }}</div>
+        <div class="tile__val tile__val--blue">{{ totals().average ?? '—' }}</div>
+      </div>
+    </div>
+
+    @if (session()!.notes) {
+      <p class="notes">{{ session()!.notes }}</p>
+    }
+
+    <h2 class="section-label">{{ t('session.gamesTitle') }}</h2>
+    @if (rows().length === 0) {
+      <p class="muted">{{ t('session.empty') }}</p>
+    } @else {
+      <ul class="games">
+        @for (row of rows(); track row.game.id) {
+          <a
+            class="game"
+            [class.game--perfect]="row.perfect"
+            [class.game--clean]="row.clean && !row.perfect"
+            [routerLink]="['/games', row.game.id]"
+          >
+            <span class="game__idx">
+              {{ t('games.gameN', { n: row.game.index }) }}
+              @if (row.perfect) {
+                <span class="game__badge game__badge--perfect">🏆 {{ t('games.perfectGame') }}</span>
+              } @else if (row.clean) {
+                <span class="game__badge">✨ {{ t('games.cleanGame') }}</span>
+              }
+            </span>
+            <span
+              class="game__score"
+              [class.game__score--wip]="!row.complete"
+              [class.game__score--empty]="!row.started"
+            >
+              @if (!row.started) {
+                {{ t('games.notStarted') }}
+              } @else {
+                {{ row.total }}{{ row.complete ? '' : '…' }}
+              }
+            </span>
+          </a>
+        }
+      </ul>
+    }
+
+    <button type="button" class="add-game" [disabled]="addingGame()" (click)="addGame()">
+      {{ t('session.addGame') }}
+    </button>
+
+    <button type="button" class="delete" (click)="confirmingDelete.set(true)">
+      {{ t('session.delete') }}
+    </button>
+  }
+
+  @if (confirmingDelete()) {
+    <app-confirm-dialog
+      [title]="t('session.deleteTitle')"
+      [message]="t('session.deleteMessage', { n: games().length })"
+      [confirmLabel]="t('session.delete')"
+      [cancelLabel]="t('common.cancel')"
+      [danger]="true"
+      (confirmed)="deleteSession()"
+      (cancelled)="confirmingDelete.set(false)"
+    />
+  }
+</section>

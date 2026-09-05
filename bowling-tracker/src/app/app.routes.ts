@@ -23,6 +23,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/game-entry/game-entry').then((m) => m.GameEntry),
   },
   {
+    path: 'sessions/:id',
+    title: 'Sesión · Bowling Tracker',
+    loadComponent: () => import('./features/session-detail/session-detail').then((m) => m.SessionDetail),
+  },
+  {
+    path: 'sessions/:id/edit',
+    title: 'Editar sesión · Bowling Tracker',
+    loadComponent: () => import('./features/session-form/session-form').then((m) => m.SessionForm),
+  },
+  {
     path: 'stats',
     title: 'Estadísticas · Bowling Tracker',
     loadComponent: () => import('./features/stats/stats').then((m) => m.Stats),

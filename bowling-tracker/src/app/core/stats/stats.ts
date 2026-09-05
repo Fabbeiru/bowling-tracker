@@ -210,6 +210,45 @@ function computeTrend(totals: number[], window: number): Trend | null {
   return { window, recentAvg, priorAvg, delta: recentAvg - priorAvg };
 }
 
+export interface SessionTotals {
+  games: number;
+  /** Games with at least one delivery (or a total score) recorded. */
+  startedGames: number;
+  /** Games whose score is final. */
+  completeGames: number;
+  /** Sum of the scores of the started games (the "series" — 3 games in a league round). */
+  series: number;
+  /** Mean score of the completed games, rounded. `null` until one is complete. */
+  average: number | null;
+  allComplete: boolean;
+}
+
+/** Series total and average for the games of a single session. */
+export function sessionTotals(games: Game[]): SessionTotals {
+  let series = 0;
+  let started = 0;
+  const completed: number[] = [];
+  for (const game of games) {
+    const s = scoreGame(game);
+    const isTotal = game.detailLevel === 'total';
+    const hasStarted = isTotal ? game.totalPins !== undefined : (game.frames?.length ?? 0) > 0;
+    const isComplete = isTotal ? game.totalPins !== undefined : s.complete;
+    if (hasStarted) {
+      started += 1;
+      series += s.total;
+    }
+    if (isComplete) completed.push(s.total);
+  }
+  return {
+    games: games.length,
+    startedGames: started,
+    completeGames: completed.length,
+    series,
+    average: completed.length ? round(mean(completed)) : null,
+    allComplete: games.length > 0 && completed.length === games.length,
+  };
+}
+
 function mean(xs: number[]): number {
   return xs.reduce((a, b) => a + b, 0) / xs.length;
 }

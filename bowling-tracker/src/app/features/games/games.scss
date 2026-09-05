@@ -85,6 +85,24 @@
   overflow: hidden;
 }
 
+.session__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover .session__head,
+  &:focus-visible .session__head {
+    background: color-mix(in srgb, var(--secondary) 12%, var(--surface-2));
+  }
+}
+
+.session__chev {
+  margin-left: auto;
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
 .session__head {
   display: flex;
   align-items: center;
