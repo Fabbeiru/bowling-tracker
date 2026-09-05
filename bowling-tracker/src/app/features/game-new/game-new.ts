@@ -13,6 +13,7 @@ import {
   createCompetition,
   createGame,
   createSession,
+  createVenue,
   DetailLevel,
   SessionType,
   Venue,
@@ -43,6 +44,11 @@ export class GameNew {
   readonly quickName = signal('');
   readonly quickSeason = signal('');
   readonly creatingCompetition = signal(false);
+
+  readonly showVenueCreate = signal(false);
+  readonly venueName = signal('');
+  readonly venueCity = signal('');
+  readonly creatingVenue = signal(false);
 
   readonly relevantCompetitions = computed(() => {
     const t = this.type();
@@ -93,6 +99,29 @@ export class GameNew {
     this.quickName.set('');
     this.quickSeason.set('');
     this.showQuickCreate.set(true);
+  }
+
+  openVenueCreate(): void {
+    this.venueName.set('');
+    this.venueCity.set('');
+    this.showVenueCreate.set(true);
+  }
+
+  async quickCreateVenue(): Promise<void> {
+    const name = this.venueName().trim();
+    if (!name || this.creatingVenue()) return;
+    this.creatingVenue.set(true);
+    try {
+      const venue = createVenue({ name, city: this.venueCity().trim() || undefined });
+      await this.repo.saveVenue(venue);
+      this.venues.update((list) => [...list, venue]);
+      this.form.controls.venueId.setValue(venue.id);
+      this.showVenueCreate.set(false);
+    } catch {
+      this.toast.error('errors.saveVenue');
+    } finally {
+      this.creatingVenue.set(false);
+    }
   }
 
   async quickCreateCompetition(): Promise<void> {

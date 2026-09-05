@@ -1,22 +1,10 @@
-.brand-head__title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.85rem;
-}
-
-.brand-head__logo {
-  flex: none;
-  border-radius: 22.6%;
-}
-
 .local-note {
   display: flex;
   gap: 0.7rem;
-  background: transparent;
-  border: 1px dashed var(--line);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  padding: 0.8rem 0.9rem;
+  padding: 0.85rem 0.9rem;
 }
 
 .local-note__icon {
@@ -30,7 +18,7 @@
 .local-note__title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 .local-note__body {
@@ -104,14 +92,15 @@
   background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  padding: 0.7rem 0.6rem;
+  padding: 0.8rem 0.75rem;
   text-decoration: none;
   color: var(--ink);
 }
 
 .tile__lab {
   font-family: var(--font-label);
-  font-size: 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--ink-soft);
@@ -120,9 +109,9 @@
 .tile__val {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 1.45rem;
+  font-size: 1.85rem;
   line-height: 1;
-  margin-top: 0.25rem;
+  margin-top: 0.3rem;
   font-variant-numeric: tabular-nums;
 
   &--blue {

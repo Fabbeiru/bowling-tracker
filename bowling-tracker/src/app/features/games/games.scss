@@ -79,9 +79,7 @@
 }
 
 .session {
-  /* Más oscura que su propia cabecera: la cabecera "flota" sobre el
-     contenido en vez de fundirse con él. */
-  background: var(--bg);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
@@ -111,10 +109,9 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--secondary);
-  /* Mezclado sobre --surface-2 (el fondo real de la cabecera), no sobre
-     transparent: Safari interpola mal color-mix(...,transparent) y sale
-     casi negro en vez de un tinte suave. */
-  background: color-mix(in srgb, var(--secondary) 16%, var(--surface-2));
+  /* Mezclado sobre el fondo real, no sobre transparent: Safari interpola mal
+     color-mix(...,transparent) y sale casi negro en vez de un tinte suave. */
+  background: color-mix(in srgb, var(--secondary) 18%, var(--surface-2));
   border-radius: 999px;
   padding: 0.15rem 0.5rem;
 }
@@ -138,6 +135,7 @@
   justify-content: space-between;
   gap: 0.3rem 0.6rem;
   padding: 0.7rem 0.9rem;
+  background: var(--surface);
   text-decoration: none;
   color: var(--ink);
   border-bottom: 1px solid var(--line);
@@ -194,14 +192,14 @@
   }
 }
 
-/* Mezclado sobre --bg (el fondo real de la sesión), no sobre transparent:
+/* Mezclado sobre --surface (el fondo real de la fila), no sobre transparent:
    ver nota en .session__type. */
 .game--clean {
-  background: color-mix(in srgb, var(--secondary) 20%, var(--bg));
+  background: color-mix(in srgb, var(--secondary) 16%, var(--surface));
 }
 
 .game--perfect {
-  background: color-mix(in srgb, var(--accent) 30%, var(--bg));
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
 }
 
 .pager {

@@ -1,9 +1,6 @@
 <section class="screen" *transloco="let t">
-  <header class="screen__head brand-head">
-    <div class="brand-head__title-row">
-      <h1>{{ t('home.title') }}</h1>
-      <img class="brand-head__logo" src="logo.svg" alt="" width="40" height="40" />
-    </div>
+  <header class="screen__head">
+    <h1>{{ t('home.title') }}</h1>
     <p>{{ t('home.subtitle') }}</p>
   </header>
 
@@ -43,6 +40,10 @@
     </div>
   } @else {
     <div class="tiles">
+      <a class="tile" routerLink="/games">
+        <div class="tile__lab">{{ t('home.lastGame') }}</div>
+        <div class="tile__val tile__val--soft">{{ last() }}</div>
+      </a>
       <a class="tile" routerLink="/stats">
         <div class="tile__lab">{{ t('stats.average') }}</div>
         <div class="tile__val">{{ stats().summary.average }}</div>
@@ -50,10 +51,6 @@
       <a class="tile" routerLink="/stats">
         <div class="tile__lab">{{ t('stats.best') }}</div>
         <div class="tile__val tile__val--blue">{{ stats().summary.best }}</div>
-      </a>
-      <a class="tile" routerLink="/games">
-        <div class="tile__lab">{{ t('home.lastGame') }}</div>
-        <div class="tile__val tile__val--soft">{{ last() }}</div>
       </a>
     </div>
   }

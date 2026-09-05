@@ -5,6 +5,26 @@
   </header>
 
   <section class="block">
+    <h2 class="block__title">{{ t('settings.storageTitle') }}</h2>
+
+    @if (loading()) {
+      <p class="muted">{{ t('common.loading') }}</p>
+    } @else {
+      @if (usageLabel(); as label) {
+        <p class="usage__label">{{ t('settings.storageUsed', { size: label }) }}</p>
+      }
+      <p class="note">{{ t('settings.storageOk') }}</p>
+    }
+  </section>
+
+  <section class="block">
+    <h2 class="block__title">{{ t('settings.dataTitle') }}</h2>
+    <p class="note">{{ t('settings.dataWhere') }}</p>
+    <p class="note">{{ t('settings.dataNote') }}</p>
+    <p class="note">{{ t('settings.dataSyncSoon') }}</p>
+  </section>
+
+  <section class="block">
     <h2 class="block__title">{{ t('settings.themeTitle') }}</h2>
     <div class="seg" role="radiogroup" [attr.aria-label]="t('settings.themeTitle')">
       <button
@@ -28,26 +48,6 @@
         {{ t('settings.themeDark') }}
       </button>
     </div>
-  </section>
-
-  <section class="block">
-    <h2 class="block__title">{{ t('settings.storageTitle') }}</h2>
-
-    @if (loading()) {
-      <p class="muted">{{ t('common.loading') }}</p>
-    } @else {
-      @if (usageLabel(); as label) {
-        <p class="usage__label">{{ t('settings.storageUsed', { size: label }) }}</p>
-      }
-      <p class="note">{{ t('settings.storageOk') }}</p>
-    }
-  </section>
-
-  <section class="block">
-    <h2 class="block__title">{{ t('settings.dataTitle') }}</h2>
-    <p class="note">{{ t('settings.dataWhere') }}</p>
-    <p class="note">{{ t('settings.dataNote') }}</p>
-    <p class="note">{{ t('settings.dataSyncSoon') }}</p>
   </section>
 
   <footer class="footer-note">

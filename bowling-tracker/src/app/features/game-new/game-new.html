@@ -46,17 +46,20 @@
       </div>
     }
 
-    @if (venues().length > 0) {
-      <div class="field">
-        <label for="venue">{{ t('gameNew.venue') }}</label>
+    <div class="field">
+      <label for="venue">{{ t('gameNew.venue') }}</label>
+      <div class="pick-row">
         <select id="venue" class="input" formControlName="venueId">
           <option value="">{{ t('gameNew.none') }}</option>
           @for (venue of venues(); track venue.id) {
             <option [value]="venue.id">{{ venue.name }}</option>
           }
         </select>
+        <button type="button" class="pick-add" (click)="openVenueCreate()" [attr.aria-label]="t('gameNew.addVenue')">
+          +
+        </button>
       </div>
-    }
+    </div>
 
     @if (balls().length > 0) {
       <div class="row2">
@@ -140,6 +143,49 @@
             class="btn"
             [disabled]="!quickName().trim() || creatingCompetition()"
             (click)="quickCreateCompetition()"
+          >
+            {{ t('common.save') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (showVenueCreate()) {
+    <div class="backdrop" (click)="showVenueCreate.set(false)">
+      <div class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+        <h2 class="dialog__title">{{ t('venueForm.newTitle') }}</h2>
+        <div class="field">
+          <label for="vname">{{ t('venueForm.name') }}<span class="req-mark">*</span></label>
+          <input
+            id="vname"
+            class="input"
+            [placeholder]="t('venueForm.namePlaceholder')"
+            [ngModel]="venueName()"
+            (ngModelChange)="venueName.set($event)"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="field">
+          <label for="vcity">{{ t('venueForm.city') }}</label>
+          <input
+            id="vcity"
+            class="input"
+            [placeholder]="t('venueForm.cityPlaceholder')"
+            [ngModel]="venueCity()"
+            (ngModelChange)="venueCity.set($event)"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div class="dialog__actions">
+          <button type="button" class="btn btn--ghost" (click)="showVenueCreate.set(false)">
+            {{ t('common.cancel') }}
+          </button>
+          <button
+            type="button"
+            class="btn"
+            [disabled]="!venueName().trim() || creatingVenue()"
+            (click)="quickCreateVenue()"
           >
             {{ t('common.save') }}
           </button>
