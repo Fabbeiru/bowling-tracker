@@ -30,7 +30,8 @@
   &--knocked {
     background: var(--accent);
     color: var(--accent-ink);
-    border-color: transparent;
+    /* mantiene el borde para que el círculo no "pierda forma" al marcarlo */
+    border-color: color-mix(in srgb, var(--accent-ink) 35%, var(--accent));
   }
 
   &--gone {
@@ -43,12 +44,21 @@
 .presets {
   display: flex;
   gap: 6px;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.presets::-webkit-scrollbar {
+  display: none;
 }
 
 .preset {
+  flex: none;
   font-family: var(--font-label);
   font-size: 0.7rem;
+  white-space: nowrap;
   padding: 0.4rem 0.7rem;
   border-radius: 999px;
   border: 1px solid var(--line);
@@ -58,38 +68,6 @@
   &--leave {
     font-size: 0.66rem;
   }
-}
-
-.count-line {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-top: 0.9rem;
-}
-
-.count-line__k {
-  font-family: var(--font-label);
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-soft);
-}
-
-.count-line__v {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.4rem;
-}
-
-.count-toggle {
-  display: block;
-  margin: 0.7rem auto 0;
-  border: 0;
-  background: transparent;
-  color: var(--ink-soft);
-  padding: 0.25rem;
-  font-size: 0.78rem;
-  text-decoration: underline;
 }
 
 .confirm {

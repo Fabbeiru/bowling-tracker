@@ -53,6 +53,12 @@
           <div class="tile__lab">{{ t('stats.best') }}</div>
           <div class="tile__val tile__val--blue">{{ stats().summary.best }}</div>
         </div>
+        @if (stats().highSeries3; as hs) {
+          <div class="tile">
+            <div class="tile__lab">{{ t('stats.highSeries') }}</div>
+            <div class="tile__val">{{ hs }}</div>
+          </div>
+        }
       </div>
 
       @if (stats().trend; as tr) {
@@ -107,17 +113,24 @@
 
       <div class="card">
         <div class="card__lab">{{ t('stats.byFrame') }}</div>
+        @if (stats().frames.games === 0) {
+          <p class="metrics__note">{{ t('stats.needFrameGames') }}</p>
+        } @else {
         <dl class="metrics">
           <div><dt>{{ t('stats.strikePct') }}</dt><dd>{{ pct(stats().frames.strikePct) }}</dd></div>
           <div><dt>{{ t('stats.sparePct') }}</dt><dd>{{ pct(stats().frames.sparePct) }}</dd></div>
-          <div><dt>{{ t('stats.openPct') }}</dt><dd>{{ pct(stats().frames.openPct) }}</dd></div>
+          <div><dt>{{ t('stats.singlePinSparePct') }}</dt><dd>{{ pct(stats().frames.singlePinSparePct) }}</dd></div>
           <div><dt>{{ t('stats.markPct') }}</dt><dd>{{ pct(stats().frames.markPct) }}</dd></div>
+          <div><dt>{{ t('stats.openPct') }}</dt><dd>{{ pct(stats().frames.openPct) }}</dd></div>
+          <div><dt>{{ t('stats.openPerGame') }}</dt><dd>{{ stats().frames.openPerGame ?? '—' }}</dd></div>
           <div><dt>{{ t('stats.firstBall') }}</dt><dd>{{ stats().frames.firstBallAverage ?? '—' }}</dd></div>
+          <div><dt>{{ t('stats.bestStrikeStreak') }}</dt><dd>{{ stats().frames.bestStrikeStreak ?? '—' }}</dd></div>
           <div><dt>{{ t('stats.cleanGames') }}</dt><dd>{{ stats().frames.cleanGames }}</dd></div>
           <div><dt>{{ t('stats.perfectGames') }}</dt><dd>{{ stats().frames.perfectGames }}</dd></div>
         </dl>
-        @if (stats().frames.strikePct === null && stats().frames.games > 0) {
+        @if (stats().frames.strikePct === null) {
           <p class="metrics__note">{{ t('stats.needMoreFrameGames') }}</p>
+        }
         }
       </div>
     }

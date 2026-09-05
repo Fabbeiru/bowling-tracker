@@ -31,7 +31,6 @@ export class GameEntry {
   readonly loading = signal(true);
   readonly totalInput = signal<number | null>(null);
   readonly notes = signal('');
-  readonly countMode = signal(false);
   readonly confirmingDelete = signal(false);
   readonly addingGame = signal(false);
 
@@ -84,7 +83,6 @@ export class GameEntry {
     this.loadingId = id;
     this.loading.set(true);
     this.confirmingDelete.set(false);
-    this.countMode.set(false);
     try {
       const g = await this.repo.getGame(id);
       if (this.loadingId !== id) return; // a newer navigation has since started loading
@@ -129,7 +127,6 @@ export class GameEntry {
     if (!g) return;
     const updated = applyDelivery(g, delivery);
     this.game.set(updated);
-    this.countMode.set(false);
     try {
       await this.repo.saveGame(updated);
     } catch {
@@ -142,7 +139,6 @@ export class GameEntry {
     if (!g) return;
     const updated = undoLastDelivery(g);
     this.game.set(updated);
-    this.countMode.set(false);
     try {
       await this.repo.saveGame(updated);
     } catch {

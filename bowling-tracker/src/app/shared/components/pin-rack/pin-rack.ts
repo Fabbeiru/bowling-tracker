@@ -17,7 +17,6 @@ export class PinRack {
   readonly ball = input.required<number>();
 
   readonly delivery = output<RackDelivery>();
-  readonly countOnly = output<void>();
 
   /** Pins knocked down on this ball. Resets whenever the standing set changes. */
   private readonly knocked = linkedSignal<number[], Set<number>>({
@@ -43,8 +42,19 @@ export class PinRack {
     return [
       { label: '10', leave: [10] },
       { label: '7', leave: [7] },
+      { label: '4', leave: [4] },
+      { label: '6', leave: [6] },
+      { label: '2', leave: [2] },
+      { label: '3', leave: [3] },
       { label: '7-10', leave: [7, 10] },
       { label: '4-6', leave: [4, 6] },
+      { label: '3-10', leave: [3, 10] },
+      { label: '2-7', leave: [2, 7] },
+      { label: '5-7', leave: [5, 7] },
+      { label: '5-10', leave: [5, 10] },
+      { label: '4-7-10', leave: [4, 7, 10] },
+      { label: '6-7-10', leave: [6, 7, 10] },
+      { label: '4-6-7-10', leave: [4, 6, 7, 10] },
     ];
   });
 

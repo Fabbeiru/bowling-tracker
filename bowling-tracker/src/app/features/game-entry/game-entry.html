@@ -100,20 +100,15 @@
               </button>
             }
           </div>
-          @if (!countMode() && pos.standingBefore; as standing) {
+          @if (pos.standingBefore; as standing) {
             <app-pin-rack
               [standingBefore]="standing"
               [ball]="pos.ball"
               (delivery)="recordRack($event)"
-              (countOnly)="countMode.set(true)"
             />
           } @else {
+            <!-- partidas antiguas guardadas sin marcar pinos: solo el número -->
             <app-pin-pad [standingCount]="pos.standingCount" [freshRack]="pos.freshRack" (pins)="record($event)" />
-            @if (countMode()) {
-              <button type="button" class="link-btn" (click)="countMode.set(false)">
-                {{ t('gameEntry.markPinsInstead') }}
-              </button>
-            }
           }
         } @else {
           <p class="done">{{ t('gameEntry.gameComplete') }}</p>

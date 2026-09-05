@@ -15,9 +15,15 @@ export interface FrameStats {
   framesCounted: number;
   strikePct: number | null;
   sparePct: number | null;
+  /** Spare conversion when exactly one pin was left (the corner-pin spare). */
+  singlePinSparePct: number | null;
   openPct: number | null;
   markPct: number | null;
   firstBallAverage: number | null;
+  /** Average open frames per game. */
+  openPerGame: number | null;
+  /** Longest run of consecutive strike frames within a single game. */
+  bestStrikeStreak: number | null;
   cleanGames: number;
   perfectGames: number;
 }
@@ -40,6 +46,8 @@ export interface StatsResult {
   evolution: number[];
   /** Recent form vs the previous block. `null` until there are `2 * window` games. */
   trend: Trend | null;
+  /** Best sum of 3 consecutive games within one session. `null` if no session has 3+. */
+  highSeries3: number | null;
 }
 
 interface ScoredGame {
@@ -58,7 +66,7 @@ function finalScore(game: Game): ScoredGame | null {
 }
 
 export function computeStats(games: Game[], opts: { minSample?: number } = {}): StatsResult {
-  const minSample = opts.minSample ?? 5;
+  const minSample = opts.minSample ?? 3;
 
   const scored = games
     .map(finalScore)
@@ -85,18 +93,36 @@ export function computeStats(games: Game[], opts: { minSample?: number } = {}): 
   let firstBallSum = 0;
   let firstBallCount = 0;
   let cleanGames = 0;
+  let singlePinAttempts = 0;
+  let singlePinConverted = 0;
+  let bestStrikeStreak = 0;
 
   for (const { game } of frameGames) {
     const frames = scoreGame(game).frames;
     let anyOpen = false;
+    let streak = 0;
     for (const f of frames) {
-      if (f.mark === 'pending') continue;
+      if (f.mark === 'pending') {
+        streak = 0;
+        continue;
+      }
       framesCounted++;
-      if (f.mark === 'strike') strikes++;
-      else if (f.mark === 'spare') spares++;
-      else {
-        opens++;
-        anyOpen = true;
+      if (f.mark === 'strike') {
+        strikes++;
+        streak++;
+        bestStrikeStreak = Math.max(bestStrikeStreak, streak);
+      } else {
+        streak = 0;
+        if (f.mark === 'spare') spares++;
+        else {
+          opens++;
+          anyOpen = true;
+        }
+        // Corner-pin spare: first ball left exactly one pin (frames 1-9).
+        if (f.index < 10 && f.rolls.length > 0 && f.rolls[0] === 9) {
+          singlePinAttempts++;
+          if (f.mark === 'spare') singlePinConverted++;
+        }
       }
       if (f.rolls.length > 0) {
         firstBallSum += f.rolls[0];
@@ -110,20 +136,44 @@ export function computeStats(games: Game[], opts: { minSample?: number } = {}): 
   const enough = frameGames.length >= minSample;
 
   const trend = computeTrend(totals, 5);
+  const highSeries3 = bestSeries(scored, 3);
 
   const frames: FrameStats = {
     games: frameGames.length,
     framesCounted,
     strikePct: enough && framesCounted ? round((strikes / framesCounted) * 100) : null,
     sparePct: enough && framesCounted - strikes > 0 ? round((spares / (framesCounted - strikes)) * 100) : null,
+    singlePinSparePct: enough && singlePinAttempts >= 3 ? round((singlePinConverted / singlePinAttempts) * 100) : null,
     openPct: enough && framesCounted ? round((opens / framesCounted) * 100) : null,
     markPct: enough && framesCounted ? round(((strikes + spares) / framesCounted) * 100) : null,
     firstBallAverage: enough && firstBallCount ? round(firstBallSum / firstBallCount, 1) : null,
+    openPerGame: enough && frameGames.length ? round(opens / frameGames.length, 1) : null,
+    bestStrikeStreak: frameGames.length ? bestStrikeStreak : null,
     cleanGames,
     perfectGames,
   };
 
-  return { summary, frames, evolution: totals, trend };
+  return { summary, frames, evolution: totals, trend, highSeries3 };
+}
+
+/** Highest sum of `n` consecutive games within a single session. */
+function bestSeries(scored: ScoredGame[], n: number): number | null {
+  const bySession = new Map<string, ScoredGame[]>();
+  for (const s of scored) {
+    const arr = bySession.get(s.game.sessionId) ?? [];
+    arr.push(s);
+    bySession.set(s.game.sessionId, arr);
+  }
+  let best: number | null = null;
+  for (const arr of bySession.values()) {
+    if (arr.length < n) continue;
+    arr.sort((a, b) => a.game.index - b.game.index);
+    for (let i = 0; i + n <= arr.length; i++) {
+      const sum = arr.slice(i, i + n).reduce((acc, g) => acc + g.total, 0);
+      best = best === null ? sum : Math.max(best, sum);
+    }
+  }
+  return best;
 }
 
 /** Compares the last `window` scores against the `window` before them. */

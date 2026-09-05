@@ -30,15 +30,6 @@
   }
 </div>
 
-<div class="count-line">
-  <span class="count-line__k">Bolos derribados</span>
-  <span class="count-line__v">{{ knockedCount() }}</span>
-</div>
-
-<button type="button" class="count-toggle" (click)="countOnly.emit()">
-  Solo el número, sin marcar pinos
-</button>
-
 <button type="button" class="confirm" (click)="confirm()">
-  {{ ball() >= 2 ? 'Guardar frame' : 'Siguiente bola' }}
+  {{ ball() >= 2 ? 'Guardar frame' : 'Siguiente bola' }} · {{ knockedCount() }}
 </button>
