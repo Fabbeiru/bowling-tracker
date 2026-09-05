@@ -96,14 +96,11 @@
   }
 }
 
-.session__series {
+.session__chev {
   margin-left: auto;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.05rem;
+  color: var(--ink-soft);
+  font-size: 1.15rem;
   line-height: 1;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
 }
 
 .session__head {
@@ -149,69 +146,8 @@
   padding: 0;
 }
 
-.game {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.3rem 0.6rem;
-  padding: 0.7rem 0.9rem;
-  background: var(--surface);
-  text-decoration: none;
-  color: var(--ink);
-  border-bottom: 1px solid var(--line);
-
-  &:last-child {
-    border-bottom: 0;
-  }
-}
-
-.game__idx {
-  font-size: 0.88rem;
-  color: var(--ink-soft);
-}
-
-/* Distintivo (limpia / 300) centrado entre el nombre de la partida y el
-   resultado — las auto-margins de un ítem flex lo empujan al centro del hueco. */
-.game__tag {
-  margin-inline: auto;
-  font-family: var(--font-label);
-  font-size: 0.6rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  border-radius: 999px;
-  padding: 0.15rem 0.55rem;
-
-  &--clean {
-    color: var(--ok);
-    background: color-mix(in srgb, var(--ok) 14%, var(--surface));
-    border: 1px solid color-mix(in srgb, var(--ok) 40%, var(--surface));
-  }
-
-  &--perfect {
-    color: var(--accent-ink);
-    background: var(--accent);
-  }
-}
-
-.game__score {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.2rem;
-  font-variant-numeric: tabular-nums;
-
-  &--wip {
-    color: var(--ink-soft);
-  }
-
-  &--empty {
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: 0.78rem;
-    font-style: italic;
-  }
-}
+/* .game / .game__idx / .game__tag / .game__score viven en styles.scss
+   (misma pieza aquí y en la pantalla de sesión). */
 
 .pager {
   display: flex;

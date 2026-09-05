@@ -42,7 +42,12 @@
     } @else {
       <ul class="games">
         @for (row of rows(); track row.game.id) {
-          <a class="game" [routerLink]="['/games', row.game.id]">
+          <a
+            class="game"
+            [class.game--perfect]="row.perfect"
+            [class.game--clean]="row.clean && !row.perfect"
+            [routerLink]="['/games', row.game.id]"
+          >
             <span class="game__idx">{{ t('games.gameN', { n: row.game.index }) }}</span>
             @if (row.perfect) {
               <span class="game__tag game__tag--perfect">{{ t('games.perfectBadge') }}</span>

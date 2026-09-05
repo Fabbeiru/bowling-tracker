@@ -4,18 +4,16 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
+import { GamesNavState, GamesTypeFilter } from '../../core/nav/games-nav.state';
 import { gameToRolls, isCleanGame, scoreGame } from '../../core/scoring';
-import { sessionTotals } from '../../core/stats/stats';
-import { Game, Session, SessionType } from '../../models';
+import { Game, Session } from '../../models';
 
-type TypeFilter = SessionType | 'all';
+type TypeFilter = GamesTypeFilter;
 
 interface SessionRow {
   session: Session;
   competitionName?: string;
   venueName?: string;
-  /** Sum of the started games' scores (the session/series total). */
-  series: number;
   games: { game: Game; total: number; complete: boolean; started: boolean; clean: boolean; perfect: boolean }[];
 }
 
@@ -34,15 +32,19 @@ function isStarted(game: Game): boolean {
 export class Games {
   private readonly repo = inject(Repository);
   private readonly toast = inject(ToastService);
+  private readonly nav = inject(GamesNavState);
 
   /** Games per page, not sessions — a session can hold more than one game. */
   static readonly PAGE_SIZE = 10;
 
   readonly rows = signal<SessionRow[]>([]);
   readonly loading = signal(true);
-  readonly typeFilter = signal<TypeFilter>('all');
   readonly typeOptions: TypeFilter[] = ['all', 'practice', 'league', 'tournament', 'social'];
-  readonly page = signal(1);
+
+  // Página y filtro viven en GamesNavState (no en el componente), así que al
+  // entrar a una sesión y volver siguen donde estaban.
+  readonly typeFilter = this.nav.typeFilter;
+  readonly page = this.nav.page;
 
   readonly filteredRows = computed(() => {
     const type = this.typeFilter();
@@ -74,7 +76,10 @@ export class Games {
 
   readonly pageCount = computed(() => this.pages().length);
 
-  readonly pagedRows = computed(() => this.pages()[this.page() - 1] ?? []);
+  readonly pagedRows = computed(() => {
+    const page = Math.min(this.page(), this.pageCount());
+    return this.pages()[page - 1] ?? [];
+  });
 
   constructor() {
     void this.load();
@@ -110,7 +115,6 @@ export class Games {
             session,
             competitionName: session.competitionId ? compName.get(session.competitionId) : undefined,
             venueName: session.venueId ? venueName.get(session.venueId) : undefined,
-            series: sessionTotals(games).series,
             games: games.map((game) => {
               const s = scoreGame(game);
               return {

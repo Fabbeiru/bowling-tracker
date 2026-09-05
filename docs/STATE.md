@@ -267,8 +267,19 @@ Ya forma parte de la v1 a publicar. Añadido:
   - **con** historial → botón de retirar/ocultar/archivar + modal que explica
     que es un soft-delete y se puede revertir.
 - Listado de partidas: enlaces sin subrayado (regla global en `styles.scss`),
-  total de la serie al extremo derecho de cada sesión, distintivo limpia/300
-  sin emoji (verde para limpia) centrado entre nº de partida y resultado.
+  chevron `›` a la derecha de cada cabecera de sesión (el total de la serie se
+  ve entrando a la sesión), distintivo limpia/300 sin emoji centrado entre nº de
+  partida y resultado — sólido, con la fila apenas teñida para que contraste.
+  La fila de partida (`.game*`) vive una sola vez en `styles.scss`, idéntica en
+  el listado y en la pantalla de sesión.
+
+### Navegación (2026-09-05)
+
+- `core/nav/games-nav.state.ts`: servicio `providedIn: 'root'` que recuerda
+  página y filtro del listado de Partidas, así entrar a una sesión y volver no
+  reinicia a la página 1.
+- `game-entry`: al terminar o borrar una partida vuelve a **su sesión** (antes
+  siempre al listado).
 
 ## Siguiente: Bloque 10 (Datos + backup) y PWA (sesión dedicada)
 

@@ -177,7 +177,8 @@ export class GameEntry {
     if (!g) return;
     try {
       await this.repo.deleteGame(g.id);
-      await this.router.navigate(['/games']);
+      const s = this.session();
+      await this.router.navigate(s ? ['/sessions', s.id] : ['/games']);
     } catch {
       this.toast.error('errors.deleteGame');
     }
@@ -209,6 +210,7 @@ export class GameEntry {
 
   async finish(): Promise<void> {
     if (this.game()?.detailLevel === 'total') await this.saveTotal();
-    await this.router.navigate(['/games']);
+    const s = this.session();
+    await this.router.navigate(s ? ['/sessions', s.id] : ['/games']);
   }
 }

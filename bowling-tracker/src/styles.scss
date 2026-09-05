@@ -239,3 +239,74 @@ textarea {
   border-radius: var(--radius-sm);
   border: 0;
 }
+
+/* Fila de partida — misma pieza en el listado de Partidas y en la pantalla de
+   sesión, así que vive aquí una sola vez (idéntica en ambos sitios). */
+.game {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem 0.6rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--surface);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  /* Fondo apenas teñido: más claro que el distintivo, para que este resalte. */
+  &--clean {
+    background: color-mix(in srgb, var(--ok) 9%, var(--surface));
+  }
+  &--perfect {
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  }
+}
+
+.game__idx {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+/* Distintivo (limpia / 300): centrado entre el nº de partida y el resultado.
+   Sólido para que contraste con el fondo teñido de la fila. Mismo tamaño y
+   forma en los dos casos; sólo cambian color y texto. */
+.game__tag {
+  margin-inline: auto;
+  font-family: var(--font-label);
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 999px;
+  padding: 0.16rem 0.6rem;
+
+  &--clean {
+    color: #fff;
+    background: var(--ok);
+  }
+  &--perfect {
+    color: var(--accent-ink);
+    background: var(--accent);
+  }
+}
+
+.game__score {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+
+  &--wip {
+    color: var(--ink-soft);
+  }
+  &--empty {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.78rem;
+    font-style: italic;
+  }
+}

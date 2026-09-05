@@ -11,9 +11,9 @@ import {
 } from '../../models';
 
 /**
- * IndexedDB database. Six object stores; frames and throws are embedded in
- * `games`. Schema changes must bump the version and add an upgrade function
- * (with a test). See docs/DATA-MODEL.md and docs/adr/0005.
+ * IndexedDB (vía Dexie). Frames y throws van embebidos dentro de `games`.
+ * Cambiar el esquema = subir la versión + añadir un `upgrade` + su test
+ * (docs/DATA-MODEL.md, docs/adr/0005).
  */
 export class AppDb extends Dexie {
   readonly balls!: Table<Ball, string>;
@@ -37,7 +37,7 @@ export class AppDb extends Dexie {
   }
 }
 
-/** Injectable handle to the database. Override in tests with a throwaway name. */
+/** Handle inyectable; en los tests se sustituye por una BD con nombre desechable. */
 export const APP_DB = new InjectionToken<AppDb>('APP_DB', {
   providedIn: 'root',
   factory: () => new AppDb(),
