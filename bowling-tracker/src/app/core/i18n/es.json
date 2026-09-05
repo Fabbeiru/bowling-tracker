@@ -60,7 +60,9 @@
     "emptyTitle": "Aún no has registrado ninguna partida",
     "emptyHint": "Empieza una partida y elige cuánto detalle quieres registrar.",
     "cleanGame": "Partida limpia",
+    "cleanBadge": "Limpia",
     "perfectGame": "¡300!",
+    "perfectBadge": "300",
     "notStarted": "Sin empezar",
     "prevPage": "< Anterior",
     "nextPage": "Siguiente >",
@@ -111,7 +113,7 @@
   "session": {
     "title": "Sesión",
     "notFound": "Sesión no encontrada",
-    "series": "Serie",
+    "series": "Total de la serie",
     "average": "Media de la sesión",
     "gamesTitle": "Partidas",
     "addGame": "+ Añadir partida a esta sesión",
@@ -196,7 +198,14 @@
     "notes": "Notas",
     "notesPlaceholder": "Formato, clasificación, rivales…",
     "deactivate": "Archivar competición",
-    "reactivate": "Desarchivar competición"
+    "reactivate": "Desarchivar competición",
+    "retireTitle": "¿Archivar «{{name}}»?",
+    "retireMessage": "Dejará de aparecer al crear sesiones, pero se conserva en las sesiones que ya tiene asociadas. Puedes desarchivarla cuando quieras.",
+    "retireConfirm": "Archivar",
+    "delete": "Borrar competición",
+    "deleteTitle": "¿Borrar «{{name}}»?",
+    "deleteMessage": "No tiene ninguna sesión asociada, así que se elimina del todo. No se puede deshacer.",
+    "deleteConfirm": "Borrar"
   },
   "ballForm": {
     "newTitle": "Nueva bola",
@@ -217,7 +226,14 @@
     "notes": "Notas",
     "notesPlaceholder": "Radio de giro, sensaciones, para qué la usas…",
     "deactivate": "Retirar del arsenal",
-    "reactivate": "Devolver al arsenal"
+    "reactivate": "Devolver al arsenal",
+    "retireTitle": "¿Retirar «{{name}}»?",
+    "retireMessage": "Dejará de aparecer al crear partidas, pero se conserva en las partidas donde ya la usaste. Puedes devolverla al arsenal cuando quieras.",
+    "retireConfirm": "Retirar",
+    "delete": "Borrar bola",
+    "deleteTitle": "¿Borrar «{{name}}»?",
+    "deleteMessage": "No la has usado en ninguna partida, así que se elimina del todo. No se puede deshacer.",
+    "deleteConfirm": "Borrar"
   },
   "venueForm": {
     "newTitle": "Nueva bolera",
@@ -231,7 +247,14 @@
     "notes": "Notas",
     "notesPlaceholder": "Patrón de aceite, tipo de pista…",
     "deactivate": "Ocultar bolera",
-    "reactivate": "Mostrar bolera"
+    "reactivate": "Mostrar bolera",
+    "retireTitle": "¿Ocultar «{{name}}»?",
+    "retireMessage": "Dejará de aparecer al crear sesiones, pero se conserva en las sesiones donde ya la usaste. Puedes mostrarla de nuevo cuando quieras.",
+    "retireConfirm": "Ocultar",
+    "delete": "Borrar bolera",
+    "deleteTitle": "¿Borrar «{{name}}»?",
+    "deleteMessage": "No la has usado en ninguna sesión, así que se elimina del todo. No se puede deshacer.",
+    "deleteConfirm": "Borrar"
   },
   "settings": {
     "title": "Ajustes",
@@ -262,6 +285,9 @@
     "loadBall": "No se pudo cargar la bola.",
     "saveBall": "No se pudo guardar la bola.",
     "updateBall": "No se pudo actualizar la bola.",
+    "deleteBall": "No se pudo borrar la bola.",
+    "deleteVenue": "No se pudo borrar la bolera.",
+    "deleteCompetition": "No se pudo borrar la competición.",
     "loadVenue": "No se pudo cargar la bolera.",
     "saveVenue": "No se pudo guardar la bolera.",
     "updateVenue": "No se pudo actualizar la bolera.",

@@ -31,6 +31,9 @@ export class DexieRepository extends Repository {
   deactivateBall(id: Id): Promise<void> {
     return this.deactivate(this.db.balls, id);
   }
+  async deleteBall(id: Id): Promise<void> {
+    await this.db.balls.delete(id);
+  }
 
   // --- Venues ---
   listVenues(opts?: { includeInactive?: boolean }): Promise<Venue[]> {
@@ -45,6 +48,9 @@ export class DexieRepository extends Repository {
   deactivateVenue(id: Id): Promise<void> {
     return this.deactivate(this.db.venues, id);
   }
+  async deleteVenue(id: Id): Promise<void> {
+    await this.db.venues.delete(id);
+  }
 
   // --- Competitions ---
   listCompetitions(opts?: { includeInactive?: boolean }): Promise<Competition[]> {
@@ -58,6 +64,9 @@ export class DexieRepository extends Repository {
   }
   deactivateCompetition(id: Id): Promise<void> {
     return this.deactivate(this.db.competitions, id);
+  }
+  async deleteCompetition(id: Id): Promise<void> {
+    await this.db.competitions.delete(id);
   }
 
   // --- Sessions ---

@@ -5,6 +5,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
 import { gameToRolls, isCleanGame, scoreGame } from '../../core/scoring';
+import { sessionTotals } from '../../core/stats/stats';
 import { Game, Session, SessionType } from '../../models';
 
 type TypeFilter = SessionType | 'all';
@@ -13,6 +14,8 @@ interface SessionRow {
   session: Session;
   competitionName?: string;
   venueName?: string;
+  /** Sum of the started games' scores (the session/series total). */
+  series: number;
   games: { game: Game; total: number; complete: boolean; started: boolean; clean: boolean; perfect: boolean }[];
 }
 
@@ -107,6 +110,7 @@ export class Games {
             session,
             competitionName: session.competitionId ? compName.get(session.competitionId) : undefined,
             venueName: session.venueId ? venueName.get(session.venueId) : undefined,
+            series: sessionTotals(games).series,
             games: games.map((game) => {
               const s = scoreGame(game);
               return {

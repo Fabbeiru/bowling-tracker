@@ -63,8 +63,38 @@
   </form>
 
   @if (editing()) {
-    <button type="button" class="toggle" (click)="toggleActive()">
-      {{ active() ? t('competitionForm.deactivate') : t('competitionForm.reactivate') }}
-    </button>
+    @if (!active()) {
+      <button type="button" class="toggle" (click)="restore()">{{ t('competitionForm.reactivate') }}</button>
+    } @else if (hasSessions()) {
+      <button type="button" class="toggle" (click)="confirming.set('retire')">
+        {{ t('competitionForm.deactivate') }}
+      </button>
+    } @else {
+      <button type="button" class="toggle toggle--danger" (click)="confirming.set('delete')">
+        {{ t('competitionForm.delete') }}
+      </button>
+    }
+  }
+
+  @if (confirming() === 'retire') {
+    <app-confirm-dialog
+      [title]="t('competitionForm.retireTitle', { name: form.controls.name.value })"
+      [message]="t('competitionForm.retireMessage')"
+      [confirmLabel]="t('competitionForm.retireConfirm')"
+      [cancelLabel]="t('common.cancel')"
+      (confirmed)="retire()"
+      (cancelled)="confirming.set(null)"
+    />
+  }
+  @if (confirming() === 'delete') {
+    <app-confirm-dialog
+      [title]="t('competitionForm.deleteTitle', { name: form.controls.name.value })"
+      [message]="t('competitionForm.deleteMessage')"
+      [confirmLabel]="t('competitionForm.deleteConfirm')"
+      [cancelLabel]="t('common.cancel')"
+      [danger]="true"
+      (confirmed)="hardDelete()"
+      (cancelled)="confirming.set(null)"
+    />
   }
 </section>

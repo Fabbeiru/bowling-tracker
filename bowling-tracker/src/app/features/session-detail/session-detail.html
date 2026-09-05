@@ -25,7 +25,6 @@
       <div class="tile">
         <div class="tile__lab">{{ t('session.series') }}</div>
         <div class="tile__val">{{ totals().series }}</div>
-        <div class="tile__sub">{{ t('session.gamesTitle') }}: {{ totals().games }}</div>
       </div>
       <div class="tile">
         <div class="tile__lab">{{ t('session.average') }}</div>
@@ -43,20 +42,13 @@
     } @else {
       <ul class="games">
         @for (row of rows(); track row.game.id) {
-          <a
-            class="game"
-            [class.game--perfect]="row.perfect"
-            [class.game--clean]="row.clean && !row.perfect"
-            [routerLink]="['/games', row.game.id]"
-          >
-            <span class="game__idx">
-              {{ t('games.gameN', { n: row.game.index }) }}
-              @if (row.perfect) {
-                <span class="game__badge game__badge--perfect">🏆 {{ t('games.perfectGame') }}</span>
-              } @else if (row.clean) {
-                <span class="game__badge">✨ {{ t('games.cleanGame') }}</span>
-              }
-            </span>
+          <a class="game" [routerLink]="['/games', row.game.id]">
+            <span class="game__idx">{{ t('games.gameN', { n: row.game.index }) }}</span>
+            @if (row.perfect) {
+              <span class="game__tag game__tag--perfect">{{ t('games.perfectBadge') }}</span>
+            } @else if (row.clean) {
+              <span class="game__tag game__tag--clean">{{ t('games.cleanBadge') }}</span>
+            }
             <span
               class="game__score"
               [class.game__score--wip]="!row.complete"

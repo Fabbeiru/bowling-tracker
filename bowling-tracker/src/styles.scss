@@ -103,7 +103,9 @@ h1, h2, h3, h4 {
   text-wrap: balance;
 }
 
-a { color: inherit; }
+/* Ningún enlace de la app va subrayado: se estilan como botones, chips o filas
+   de lista. Cada componente que quiera subrayado lo pide explícitamente. */
+a { color: inherit; text-decoration: none; }
 
 /* Palabras muy largas (URLs, compuestos con "/") no desbordan su contenedor,
    sobre todo con texto ampliado por zoom o preferencia del sistema. */

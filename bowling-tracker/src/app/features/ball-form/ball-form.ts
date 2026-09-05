@@ -8,10 +8,11 @@ import { ToastService } from '../../core/errors/toast.service';
 import { Ball, createBall } from '../../models';
 import { BackLink } from '../../shared/components/back-link/back-link';
 import { BallAvatar } from '../../shared/components/ball-avatar/ball-avatar';
+import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-ball-form',
-  imports: [ReactiveFormsModule, TranslocoDirective, BackLink, BallAvatar],
+  imports: [ReactiveFormsModule, TranslocoDirective, BackLink, BallAvatar, ConfirmDialog],
   templateUrl: './ball-form.html',
   styleUrl: './ball-form.scss',
 })
@@ -24,6 +25,9 @@ export class BallForm {
   private existing: Ball | null = null;
   readonly editing = signal(false);
   readonly active = signal(true);
+  /** Whether any game was played with this ball — decides retire vs. hard delete. */
+  readonly hasGames = signal(false);
+  readonly confirming = signal<'retire' | 'delete' | null>(null);
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(80)]],
@@ -44,6 +48,15 @@ export class BallForm {
     let ball: Ball | undefined;
     try {
       ball = await this.repo.getBall(id);
+      const games = await this.repo.listGames();
+      this.hasGames.set(
+        games.some(
+          (g) =>
+            g.primaryBallId === id ||
+            g.spareBallId === id ||
+            g.frames?.some((f) => f.throws?.some((th) => th.ballId === id)),
+        ),
+      );
     } catch {
       this.toast.error('errors.loadBall');
       return;
@@ -86,17 +99,36 @@ export class BallForm {
     }
   }
 
-  async toggleActive(): Promise<void> {
+  /** Bring a retired ball back into the arsenal (not destructive, no dialog). */
+  async restore(): Promise<void> {
     if (!this.existing) return;
     try {
-      if (this.existing.active) {
-        await this.repo.deactivateBall(this.existing.id);
-      } else {
-        await this.repo.saveBall({ ...this.existing, active: true });
-      }
+      await this.repo.saveBall({ ...this.existing, active: true });
       await this.router.navigate(['/arsenal']);
     } catch {
       this.toast.error('errors.updateBall');
+    }
+  }
+
+  async retire(): Promise<void> {
+    if (!this.existing) return;
+    this.confirming.set(null);
+    try {
+      await this.repo.deactivateBall(this.existing.id);
+      await this.router.navigate(['/arsenal']);
+    } catch {
+      this.toast.error('errors.updateBall');
+    }
+  }
+
+  async hardDelete(): Promise<void> {
+    if (!this.existing) return;
+    this.confirming.set(null);
+    try {
+      await this.repo.deleteBall(this.existing.id);
+      await this.router.navigate(['/arsenal']);
+    } catch {
+      this.toast.error('errors.deleteBall');
     }
   }
 }

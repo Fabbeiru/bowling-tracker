@@ -7,10 +7,11 @@ import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
 import { Competition, CompetitionType, createCompetition } from '../../models';
 import { BackLink } from '../../shared/components/back-link/back-link';
+import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-competition-form',
-  imports: [ReactiveFormsModule, TranslocoDirective, BackLink],
+  imports: [ReactiveFormsModule, TranslocoDirective, BackLink, ConfirmDialog],
   templateUrl: './competition-form.html',
   styleUrl: '../ball-form/ball-form.scss',
 })
@@ -23,6 +24,8 @@ export class CompetitionForm {
   private existing: Competition | null = null;
   readonly editing = signal(false);
   readonly active = signal(true);
+  readonly hasSessions = signal(false);
+  readonly confirming = signal<'retire' | 'delete' | null>(null);
   readonly types: CompetitionType[] = ['league', 'tournament'];
 
   readonly form = this.fb.nonNullable.group({
@@ -43,6 +46,8 @@ export class CompetitionForm {
     let c: Competition | undefined;
     try {
       c = await this.repo.getCompetition(id);
+      const sessions = await this.repo.listSessions();
+      this.hasSessions.set(sessions.some((s) => s.competitionId === id));
     } catch {
       this.toast.error('errors.loadCompetition');
       return;
@@ -87,14 +92,35 @@ export class CompetitionForm {
     }
   }
 
-  async toggleActive(): Promise<void> {
+  async restore(): Promise<void> {
     if (!this.existing) return;
     try {
-      if (this.existing.active) await this.repo.deactivateCompetition(this.existing.id);
-      else await this.repo.saveCompetition({ ...this.existing, active: true });
+      await this.repo.saveCompetition({ ...this.existing, active: true });
       await this.router.navigate(['/competitions']);
     } catch {
       this.toast.error('errors.updateCompetition');
+    }
+  }
+
+  async retire(): Promise<void> {
+    if (!this.existing) return;
+    this.confirming.set(null);
+    try {
+      await this.repo.deactivateCompetition(this.existing.id);
+      await this.router.navigate(['/competitions']);
+    } catch {
+      this.toast.error('errors.updateCompetition');
+    }
+  }
+
+  async hardDelete(): Promise<void> {
+    if (!this.existing) return;
+    this.confirming.set(null);
+    try {
+      await this.repo.deleteCompetition(this.existing.id);
+      await this.router.navigate(['/competitions']);
+    } catch {
+      this.toast.error('errors.deleteCompetition');
     }
   }
 }

@@ -89,8 +89,38 @@
   </form>
 
   @if (editing()) {
-    <button type="button" class="toggle" (click)="toggleActive()">
-      {{ active() ? t('ballForm.deactivate') : t('ballForm.reactivate') }}
-    </button>
+    @if (!active()) {
+      <button type="button" class="toggle" (click)="restore()">{{ t('ballForm.reactivate') }}</button>
+    } @else if (hasGames()) {
+      <button type="button" class="toggle" (click)="confirming.set('retire')">
+        {{ t('ballForm.deactivate') }}
+      </button>
+    } @else {
+      <button type="button" class="toggle toggle--danger" (click)="confirming.set('delete')">
+        {{ t('ballForm.delete') }}
+      </button>
+    }
+  }
+
+  @if (confirming() === 'retire') {
+    <app-confirm-dialog
+      [title]="t('ballForm.retireTitle', { name: form.controls.name.value })"
+      [message]="t('ballForm.retireMessage')"
+      [confirmLabel]="t('ballForm.retireConfirm')"
+      [cancelLabel]="t('common.cancel')"
+      (confirmed)="retire()"
+      (cancelled)="confirming.set(null)"
+    />
+  }
+  @if (confirming() === 'delete') {
+    <app-confirm-dialog
+      [title]="t('ballForm.deleteTitle', { name: form.controls.name.value })"
+      [message]="t('ballForm.deleteMessage')"
+      [confirmLabel]="t('ballForm.deleteConfirm')"
+      [cancelLabel]="t('common.cancel')"
+      [danger]="true"
+      (confirmed)="hardDelete()"
+      (cancelled)="confirming.set(null)"
+    />
   }
 </section>

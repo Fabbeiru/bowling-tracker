@@ -53,8 +53,38 @@
   </form>
 
   @if (editing()) {
-    <button type="button" class="toggle" (click)="toggleActive()">
-      {{ active() ? t('venueForm.deactivate') : t('venueForm.reactivate') }}
-    </button>
+    @if (!active()) {
+      <button type="button" class="toggle" (click)="restore()">{{ t('venueForm.reactivate') }}</button>
+    } @else if (hasSessions()) {
+      <button type="button" class="toggle" (click)="confirming.set('retire')">
+        {{ t('venueForm.deactivate') }}
+      </button>
+    } @else {
+      <button type="button" class="toggle toggle--danger" (click)="confirming.set('delete')">
+        {{ t('venueForm.delete') }}
+      </button>
+    }
+  }
+
+  @if (confirming() === 'retire') {
+    <app-confirm-dialog
+      [title]="t('venueForm.retireTitle', { name: form.controls.name.value })"
+      [message]="t('venueForm.retireMessage')"
+      [confirmLabel]="t('venueForm.retireConfirm')"
+      [cancelLabel]="t('common.cancel')"
+      (confirmed)="retire()"
+      (cancelled)="confirming.set(null)"
+    />
+  }
+  @if (confirming() === 'delete') {
+    <app-confirm-dialog
+      [title]="t('venueForm.deleteTitle', { name: form.controls.name.value })"
+      [message]="t('venueForm.deleteMessage')"
+      [confirmLabel]="t('venueForm.deleteConfirm')"
+      [cancelLabel]="t('common.cancel')"
+      [danger]="true"
+      (confirmed)="hardDelete()"
+      (cancelled)="confirming.set(null)"
+    />
   }
 </section>

@@ -73,6 +73,13 @@ describe('DexieRepository', () => {
     expect(await repo.listBalls()).toEqual([]);
   });
 
+  it('hard-deletes a ball', async () => {
+    const b = ball('Hammer');
+    await repo.saveBall(b);
+    await repo.deleteBall(b.id);
+    expect(await repo.getBall(b.id)).toBeUndefined();
+  });
+
   it('deleting a session removes its games', async () => {
     const s = session();
     await repo.saveSession(s);

@@ -115,4 +115,9 @@ textarea.input {
   border-radius: var(--radius-sm);
   padding: 0.6rem;
   font-size: 0.85rem;
+
+  &--danger {
+    border-color: color-mix(in srgb, var(--danger) 45%, var(--surface));
+    color: var(--danger-text);
+  }
 }

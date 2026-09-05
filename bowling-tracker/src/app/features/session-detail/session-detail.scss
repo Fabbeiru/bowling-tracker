@@ -44,12 +44,6 @@
   }
 }
 
-.tile__sub {
-  margin-top: 0.35rem;
-  font-size: 0.7rem;
-  color: var(--ink-soft);
-}
-
 .notes {
   margin: 1rem 0 0;
   padding: 0.7rem 0.9rem;
@@ -97,31 +91,29 @@
 }
 
 .game__idx {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.3rem 0.5rem;
   font-size: 0.88rem;
   color: var(--ink-soft);
 }
 
-.game__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25em;
+.game__tag {
+  margin-inline: auto;
   font-family: var(--font-label);
   font-size: 0.6rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--secondary);
-  border: 1px solid var(--secondary);
   border-radius: 999px;
-  padding: 0.15rem 0.5rem;
+  padding: 0.15rem 0.55rem;
+
+  &--clean {
+    color: var(--ok);
+    background: color-mix(in srgb, var(--ok) 14%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--ok) 40%, var(--surface));
+  }
 
   &--perfect {
     color: var(--accent-ink);
     background: var(--accent);
-    border-color: transparent;
   }
 }
 
@@ -141,14 +133,6 @@
     font-size: 0.78rem;
     font-style: italic;
   }
-}
-
-.game--clean {
-  background: color-mix(in srgb, var(--secondary) 16%, var(--surface));
-}
-
-.game--perfect {
-  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
 }
 
 .add-game {

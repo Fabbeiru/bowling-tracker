@@ -7,10 +7,11 @@ import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
 import { createVenue, Venue } from '../../models';
 import { BackLink } from '../../shared/components/back-link/back-link';
+import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-venue-form',
-  imports: [ReactiveFormsModule, TranslocoDirective, BackLink],
+  imports: [ReactiveFormsModule, TranslocoDirective, BackLink, ConfirmDialog],
   templateUrl: './venue-form.html',
   styleUrl: '../ball-form/ball-form.scss',
 })
@@ -23,6 +24,8 @@ export class VenueForm {
   private existing: Venue | null = null;
   readonly editing = signal(false);
   readonly active = signal(true);
+  readonly hasSessions = signal(false);
+  readonly confirming = signal<'retire' | 'delete' | null>(null);
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(80)]],
@@ -40,6 +43,8 @@ export class VenueForm {
     let venue: Venue | undefined;
     try {
       venue = await this.repo.getVenue(id);
+      const sessions = await this.repo.listSessions();
+      this.hasSessions.set(sessions.some((s) => s.venueId === id));
     } catch {
       this.toast.error('errors.loadVenue');
       return;
@@ -74,14 +79,35 @@ export class VenueForm {
     }
   }
 
-  async toggleActive(): Promise<void> {
+  async restore(): Promise<void> {
     if (!this.existing) return;
     try {
-      if (this.existing.active) await this.repo.deactivateVenue(this.existing.id);
-      else await this.repo.saveVenue({ ...this.existing, active: true });
+      await this.repo.saveVenue({ ...this.existing, active: true });
       await this.router.navigate(['/venues']);
     } catch {
       this.toast.error('errors.updateVenue');
+    }
+  }
+
+  async retire(): Promise<void> {
+    if (!this.existing) return;
+    this.confirming.set(null);
+    try {
+      await this.repo.deactivateVenue(this.existing.id);
+      await this.router.navigate(['/venues']);
+    } catch {
+      this.toast.error('errors.updateVenue');
+    }
+  }
+
+  async hardDelete(): Promise<void> {
+    if (!this.existing) return;
+    this.confirming.set(null);
+    try {
+      await this.repo.deleteVenue(this.existing.id);
+      await this.router.navigate(['/venues']);
+    } catch {
+      this.toast.error('errors.deleteVenue');
     }
   }
 }

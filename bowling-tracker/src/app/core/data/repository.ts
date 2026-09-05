@@ -21,20 +21,26 @@ export abstract class Repository {
   abstract listBalls(opts?: { includeInactive?: boolean }): Promise<Ball[]>;
   abstract getBall(id: Id): Promise<Ball | undefined>;
   abstract saveBall(ball: Ball): Promise<void>;
-  /** Soft delete: sets `active = false`. */
+  /** Soft delete: sets `active = false`. Use when the ball has game history. */
   abstract deactivateBall(id: Id): Promise<void>;
+  /** Hard delete. Only call when nothing references the ball. */
+  abstract deleteBall(id: Id): Promise<void>;
 
   // --- Venues ---
   abstract listVenues(opts?: { includeInactive?: boolean }): Promise<Venue[]>;
   abstract getVenue(id: Id): Promise<Venue | undefined>;
   abstract saveVenue(venue: Venue): Promise<void>;
   abstract deactivateVenue(id: Id): Promise<void>;
+  /** Hard delete. Only call when no session references the venue. */
+  abstract deleteVenue(id: Id): Promise<void>;
 
   // --- Competitions ---
   abstract listCompetitions(opts?: { includeInactive?: boolean }): Promise<Competition[]>;
   abstract getCompetition(id: Id): Promise<Competition | undefined>;
   abstract saveCompetition(competition: Competition): Promise<void>;
   abstract deactivateCompetition(id: Id): Promise<void>;
+  /** Hard delete. Only call when no session references the competition. */
+  abstract deleteCompetition(id: Id): Promise<void>;
 
   // --- Sessions ---
   abstract listSessions(): Promise<Session[]>;

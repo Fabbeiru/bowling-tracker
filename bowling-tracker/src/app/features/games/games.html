@@ -46,19 +46,19 @@
                 @if (row.venueName) {
                   <span class="session__venue">· {{ row.venueName }}</span>
                 }
-                <span class="session__chev" aria-hidden="true">›</span>
+                @if (row.series > 0) {
+                  <span class="session__series">{{ row.series }}</span>
+                }
               </div>
               <ul class="games">
                 @for (item of row.games; track item.game.id) {
-                  <li class="game" [class.game--perfect]="item.perfect" [class.game--clean]="item.clean && !item.perfect">
-                    <span class="game__idx">
-                      {{ t('games.gameN', { n: item.game.index }) }}
-                      @if (item.perfect) {
-                        <span class="game__badge game__badge--perfect" [title]="t('games.perfectGame')">🏆 {{ t('games.perfectGame') }}</span>
-                      } @else if (item.clean) {
-                        <span class="game__badge" [title]="t('games.cleanGame')">✨ {{ t('games.cleanGame') }}</span>
-                      }
-                    </span>
+                  <li class="game">
+                    <span class="game__idx">{{ t('games.gameN', { n: item.game.index }) }}</span>
+                    @if (item.perfect) {
+                      <span class="game__tag game__tag--perfect">{{ t('games.perfectBadge') }}</span>
+                    } @else if (item.clean) {
+                      <span class="game__tag game__tag--clean">{{ t('games.cleanBadge') }}</span>
+                    }
                     <span class="game__score" [class.game__score--wip]="!item.complete" [class.game__score--empty]="!item.started">
                       @if (!item.started) {
                         {{ t('games.notStarted') }}
