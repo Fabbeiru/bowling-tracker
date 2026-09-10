@@ -1,10 +1,24 @@
 # Estado actual
 
-**Fecha**: 2026-09-03
-**Fase**: 0 — Planificación
-**Código**: nada todavía (la carpeta `bowling-tracker/` se crea al arrancar Fase 1)
+**Fecha**: 2026-09-10 · **Versión**: v0.2.0 (desplegada)
 
-## Hecho
+## Al día — leer esto primero
+
+- **Desplegada** en https://fabbeiru.github.io/bowling-tracker/ (GitHub Pages vía
+  Actions en cada push a `main`). Repo: `github.com/Fabbeiru/bowling-tracker`.
+  Instalable en iPhone (manifest, abre standalone). **Sin service worker aún.**
+- Tags `v0.1.0` (primera versión pública) y `v0.2.0` (gestión de datos).
+- **134 tests**, verde. Node v22.17.1.
+- **Funciona**: registro de partidas (total / frame / tiro), sesiones con varias
+  partidas + serie, arsenal (bolas con tipo strike/spare, boleras, competiciones)
+  con alta/edición/retirar/borrar, **bola usada por tiro**, estadísticas (media,
+  plenos, semiplenos, splits, evolución, media por bola/bolera), tema
+  claro/oscuro, **exportar/importar/borrar datos** (Ajustes → Tus datos).
+- **Siguiente**: v0.3 = PWA (ver sección "Siguiente" al final). Luego v1.0 = pulido.
+- Este fichero es un log largo; el detalle reciente está en las secciones con
+  fecha (busca "2026-09-05"). Revisiones puntuales en `docs/revisiones/`.
+
+## Hecho (histórico)
 
 - Análisis de viabilidad (ver conversación / resumen en ADR 0002).
 - Estructura del repo + documentación base.
