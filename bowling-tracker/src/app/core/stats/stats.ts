@@ -1,4 +1,4 @@
-import { Game } from '../../models';
+import { Game, Id } from '../../models';
 import { isSplit, scoreGame } from '../scoring';
 
 export interface Summary {
@@ -208,6 +208,81 @@ function computeTrend(totals: number[], window: number): Trend | null {
   const recentAvg = round(mean(recent));
   const priorAvg = round(mean(prior));
   return { window, recentAvg, priorAvg, delta: recentAvg - priorAvg };
+}
+
+export interface BallFrameStats {
+  strikeAttempts: number;
+  strikes: number;
+  /** `null` until `strikeAttempts` reaches the minimum sample. */
+  strikePct: number | null;
+  spareAttempts: number;
+  sparesConverted: number;
+  /** `null` until `spareAttempts` reaches the minimum sample. */
+  sparePct: number | null;
+}
+
+/**
+ * Strike rate and spare-conversion rate per ball, attributed by which ball
+ * was actually used on each delivery (`Frame.firstBallId`/`secondBallId` for
+ * `frame` detail, `Throw.ballId` for `throw` detail) — not just the game's
+ * primary ball, so a mid-game swap is reflected correctly.
+ *
+ * The tenth frame is excluded: its bonus balls after a strike/spare don't map
+ * cleanly onto "first ball" / "spare attempt" (same reasoning as the split
+ * stats in `computeStats`). `total`-detail games carry no frame data and are
+ * skipped too.
+ */
+export function statsByBall(games: Game[], opts: { minAttempts?: number } = {}): Map<Id, BallFrameStats> {
+  const minAttempts = opts.minAttempts ?? 10;
+  const acc = new Map<Id, { strikeAttempts: number; strikes: number; spareAttempts: number; sparesConverted: number }>();
+
+  const bump = (ballId: Id | undefined) => {
+    if (!ballId) return undefined;
+    let cur = acc.get(ballId);
+    if (!cur) {
+      cur = { strikeAttempts: 0, strikes: 0, spareAttempts: 0, sparesConverted: 0 };
+      acc.set(ballId, cur);
+    }
+    return cur;
+  };
+
+  for (const game of games) {
+    if (game.detailLevel === 'total') continue;
+    for (const f of scoreGame(game).frames) {
+      if (f.index >= 10 || f.mark === 'pending') continue;
+      const raw = game.frames?.find((fr) => fr.index === f.index);
+      if (!raw) continue;
+      const ballOn = (ball: 1 | 2): Id | undefined =>
+        game.detailLevel === 'throw'
+          ? raw.throws?.find((t) => t.index === ball)?.ballId
+          : ball === 1
+            ? raw.firstBallId
+            : raw.secondBallId;
+
+      const onFirst = bump(ballOn(1));
+      if (onFirst) {
+        onFirst.strikeAttempts++;
+        if (f.mark === 'strike') onFirst.strikes++;
+      }
+      if (f.mark !== 'strike') {
+        const onSecond = bump(ballOn(2));
+        if (onSecond) {
+          onSecond.spareAttempts++;
+          if (f.mark === 'spare') onSecond.sparesConverted++;
+        }
+      }
+    }
+  }
+
+  const result = new Map<Id, BallFrameStats>();
+  for (const [ballId, v] of acc) {
+    result.set(ballId, {
+      ...v,
+      strikePct: v.strikeAttempts >= minAttempts ? round((v.strikes / v.strikeAttempts) * 100) : null,
+      sparePct: v.spareAttempts >= minAttempts ? round((v.sparesConverted / v.spareAttempts) * 100) : null,
+    });
+  }
+  return result;
 }
 
 export interface SessionTotals {

@@ -97,17 +97,32 @@
         </div>
       }
 
-      @if (byBall().length > 0) {
+      @if (ballComparison().length > 0) {
         <div class="card">
           <div class="card__lab">{{ t('stats.byBall') }}</div>
-          <dl class="metrics">
-            @for (b of byBall(); track b.name) {
-              <div>
-                <dt>{{ b.name }} <span class="metrics__sub">· {{ b.games }}</span></dt>
-                <dd>{{ b.average }}</dd>
-              </div>
+          <ul class="ball-compare">
+            @for (b of ballComparison(); track b.id) {
+              <li class="ball-compare__row">
+                <div class="ball-compare__name">
+                  {{ b.name }} <span class="metrics__sub">· {{ b.games }}</span>
+                </div>
+                <div class="ball-compare__figs">
+                  <span class="ball-compare__fig">
+                    <b>{{ b.average }}</b>
+                    <small>{{ t('stats.average') }}</small>
+                  </span>
+                  <span class="ball-compare__fig">
+                    <b>{{ pct(b.strikePct) }}</b>
+                    <small>{{ t('stats.strikePct') }}</small>
+                  </span>
+                  <span class="ball-compare__fig">
+                    <b>{{ pct(b.sparePct) }}</b>
+                    <small>{{ t('stats.sparePct') }}</small>
+                  </span>
+                </div>
+              </li>
             }
-          </dl>
+          </ul>
         </div>
       }
 
@@ -115,7 +130,7 @@
         <div class="card">
           <div class="card__lab">{{ t('stats.byVenue') }}</div>
           <dl class="metrics">
-            @for (v of byVenue(); track v.name) {
+            @for (v of byVenue(); track v.id) {
               <div>
                 <dt>{{ v.name }} <span class="metrics__sub">· {{ v.games }}</span></dt>
                 <dd>{{ v.average }}</dd>

@@ -1,5 +1,5 @@
 import { Game } from '../../models';
-import { computeStats, sessionTotals } from './stats';
+import { computeStats, sessionTotals, statsByBall } from './stats';
 
 let seq = 0;
 function totalGame(total: number, sessionId = 's'): Game {
@@ -180,6 +180,100 @@ describe('computeStats — high series', () => {
     ] as Game[];
     // best window: games 2+3+4 = 550
     expect(computeStats(games).highSeries3).toBe(550);
+  });
+});
+
+/** A frame-detail game where only frame 1 matters; frames 2-9 are untagged
+ *  filler strikes (no ballId, so they never pollute a ball's stats). */
+function taggedFrameGame(
+  first: number,
+  second: number | undefined,
+  firstBallId?: string,
+  secondBallId?: string,
+  sessionId = 's',
+): Game {
+  seq++;
+  return {
+    id: `g${seq}`,
+    sessionId,
+    index: 1,
+    detailLevel: 'frame',
+    frames: [
+      { index: 1, first, second, firstBallId, secondBallId },
+      ...Array.from({ length: 8 }, (_, i) => ({ index: i + 2, first: 10 })),
+      { index: 10, first: 10, second: 10, third: 10 },
+    ],
+    createdAt: 'x',
+    updatedAt: 'x',
+  };
+}
+
+describe('statsByBall', () => {
+  it('computes the strike rate per ball from the first ball of each frame', () => {
+    const strikes = Array.from({ length: 6 }, () => taggedFrameGame(10, undefined, 'A'));
+    const opens = Array.from({ length: 4 }, () => taggedFrameGame(6, 3, 'A'));
+    const stats = statsByBall([...strikes, ...opens]);
+    expect(stats.get('A')).toMatchObject({ strikeAttempts: 10, strikes: 6, strikePct: 60 });
+  });
+
+  it('computes spare conversion per ball from the second ball, only on non-strike frames', () => {
+    const converted = Array.from({ length: 7 }, () => taggedFrameGame(6, 4, 'X', 'B'));
+    const missed = Array.from({ length: 3 }, () => taggedFrameGame(6, 2, 'X', 'B'));
+    const stats = statsByBall([...converted, ...missed]);
+    expect(stats.get('B')).toMatchObject({ spareAttempts: 10, sparesConverted: 7, sparePct: 70 });
+  });
+
+  it('hides the percentage below the minimum attempts (default 10)', () => {
+    const games = Array.from({ length: 5 }, () => taggedFrameGame(10, undefined, 'C'));
+    expect(statsByBall(games).get('C')).toMatchObject({ strikeAttempts: 5, strikes: 5, strikePct: null });
+  });
+
+  it('does not record a spare attempt when the first ball was a strike', () => {
+    const games = Array.from({ length: 10 }, () => taggedFrameGame(10, undefined, 'A', 'A'));
+    expect(statsByBall(games).get('A')?.spareAttempts).toBe(0);
+  });
+
+  it('ignores the tenth frame', () => {
+    const g = taggedFrameGame(4, 3);
+    g.frames![9] = { index: 10, first: 10, second: 10, third: 10, firstBallId: 'ghost' };
+    expect(statsByBall([g]).has('ghost')).toBe(false);
+  });
+
+  it('ignores total-detail games', () => {
+    expect(statsByBall([totalGame(200)]).size).toBe(0);
+  });
+
+  it('attributes by throw.ballId for throw-detail games', () => {
+    seq++;
+    const g: Game = {
+      id: `g${seq}`,
+      sessionId: 's',
+      index: 1,
+      detailLevel: 'throw',
+      frames: [
+        {
+          index: 1,
+          throws: [
+            { index: 1, pinsKnocked: 7, ballId: 'D' },
+            { index: 2, pinsKnocked: 3, ballId: 'E' },
+          ],
+        },
+        ...Array.from({ length: 8 }, (_, i) => ({ index: i + 2, throws: [{ index: 1, pinsKnocked: 10 }] })),
+        {
+          index: 10,
+          throws: [
+            { index: 1, pinsKnocked: 10 },
+            { index: 2, pinsKnocked: 10 },
+            { index: 3, pinsKnocked: 10 },
+          ],
+        },
+      ],
+      createdAt: 'x',
+      updatedAt: 'x',
+    };
+    const stats = statsByBall(Array.from({ length: 10 }, () => g));
+    expect(stats.get('D')).toMatchObject({ strikeAttempts: 10 });
+    expect(stats.get('E')).toMatchObject({ spareAttempts: 10, sparesConverted: 10 });
   });
 });
 

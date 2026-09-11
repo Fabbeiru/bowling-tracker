@@ -394,11 +394,22 @@ Ya forma parte de la v1 a publicar. Añadido:
 ## Siguiente
 
 - **Filtros de bolera/bola** en Estadísticas.
-- **Comparativa de equipamiento**: % de plenos / spares convertidos por bola
-  (el dato ya se captura vía `Throw.ballId` / `Frame.*BallId`, falta la vista;
-  probablemente ampliando la tarjeta "Media por bola").
 - Más adelante, sin prisa: PWA, pulido (CSS duplicado, README raíz, degradado
   del scoresheet, decidir `AppMeta` / `Game.startedAt`).
+
+### Comparativa de equipamiento (2026-09-11)
+
+- **`core/stats/stats.ts`: `statsByBall(games)`** — % de plenos y % de
+  semiplenos convertidos, **por bola**, atribuidos por qué bola se usó en
+  cada tiro (`Frame.firstBallId`/`secondBallId` o `Throw.ballId`), no solo
+  la bola principal de la partida. Excluye el 10º frame (igual que los
+  splits) y exige ≥10 intentos de ese tipo antes de mostrar el %. 7 tests.
+- La tarjeta **"Media por bola"** de Estadísticas ahora enseña, por bola:
+  media, % de plenos y % de semiplenos convertidos, uno junto a otro. Una
+  bola solo aparece si cumple el criterio ya existente (≥3 partidas como
+  principal); dentro de esas, los dos % nuevos se calculan aparte y pueden
+  salir "—" si esa bola en concreto no llega a los 10 intentos.
+- 142 tests.
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.

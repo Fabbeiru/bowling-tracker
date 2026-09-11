@@ -3,16 +3,22 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
-import { computeStats } from '../../core/stats/stats';
+import { computeStats, statsByBall } from '../../core/stats/stats';
 import { scoreGame } from '../../core/scoring';
-import { Ball, Competition, Game, Session, SessionType, Venue } from '../../models';
+import { Ball, Competition, Game, Id, Session, SessionType, Venue } from '../../models';
 
 type TypeFilter = SessionType | 'all';
 
 interface NamedAverage {
+  id: Id;
   name: string;
   average: number;
   games: number;
+}
+
+interface BallComparisonRow extends NamedAverage {
+  strikePct: number | null;
+  sparePct: number | null;
 }
 
 /** SVG geometry for the evolution chart (viewBox 0 0 600 100). */
@@ -85,6 +91,16 @@ export class Stats {
     );
   });
 
+  /** `byBall`, plus strike% / spare-conversion% attributed per delivery (throw/frame detail). */
+  readonly ballComparison = computed<BallComparisonRow[]>(() => {
+    const perBall = statsByBall(this.filteredGames());
+    return this.byBall().map((row) => ({
+      ...row,
+      strikePct: perBall.get(row.id)?.strikePct ?? null,
+      sparePct: perBall.get(row.id)?.sparePct ?? null,
+    }));
+  });
+
   private averageBy(names: Map<string, string>, keyOf: (g: Game) => string | undefined): NamedAverage[] {
     const acc = new Map<string, { sum: number; n: number }>();
     for (const g of this.filteredGames()) {
@@ -100,7 +116,7 @@ export class Stats {
     }
     return [...acc.entries()]
       .filter(([, v]) => v.n >= 3)
-      .map(([id, v]) => ({ name: names.get(id) ?? '—', average: Math.round(v.sum / v.n), games: v.n }))
+      .map(([id, v]) => ({ id, name: names.get(id) ?? '—', average: Math.round(v.sum / v.n), games: v.n }))
       .sort((a, b) => b.average - a.average);
   }
 
