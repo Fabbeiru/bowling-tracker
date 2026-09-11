@@ -176,10 +176,16 @@ textarea {
 }
 
 /* Campos obligatorios: asterisco junto al label + una única leyenda al
-   principio del formulario (el resto de campos se asumen opcionales). */
+   principio del formulario (el resto de campos se asumen opcionales).
+   Tamaño fijo en rem (no em): las etiquetas son diminutas (mayúsculas,
+   0.62rem) y el asterisco heredando ese tamaño se volvía casi invisible. */
 .req-mark {
   color: var(--danger-text);
-  margin-left: 0.15em;
+  margin-left: 0.2em;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: middle;
 }
 .form-legend {
   color: var(--ink-soft);

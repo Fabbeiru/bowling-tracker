@@ -230,6 +230,7 @@
     "image": "Foto de la bola",
     "imagePlaceholder": "https://…/mi-bola.jpg",
     "imageHint": "Pega la dirección de una imagen (acaba en .jpg, .png o .webp).",
+    "imageUrlError": "Tiene que ser una dirección completa que empiece por http:// o https://",
     "notes": "Notas",
     "notesPlaceholder": "Radio de giro, sensaciones, para qué la usas…",
     "deactivate": "Retirar del arsenal",
