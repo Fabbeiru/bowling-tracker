@@ -255,6 +255,7 @@ function sanitizeSession(v: unknown): Session | null {
   if (!optId(v['competitionId']) || !optId(v['venueId'])) return null;
   if (!optId(v['defaultPrimaryBallId']) || !optId(v['defaultSpareBallId'])) return null;
   if (!optStr(v['lanes'], MAX_NAME) || !optStr(v['notes'], MAX_TEXT)) return null;
+  if (v['handicap'] !== undefined && !isNum(v['handicap'], 0, 300)) return null;
   return {
     id: v['id'],
     type: v['type'],
@@ -266,6 +267,7 @@ function sanitizeSession(v: unknown): Session | null {
     defaultDetailLevel: v['defaultDetailLevel'],
     defaultPrimaryBallId: v['defaultPrimaryBallId'] as string | undefined,
     defaultSpareBallId: v['defaultSpareBallId'] as string | undefined,
+    handicap: v['handicap'] as number | undefined,
     ...t,
   };
 }

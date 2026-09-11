@@ -360,13 +360,45 @@ Ya forma parte de la v1 a publicar. Añadido:
 - **Nit conocido**: el resumen dice "1 sesiones / 1 partidas" (sin plural). Se
   arregla con el plugin de plurales de Transloco si molesta.
 
+### Pantalla de competición + hándicap (2026-09-11)
+
+- **`Session.handicap?: number`** — campo opcional, sin migración. Nadie lo
+  calcula (cada liga usa su propia fórmula): el usuario lo escribe a mano en
+  `session-form` (solo visible si el tipo es Liga/Torneo). `data-transfer.ts`
+  actualizado (export/import lo respetan, con su rango validado).
+- **`/competitions/:id` → `CompetitionDetail`** (nuevo, reemplaza el enlace
+  directo a editar): identidad + `computeStats` de las partidas de esa
+  competición (partidas/media/mejor/mejor serie, reutilizado tal cual) +
+  progreso de hándicap (lista cronológica) + lista de sesiones (fecha, bolera,
+  serie, hándicap) enlazadas a `/sessions/:id`.
+- **`/competitions/:id/edit` → `CompetitionForm`** (edición, movida desde
+  `/competitions/:id`; mismo patrón que sesión/partida). Guardar y
+  retirar/reactivar redirigen ya al detalle, no a la lista.
+- `session-detail` muestra una 3ª tarjeta "Hándicap" si la sesión lo tiene.
+- 135 tests.
+
+### Revisión de prioridades (2026-09-10/11)
+
+- **PWA pospuesta**: sin service worker, "una vez abierta funciona offline"
+  es solo parcialmente cierto (caché HTTP normal, nada garantizado — falla
+  justo cuando más importa: llegar a la bolera sin haber abierto la app en
+  un rato y sin señal). Aun así, se pospone a propósito; no bloquea nada.
+- **Fechas**: se quedan en ISO (`2026-09-05`) a propósito, no se cambia a
+  `Intl` — el usuario prefiere el formato estándar y consistente.
+- **Editar tiradas de una partida ya cerrada**: pospuesto (el deshacer ya
+  cubre el caso real, que es mientras se registra).
+- **Buscador de histórico / exportar partida como imagen**: descartados por
+  ahora (filtros + paginación bastan; una captura nativa ya sirve para
+  compartir).
+
 ## Siguiente
 
-- **v0.3 → PWA**: service worker (offline + aviso de actualización), iconos
-  maskable regenerados desde el logo, `ngsw-config.json`, CSP.
-- **v1.0 → pulido**: fechas con `Intl`, CSS duplicado (`.seg`, modal, `.tile`),
-  README raíz, degradado en el scoresheet, decidir `AppMeta` / `Game.startedAt`.
-  (El "borrar todos mis datos" se adelantó a v0.2.)
+- **Filtros de bolera/bola** en Estadísticas.
+- **Comparativa de equipamiento**: % de plenos / spares convertidos por bola
+  (el dato ya se captura vía `Throw.ballId` / `Frame.*BallId`, falta la vista;
+  probablemente ampliando la tarjeta "Media por bola").
+- Más adelante, sin prisa: PWA, pulido (CSS duplicado, README raíz, degradado
+  del scoresheet, decidir `AppMeta` / `Game.startedAt`).
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.

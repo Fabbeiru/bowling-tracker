@@ -40,6 +40,7 @@ export class SessionForm {
     competitionId: this.fb.nonNullable.control(''),
     venueId: this.fb.nonNullable.control(''),
     lanes: this.fb.nonNullable.control('', [Validators.maxLength(40)]),
+    handicap: this.fb.control<number | null>(null, [Validators.min(0), Validators.max(300)]),
     notes: this.fb.nonNullable.control('', [Validators.maxLength(500)]),
   });
 
@@ -67,6 +68,7 @@ export class SessionForm {
         competitionId: session.competitionId ?? '',
         venueId: session.venueId ?? '',
         lanes: session.lanes ?? '',
+        handicap: session.handicap ?? null,
         notes: session.notes ?? '',
       });
     } catch {
@@ -96,6 +98,8 @@ export class SessionForm {
         (type === 'league' || type === 'tournament') && v.competitionId ? v.competitionId : undefined,
       venueId: v.venueId || undefined,
       lanes: v.lanes.trim() || undefined,
+      handicap:
+        (type === 'league' || type === 'tournament') && v.handicap !== null ? v.handicap : undefined,
       notes: v.notes.trim() || undefined,
     };
     try {

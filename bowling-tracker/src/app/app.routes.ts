@@ -82,6 +82,12 @@ export const routes: Routes = [
     path: 'competitions/:id',
     title: 'Competición · Bowling Tracker',
     loadComponent: () =>
+      import('./features/competition-detail/competition-detail').then((m) => m.CompetitionDetail),
+  },
+  {
+    path: 'competitions/:id/edit',
+    title: 'Editar competición · Bowling Tracker',
+    loadComponent: () =>
       import('./features/competition-form/competition-form').then((m) => m.CompetitionForm),
   },
   {

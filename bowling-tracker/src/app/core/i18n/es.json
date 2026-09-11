@@ -73,6 +73,16 @@
     "subtitle": "Tus ligas y torneos.",
     "add": "+ Nueva"
   },
+  "competitionDetail": {
+    "title": "Competición",
+    "notFound": "Competición no encontrada",
+    "edit": "Editar datos de la competición",
+    "empty": "Esta competición no tiene partidas todavía.",
+    "sessionsTitle": "Sesiones",
+    "noSessions": "Esta competición no tiene sesiones todavía.",
+    "handicapProgress": "Progreso de hándicap",
+    "handicapShort": "Hcp {{n}}"
+  },
   "gameNew": {
     "title": "Nueva partida",
     "sessionType": "Tipo de sesión",
@@ -118,6 +128,7 @@
     "notFound": "Sesión no encontrada",
     "series": "Total de la serie",
     "average": "Media de la sesión",
+    "handicap": "Hándicap",
     "gamesTitle": "Partidas",
     "addGame": "+ Añadir partida a esta sesión",
     "edit": "Editar datos de la sesión",
@@ -134,6 +145,8 @@
     "venue": "Bolera",
     "lanes": "Pistas",
     "lanesPlaceholder": "12-13",
+    "handicap": "Hándicap",
+    "handicapHint": "El que te dé tu liga o torneo — no lo calculamos nosotros.",
     "notes": "Notas",
     "notesPlaceholder": "Patrón de aceite, sensaciones, resultado…",
     "none": "—"

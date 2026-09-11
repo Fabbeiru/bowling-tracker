@@ -18,6 +18,7 @@ function sampleData(): AppData {
         competitionId: 'c1',
         venueId: 'v1',
         defaultDetailLevel: 'throw',
+        handicap: 22,
         createdAt: 'x',
         updatedAt: 'x',
       },
@@ -118,6 +119,12 @@ describe('data-transfer — rejections', () => {
   it('rejects an out-of-range number', () => {
     expect(
       importOf((r) => ((r['data'] as { games: Record<string, unknown>[] }).games[1]['totalPins'] = 999)),
+    ).toEqual({ ok: false, error: 'errors.importBadRecord' });
+  });
+
+  it('rejects an out-of-range session handicap', () => {
+    expect(
+      importOf((r) => ((r['data'] as { sessions: Record<string, unknown>[] }).sessions[0]['handicap'] = 9999)),
     ).toEqual({ ok: false, error: 'errors.importBadRecord' });
   });
 

@@ -49,6 +49,24 @@
             }
           </select>
         </div>
+
+        <div class="field">
+          <label for="handicap">{{ t('sessionForm.handicap') }}</label>
+          <input
+            id="handicap"
+            class="input"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="300"
+            step="1"
+            formControlName="handicap"
+          />
+          <p class="field__hint">{{ t('sessionForm.handicapHint') }}</p>
+          @if (form.controls.handicap.errors && (form.controls.handicap.dirty || form.controls.handicap.touched)) {
+            <p class="field__error">{{ t('form.onlyNumbers') }}</p>
+          }
+        </div>
       }
 
       <div class="field">

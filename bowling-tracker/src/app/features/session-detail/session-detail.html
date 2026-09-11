@@ -30,6 +30,12 @@
         <div class="tile__lab">{{ t('session.average') }}</div>
         <div class="tile__val tile__val--blue">{{ totals().average ?? '—' }}</div>
       </div>
+      @if (session()!.handicap !== undefined) {
+        <div class="tile">
+          <div class="tile__lab">{{ t('session.handicap') }}</div>
+          <div class="tile__val">{{ session()!.handicap }}</div>
+        </div>
+      }
     </div>
 
     @if (session()!.notes) {

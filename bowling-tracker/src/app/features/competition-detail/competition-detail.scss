@@ -1,0 +1,166 @@
+.muted {
+  color: var(--ink-soft);
+}
+
+.edit-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: var(--secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.6rem;
+}
+
+.tile {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.75rem;
+}
+
+.tile__lab {
+  font-family: var(--font-label);
+  font-size: 0.56rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.tile__val {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.85rem;
+  line-height: 1;
+  margin-top: 0.25rem;
+  font-variant-numeric: tabular-nums;
+
+  &--blue {
+    color: var(--secondary);
+  }
+}
+
+.notes {
+  margin: 1rem 0 0;
+  padding: 0.7rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  white-space: pre-wrap;
+}
+
+.section-label {
+  margin: 1.4rem 0 0.6rem;
+  font-family: var(--font-label);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+}
+
+/* Progreso de hándicap: lista compacta fecha -> valor, orden cronológico. */
+.handicap-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.78rem;
+  }
+}
+
+.handicap-list__date {
+  color: var(--ink-soft);
+}
+
+.handicap-list__val {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.sessions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.session-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem 0.6rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--surface);
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.session-row__main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.session-row__date {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.session-row__venue {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.session-row__figures {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.session-row__series {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.session-row__handicap {
+  font-family: var(--font-label);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 16%, var(--surface));
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  white-space: nowrap;
+}

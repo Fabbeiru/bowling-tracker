@@ -18,4 +18,8 @@ export interface Session extends Timestamps {
   defaultDetailLevel: DetailLevel;
   defaultPrimaryBallId?: Id;
   defaultSpareBallId?: Id;
+  /** Handicap assigned for this session (league/tournament only). Each league
+   *  computes it its own way, so it's a plain number the user enters — we
+   *  never derive it. Lets a competition show its progression over time. */
+  handicap?: number;
 }

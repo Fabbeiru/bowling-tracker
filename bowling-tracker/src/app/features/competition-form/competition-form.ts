@@ -22,6 +22,7 @@ export class CompetitionForm {
   private readonly toast = inject(ToastService);
 
   private existing: Competition | null = null;
+  readonly existingId = signal<string | null>(null);
   readonly editing = signal(false);
   readonly active = signal(true);
   readonly hasSessions = signal(false);
@@ -54,6 +55,7 @@ export class CompetitionForm {
     }
     if (!c) return;
     this.existing = c;
+    this.existingId.set(c.id);
     this.editing.set(true);
     this.active.set(c.active);
     this.form.patchValue({
@@ -81,12 +83,13 @@ export class CompetitionForm {
       endDate: v.endDate || undefined,
       notes: v.notes.trim() || undefined,
     };
+    const isNew = !this.existing;
     const competition: Competition = this.existing
       ? { ...this.existing, ...patch }
       : createCompetition(patch);
     try {
       await this.repo.saveCompetition(competition);
-      await this.router.navigate(['/competitions']);
+      await this.router.navigate(isNew ? ['/competitions'] : ['/competitions', competition.id]);
     } catch {
       this.toast.error('errors.saveCompetition');
     }
@@ -96,7 +99,7 @@ export class CompetitionForm {
     if (!this.existing) return;
     try {
       await this.repo.saveCompetition({ ...this.existing, active: true });
-      await this.router.navigate(['/competitions']);
+      await this.router.navigate(['/competitions', this.existing.id]);
     } catch {
       this.toast.error('errors.updateCompetition');
     }
@@ -107,7 +110,7 @@ export class CompetitionForm {
     this.confirming.set(null);
     try {
       await this.repo.deactivateCompetition(this.existing.id);
-      await this.router.navigate(['/competitions']);
+      await this.router.navigate(['/competitions', this.existing.id]);
     } catch {
       this.toast.error('errors.updateCompetition');
     }

@@ -1,0 +1,92 @@
+<section class="screen" *transloco="let t">
+  <app-back-link to="/competitions" [label]="t('competitions.title')" />
+
+  @if (loading()) {
+    <p class="muted">{{ t('common.loading') }}</p>
+  } @else if (!competition()) {
+    <div class="empty-state">
+      <p class="empty-state__title">{{ t('competitionDetail.notFound') }}</p>
+    </div>
+  } @else {
+    <header class="screen__head">
+      <h1>{{ competition()!.name }}</h1>
+      <p>
+        {{ t('competitionType.' + competition()!.type) }}
+        @if (competition()!.season) { · {{ competition()!.season }} }
+      </p>
+    </header>
+
+    <a class="edit-link" [routerLink]="['/competitions', competition()!.id, 'edit']">
+      {{ t('competitionDetail.edit') }} ›
+    </a>
+
+    @if (stats().summary.games === 0) {
+      <div class="empty-state">
+        <p class="empty-state__title">{{ t('competitionDetail.empty') }}</p>
+      </div>
+    } @else {
+      <div class="tiles">
+        <div class="tile">
+          <div class="tile__lab">{{ t('stats.games') }}</div>
+          <div class="tile__val">{{ stats().summary.games }}</div>
+        </div>
+        <div class="tile">
+          <div class="tile__lab">{{ t('stats.average') }}</div>
+          <div class="tile__val">{{ stats().summary.average }}</div>
+        </div>
+        <div class="tile">
+          <div class="tile__lab">{{ t('stats.best') }}</div>
+          <div class="tile__val tile__val--blue">{{ stats().summary.best }}</div>
+        </div>
+        @if (stats().highSeries3; as hs) {
+          <div class="tile">
+            <div class="tile__lab">{{ t('stats.highSeries') }}</div>
+            <div class="tile__val">{{ hs }}</div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (competition()!.notes) {
+      <p class="notes">{{ competition()!.notes }}</p>
+    }
+
+    @if (handicapRows().length > 0) {
+      <h2 class="section-label">{{ t('competitionDetail.handicapProgress') }}</h2>
+      <ul class="handicap-list">
+        @for (row of handicapRows(); track row.session.id) {
+          <li>
+            <span class="handicap-list__date">{{ row.session.date }}</span>
+            <span class="handicap-list__val">{{ row.session.handicap }}</span>
+          </li>
+        }
+      </ul>
+    }
+
+    <h2 class="section-label">{{ t('competitionDetail.sessionsTitle') }}</h2>
+    @if (rows().length === 0) {
+      <p class="muted">{{ t('competitionDetail.noSessions') }}</p>
+    } @else {
+      <ul class="sessions">
+        @for (row of rows(); track row.session.id) {
+          <a class="session-row" [routerLink]="['/sessions', row.session.id]">
+            <span class="session-row__main">
+              <span class="session-row__date">{{ row.session.date }}</span>
+              @if (row.venueName) {
+                <span class="session-row__venue">{{ row.venueName }}</span>
+              }
+            </span>
+            <span class="session-row__figures">
+              <span class="session-row__series">{{ row.series }}</span>
+              @if (row.session.handicap !== undefined) {
+                <span class="session-row__handicap">
+                  {{ t('competitionDetail.handicapShort', { n: row.session.handicap }) }}
+                </span>
+              }
+            </span>
+          </a>
+        }
+      </ul>
+    }
+  }
+</section>
