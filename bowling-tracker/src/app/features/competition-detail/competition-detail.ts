@@ -40,8 +40,12 @@ export class CompetitionDetail {
       list.push(g);
       gamesBySession.set(g.sessionId, list);
     }
+    // `sessions` keeps the repo's order (newest first, ties broken by
+    // createdAt desc); reversing it — rather than re-sorting by date here —
+    // avoids new date/createdAt ties (same-minute timestamps happen) landing
+    // in a different order than the rest of the app uses.
     return [...this.sessions()]
-      .sort((a, b) => a.date.localeCompare(b.date) || a.createdAt.localeCompare(b.createdAt))
+      .reverse()
       .map((session) => {
         const totals = sessionTotals(gamesBySession.get(session.id) ?? []);
         return {
