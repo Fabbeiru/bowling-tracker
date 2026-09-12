@@ -2,10 +2,10 @@
   color: var(--ink-soft);
 }
 
-.filters {
+.filters-row {
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 1.1rem;
 }
 
@@ -14,6 +14,23 @@
   gap: 5px;
   overflow-x: auto;
   scrollbar-width: none;
+  flex: 1;
+  min-width: 0;
+  // Máscara de desvanecido en el borde derecho: aviso visual de que hay más
+  // chips fuera de vista y se puede hacer scroll horizontal. Solo en el
+  // extremo final, no en el inicio, porque el primer chip nunca queda
+  // oculto a la izquierda. `HorizontalWheelScroll` añade `.at-scroll-end`
+  // en cuanto no queda nada más a la derecha (ya sea porque se llegó
+  // desplazando, ya sea porque todo cabía desde el principio) — sin esto el
+  // desvanecido se quedaba siempre ahí, sobre el último chip, aunque fuera
+  // el último de verdad y no hubiera nada más que ver.
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 24px), transparent 100%);
+  mask-image: linear-gradient(to right, black calc(100% - 24px), transparent 100%);
+
+  &.at-scroll-end {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }
 
 .chips::-webkit-scrollbar {
@@ -39,49 +56,21 @@
   }
 }
 
-.comp-select {
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  min-height: 40px;
-  padding: 0.5rem 0.7rem;
-  font: inherit;
-  color: var(--ink);
-}
+// El botón "Filtros" (con su badge) y la hoja inferior (backdrop, panel,
+// header/footer, selects) viven en los componentes compartidos
+// `app-filter-trigger` / `app-filter-sheet` / `app-filter-select` — se
+// reutilizan tal cual en Partidas, así que su CSS no se duplica aquí.
 
 .tiles {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  // 125px, no 90px: "Mejor serie (N)" (la etiqueta más larga de las 4) no
+  // cabía en una línea en columnas de ~100px — ni tan estrecho como para
+  // que la rejilla bajara a menos columnas, ni tan ancho como para que
+  // cupiera, la peor combinación posible. 125px salta ese punto muerto.
+  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
   gap: 0.6rem;
 }
-
-.tile {
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  padding: 0.7rem 0.6rem;
-}
-
-.tile__lab {
-  font-family: var(--font-label);
-  font-size: 0.56rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-soft);
-}
-
-.tile__val {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.5rem;
-  line-height: 1;
-  margin-top: 0.25rem;
-  font-variant-numeric: tabular-nums;
-
-  &--blue {
-    color: var(--secondary);
-  }
-}
+// La tile en sí (`app-tile`, shared/components/tile) ya no se define aquí.
 
 .card {
   margin-top: 1rem;
@@ -165,8 +154,11 @@
   flex: 1;
   min-width: 0;
   /* Alto fijo por breakpoint + preserveAspectRatio="meet": el viewBox 600×100
-     se escala por igual en ambos ejes (nada se estira) y se centra en la caja. */
-  height: clamp(72px, 15vw, 116px);
+     se escala por igual en ambos ejes (nada se estira) y se centra en la caja.
+     Subido de 72-116px a 100-140px: en móvil se veía pequeño de más — los
+     puntos y la línea son vectoriales, así que suben de tamaño en proporción
+     sin perder nitidez. */
+  height: clamp(100px, 22vw, 140px);
   align-self: center;
   overflow: visible;
 }
@@ -186,7 +178,10 @@
 .chart__line {
   fill: none;
   stroke: var(--secondary);
-  stroke-width: 1.2;
+  // `non-scaling-stroke` deja este valor en píxeles de pantalla reales, sin
+  // verse afectado por el factor de escala del `viewBox` — 1.2 quedaba fino
+  // de más a la vez que los puntos.
+  stroke-width: 1.8;
   stroke-linejoin: round;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
@@ -199,7 +194,7 @@
 .chart__dot--last {
   fill: var(--accent);
   stroke: var(--surface);
-  stroke-width: 1.5;
+  stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
 
@@ -208,7 +203,7 @@
   flex-direction: column;
   justify-content: space-between;
   font-family: var(--font-label);
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -237,6 +232,34 @@
   &:last-child {
     border-bottom: 0;
   }
+
+  // `WrapAwareRow` (appWrapAwareRow) pone `.wrapped` cuando el nombre y las
+  // cifras REALMENTE han caído en dos líneas — no hay ancho de tarjeta fijo
+  // que sirva de umbral: cuánto quepa depende de lo largo que sea el nombre
+  // de CADA bola, así que dos filas con el mismo ancho de tarjeta pueden
+  // necesitar (o no) envolver según el nombre. Midiendo por fila en vez de
+  // adivinar un breakpoint, acierta siempre: una línea con hueco en medio
+  // cuando cabe, dos filas centradas cuando no.
+  &.wrapped {
+    justify-content: center;
+    text-align: center;
+    // Solo `row-gap` (espacio entre las dos líneas apiladas) — el shorthand
+    // `gap` habría tocado también `column-gap`, y `WrapAwareRow` LEE ese
+    // mismo `column-gap` para decidir si hace falta apilar. Cambiarlo aquí
+    // habría hecho que su propia medición dependiera de si ya estaba
+    // apilado o no: justo en el ancho límite, apilar cambiaba el gap, lo
+    // que cambiaba el resultado de la siguiente medición, lo que volvía a
+    // desapilar, y vuelta a empezar — el "temblor" al cambiar de tamaño.
+    row-gap: 0.5rem;
+  }
+}
+
+// Sin `width: 100%` a propósito: el `justify-content: center` del padre ya
+// centra esta caja (del tamaño de su contenido) en su línea; estirarla
+// contaminaría la medición de `WrapAwareRow` (que compara anchos) y se
+// quedaría atascada en apilado para siempre tras el primer resize.
+.ball-compare__row.wrapped .ball-compare__figs {
+  justify-content: center;
 }
 
 .ball-compare__name {
@@ -264,7 +287,11 @@
 
   small {
     font-family: var(--font-label);
-    font-size: 0.55rem;
+    // 0.55rem (8.8px) se leía mal, sobre todo la fracción tras el "·"
+    // (24/36) — de los textos más pequeños de toda la pantalla. 0.68rem
+    // (~11px) sigue leyéndose claramente como una etiqueta secundaria bajo
+    // el número grande, sin competir con él.
+    font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--ink-soft);

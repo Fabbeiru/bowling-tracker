@@ -6,8 +6,8 @@
   @if (loading()) {
     <p class="muted">{{ t('common.loading') }}</p>
   } @else {
-    <div class="filters">
-      <div class="chips">
+    <div class="filters-row">
+      <div class="chips" appHorizontalWheelScroll>
         @for (opt of typeOptions; track opt) {
           <button
             type="button"
@@ -19,20 +19,49 @@
           </button>
         }
       </div>
-      @if (competitions().length > 0 && (typeFilter() === 'league' || typeFilter() === 'tournament')) {
-        <select
-          class="comp-select"
-          [attr.aria-label]="t('stats.allCompetitions')"
-          [value]="competitionFilter()"
-          (change)="competitionFilter.set($any($event.target).value)"
-        >
-          <option value="all">{{ t('stats.allCompetitions') }}</option>
-          @for (c of competitions(); track c.id) {
-            <option [value]="c.id">{{ c.name }}</option>
-          }
-        </select>
-      }
+      <app-filter-trigger
+        [label]="t('stats.filters')"
+        [count]="activeFilterCount()"
+        (opened)="openSheet()"
+      />
     </div>
+
+    <app-filter-sheet
+      [open]="sheetOpen()"
+      [heading]="t('stats.filters')"
+      [clearLabel]="t('stats.clearFilters')"
+      [closeLabel]="t('common.close')"
+      (closeSheet)="closeSheet()"
+      (clearFilters)="clearSheetFilters()"
+    >
+      @if (competitions().length > 0 && typeFilter() !== 'practice' && typeFilter() !== 'social') {
+        <app-filter-select
+          [label]="t('stats.competition')"
+          [allLabel]="t('stats.allCompetitions')"
+          [value]="competitionFilter()"
+          [options]="competitionOptions()"
+          (valueChange)="competitionFilter.set($event)"
+        />
+      }
+      @if (venues().length > 0) {
+        <app-filter-select
+          [label]="t('stats.venue')"
+          [allLabel]="t('stats.allVenues')"
+          [value]="venueFilter()"
+          [options]="venueOptions()"
+          (valueChange)="venueFilter.set($event)"
+        />
+      }
+      @if (balls().length > 0) {
+        <app-filter-select
+          [label]="t('stats.ball')"
+          [allLabel]="t('stats.allBalls')"
+          [value]="ballFilter()"
+          [options]="ballOptions()"
+          (valueChange)="ballFilter.set($event)"
+        />
+      }
+    </app-filter-sheet>
 
     @if (stats().summary.games === 0) {
       <div class="empty-state">
@@ -41,23 +70,11 @@
       </div>
     } @else {
       <div class="tiles">
-        <div class="tile">
-          <div class="tile__lab">{{ t('stats.games') }}</div>
-          <div class="tile__val">{{ stats().summary.games }}</div>
-        </div>
-        <div class="tile">
-          <div class="tile__lab">{{ t('stats.average') }}</div>
-          <div class="tile__val">{{ stats().summary.average }}</div>
-        </div>
-        <div class="tile">
-          <div class="tile__lab">{{ t('stats.best') }}</div>
-          <div class="tile__val tile__val--blue">{{ stats().summary.best }}</div>
-        </div>
+        <app-tile [label]="t('stats.games')" [value]="stats().summary.games" />
+        <app-tile [label]="t('stats.average')" [value]="stats().summary.average" />
+        <app-tile [label]="t('stats.best')" [value]="stats().summary.best" accent="blue" />
         @if (stats().highSeries3; as hs) {
-          <div class="tile">
-            <div class="tile__lab">{{ t('stats.highSeries') }}</div>
-            <div class="tile__val">{{ hs }}</div>
-          </div>
+          <app-tile [label]="t('stats.highSeries')" [value]="hs" />
         }
       </div>
 
@@ -79,12 +96,12 @@
         <div class="card">
           <div class="card__lab">{{ t('stats.evolution') }}</div>
           <div class="chart">
-            <svg viewBox="0 0 600 100" preserveAspectRatio="xMidYMid meet" class="chart__svg" aria-hidden="true">
+            <svg #chartSvg [attr.viewBox]="'0 0 600 ' + c.h" preserveAspectRatio="xMidYMid meet" class="chart__svg" aria-hidden="true">
               <line x1="0" [attr.y1]="c.avgY" x2="600" [attr.y2]="c.avgY" class="chart__avg" />
               <path [attr.d]="c.area" class="chart__area" />
               <polyline [attr.points]="c.line" class="chart__line" />
               @for (d of c.dots; track $index) {
-                <circle [attr.cx]="d.x" [attr.cy]="d.y" [attr.r]="d.last ? 5 : 3"
+                <circle [attr.cx]="d.x" [attr.cy]="d.y" [attr.r]="d.r"
                         [class.chart__dot--last]="d.last" class="chart__dot" />
               }
             </svg>
@@ -102,9 +119,9 @@
           <div class="card__lab">{{ t('stats.byBall') }}</div>
           <ul class="ball-compare">
             @for (b of ballComparison(); track b.id) {
-              <li class="ball-compare__row">
+              <li class="ball-compare__row" appWrapAwareRow>
                 <div class="ball-compare__name">
-                  {{ b.name }} <span class="metrics__sub">· {{ b.games }}</span>
+                  {{ b.name }} <span class="metrics__sub">· {{ t('stats.gamesCount', { n: b.games }) }}</span>
                 </div>
                 <div class="ball-compare__figs">
                   <span class="ball-compare__fig">
@@ -113,11 +130,11 @@
                   </span>
                   <span class="ball-compare__fig">
                     <b>{{ pct(b.strikePct) }}</b>
-                    <small>{{ t('stats.strikePct') }}</small>
+                    <small>{{ t('stats.strikePct') }} · {{ b.strikes }}/{{ b.strikeAttempts }}</small>
                   </span>
                   <span class="ball-compare__fig">
                     <b>{{ pct(b.sparePct) }}</b>
-                    <small>{{ t('stats.sparePct') }}</small>
+                    <small>{{ t('stats.sparePct') }} · {{ b.sparesConverted }}/{{ b.spareAttempts }}</small>
                   </span>
                 </div>
               </li>
@@ -132,7 +149,7 @@
           <dl class="metrics">
             @for (v of byVenue(); track v.id) {
               <div>
-                <dt>{{ v.name }} <span class="metrics__sub">· {{ v.games }}</span></dt>
+                <dt>{{ v.name }} <span class="metrics__sub">· {{ t('stats.gamesCount', { n: v.games }) }}</span></dt>
                 <dd>{{ v.average }}</dd>
               </div>
             }
