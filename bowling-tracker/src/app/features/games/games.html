@@ -18,18 +18,62 @@
       <a class="cta" routerLink="/games/new">{{ t('games.new') }}</a>
     </div>
   } @else {
-    <div class="chips">
-      @for (opt of typeOptions; track opt) {
-        <button
-          type="button"
-          class="chip"
-          [class.chip--on]="typeFilter() === opt"
-          (click)="selectType(opt)"
-        >
-          {{ opt === 'all' ? t('stats.allTypes') : t('sessionType.' + opt) }}
-        </button>
-      }
+    <div class="filters-row">
+      <div class="chips" appHorizontalWheelScroll>
+        @for (opt of typeOptions; track opt) {
+          <button
+            type="button"
+            class="chip"
+            [class.chip--on]="typeFilter() === opt"
+            (click)="selectType(opt)"
+          >
+            {{ opt === 'all' ? t('stats.allTypes') : t('sessionType.' + opt) }}
+          </button>
+        }
+      </div>
+      <app-filter-trigger
+        [label]="t('stats.filters')"
+        [count]="activeFilterCount()"
+        (opened)="openSheet()"
+      />
     </div>
+
+    <app-filter-sheet
+      [open]="sheetOpen()"
+      [heading]="t('stats.filters')"
+      [clearLabel]="t('stats.clearFilters')"
+      [closeLabel]="t('common.close')"
+      (closeSheet)="closeSheet()"
+      (clearFilters)="clearSheetFilters()"
+    >
+      @if (competitions().length > 0) {
+        <app-filter-select
+          [label]="t('stats.competition')"
+          [allLabel]="t('stats.allCompetitions')"
+          [value]="competitionFilter()"
+          [options]="competitionOptions()"
+          (valueChange)="setCompetitionFilter($event)"
+        />
+      }
+      @if (venues().length > 0) {
+        <app-filter-select
+          [label]="t('stats.venue')"
+          [allLabel]="t('stats.allVenues')"
+          [value]="venueFilter()"
+          [options]="venueOptions()"
+          (valueChange)="setVenueFilter($event)"
+        />
+      }
+      @if (balls().length > 0) {
+        <app-filter-select
+          [label]="t('stats.ball')"
+          [allLabel]="t('stats.allBalls')"
+          [value]="ballFilter()"
+          [options]="ballOptions()"
+          (valueChange)="setBallFilter($event)"
+        />
+      }
+    </app-filter-sheet>
 
     @if (filteredRows().length === 0) {
       <p class="muted">{{ t('games.emptyHint') }}</p>

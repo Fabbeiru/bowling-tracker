@@ -4,7 +4,8 @@
     "backToGames": "Volver a Partidas",
     "backToSession": "Volver a la sesión",
     "cancel": "Cancelar",
-    "save": "Guardar"
+    "save": "Guardar",
+    "close": "Cerrar"
   },
   "nav": {
     "home": "Inicio",
@@ -49,7 +50,8 @@
     "starterTitle": "Antes de tu primera partida",
     "starterBall": "Añade tu bola al arsenal",
     "starterVenue": "Añade tu bolera habitual",
-    "starterSettings": "Revisa dónde se guardan tus datos"
+    "starterSettings": "Revisa dónde se guardan tus datos",
+    "starterDone": "completado"
   },
   "games": {
     "title": "Partidas",
@@ -161,11 +163,19 @@
     "best": "Mejor",
     "allTypes": "Todas",
     "allCompetitions": "Todas las competiciones",
+    "allVenues": "Todas las boleras",
+    "allBalls": "Todas las bolas",
+    "filters": "Filtros",
+    "competition": "Competición",
+    "venue": "Bolera",
+    "ball": "Bola",
+    "clearFilters": "Limpiar",
     "evolution": "Evolución",
     "trendRecent": "Últimas {{n}} partidas",
     "trendVsPrior": "vs. las {{n}} anteriores",
     "byBall": "Media por bola",
     "byVenue": "Media por bolera",
+    "gamesCount": "{{n}} partidas",
     "byFrame": "Por frame",
     "highSeries": "Mejor serie (3)",
     "strikePct": "Plenos",

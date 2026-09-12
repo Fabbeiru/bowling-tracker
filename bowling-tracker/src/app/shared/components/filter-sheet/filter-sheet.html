@@ -1,0 +1,22 @@
+@if (open()) {
+  <div class="backdrop" (click)="closeSheet.emit()"></div>
+  <div class="sheet" role="dialog" aria-modal="true" [attr.aria-label]="heading()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <h2>{{ heading() }}</h2>
+      <button type="button" class="sheet-close" [attr.aria-label]="closeLabel()" (click)="closeSheet.emit()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="sheet-body">
+      <ng-content></ng-content>
+    </div>
+    <div class="sheet-footer">
+      <button type="button" class="btn" (click)="clearFilters.emit()">{{ clearLabel() }}</button>
+      <button type="button" class="btn btn--primary" (click)="closeSheet.emit()">{{ closeLabel() }}</button>
+    </div>
+  </div>
+}

@@ -6,7 +6,11 @@ import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
 import { GamesNavState, GamesTypeFilter } from '../../core/nav/games-nav.state';
 import { gameToRolls, isCleanGame, scoreGame } from '../../core/scoring';
-import { Game, Session } from '../../models';
+import { Ball, Competition, Game, Session, Venue } from '../../models';
+import { FilterSelect } from '../../shared/components/filter-select/filter-select';
+import { FilterSheet } from '../../shared/components/filter-sheet/filter-sheet';
+import { FilterTrigger } from '../../shared/components/filter-trigger/filter-trigger';
+import { HorizontalWheelScroll } from '../../shared/directives/horizontal-wheel-scroll.directive';
 
 type TypeFilter = GamesTypeFilter;
 
@@ -25,7 +29,7 @@ function isStarted(game: Game): boolean {
 
 @Component({
   selector: 'app-games',
-  imports: [RouterLink, TranslocoDirective],
+  imports: [RouterLink, TranslocoDirective, HorizontalWheelScroll, FilterTrigger, FilterSheet, FilterSelect],
   templateUrl: './games.html',
   styleUrl: './games.scss',
 })
@@ -40,16 +44,47 @@ export class Games {
   readonly rows = signal<SessionRow[]>([]);
   readonly loading = signal(true);
   readonly typeOptions: TypeFilter[] = ['all', 'practice', 'league', 'tournament', 'social'];
+  readonly competitions = signal<Competition[]>([]);
+  readonly venues = signal<Venue[]>([]);
+  readonly balls = signal<Ball[]>([]);
 
-  // Página y filtro viven en GamesNavState (no en el componente), así que al
+  // Página y filtros viven en GamesNavState (no en el componente), así que al
   // entrar a una sesión y volver siguen donde estaban.
   readonly typeFilter = this.nav.typeFilter;
+  readonly competitionFilter = this.nav.competitionFilter;
+  readonly venueFilter = this.nav.venueFilter;
+  readonly ballFilter = this.nav.ballFilter;
   readonly page = this.nav.page;
 
+  readonly sheetOpen = signal(false);
+
+  readonly activeFilterCount = computed(
+    () =>
+      (this.competitionFilter() !== 'all' ? 1 : 0) +
+      (this.venueFilter() !== 'all' ? 1 : 0) +
+      (this.ballFilter() !== 'all' ? 1 : 0),
+  );
+
+  readonly competitionOptions = computed(() => this.competitions().map((c) => ({ id: c.id, name: c.name })));
+  readonly venueOptions = computed(() => this.venues().map((v) => ({ id: v.id, name: v.name })));
+  readonly ballOptions = computed(() => this.balls().map((b) => ({ id: b.id, name: b.name })));
+
+  /**
+   * Type/competition/venue narrow which *sessions* show; ball narrows the
+   * *games* within a session (a session can mix balls across its games), so
+   * a session with no matching game after that drops out entirely.
+   */
   readonly filteredRows = computed(() => {
     const type = this.typeFilter();
-    const rows = this.rows();
-    return type === 'all' ? rows : rows.filter((r) => r.session.type === type);
+    const comp = this.competitionFilter();
+    const venue = this.venueFilter();
+    const ball = this.ballFilter();
+    return this.rows()
+      .filter((r) => type === 'all' || r.session.type === type)
+      .filter((r) => comp === 'all' || r.session.competitionId === comp)
+      .filter((r) => venue === 'all' || r.session.venueId === venue)
+      .map((r) => (ball === 'all' ? r : { ...r, games: r.games.filter((g) => g.game.primaryBallId === ball) }))
+      .filter((r) => r.games.length > 0);
   });
 
   /**
@@ -90,6 +125,36 @@ export class Games {
     this.page.set(1);
   }
 
+  openSheet(): void {
+    this.sheetOpen.set(true);
+  }
+
+  closeSheet(): void {
+    this.sheetOpen.set(false);
+  }
+
+  clearSheetFilters(): void {
+    this.competitionFilter.set('all');
+    this.venueFilter.set('all');
+    this.ballFilter.set('all');
+    this.page.set(1);
+  }
+
+  setCompetitionFilter(id: string): void {
+    this.competitionFilter.set(id);
+    this.page.set(1);
+  }
+
+  setVenueFilter(id: string): void {
+    this.venueFilter.set(id);
+    this.page.set(1);
+  }
+
+  setBallFilter(id: string): void {
+    this.ballFilter.set(id);
+    this.page.set(1);
+  }
+
   prevPage(): void {
     this.page.update((p) => Math.max(1, p - 1));
   }
@@ -100,11 +165,15 @@ export class Games {
 
   private async load(): Promise<void> {
     try {
-      const [sessions, competitions, venues] = await Promise.all([
+      const [sessions, competitions, venues, balls] = await Promise.all([
         this.repo.listSessions(),
         this.repo.listCompetitions({ includeInactive: true }),
         this.repo.listVenues({ includeInactive: true }),
+        this.repo.listBalls({ includeInactive: true }),
       ]);
+      this.competitions.set(competitions);
+      this.venues.set(venues);
+      this.balls.set(balls);
       const compName = new Map(competitions.map((c) => [c.id, c.name]));
       const venueName = new Map(venues.map((v) => [v.id, v.name]));
 

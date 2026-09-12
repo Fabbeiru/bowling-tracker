@@ -13,9 +13,16 @@ export type GamesTypeFilter = SessionType | 'all';
 export class GamesNavState {
   readonly page = signal(1);
   readonly typeFilter = signal<GamesTypeFilter>('all');
+  /** Filters by `Session.competitionId` / `Session.venueId` / `Game.primaryBallId`. */
+  readonly competitionFilter = signal<string>('all');
+  readonly venueFilter = signal<string>('all');
+  readonly ballFilter = signal<string>('all');
 
   reset(): void {
     this.page.set(1);
     this.typeFilter.set('all');
+    this.competitionFilter.set('all');
+    this.venueFilter.set('all');
+    this.ballFilter.set('all');
   }
 }

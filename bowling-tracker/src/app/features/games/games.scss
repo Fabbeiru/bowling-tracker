@@ -38,12 +38,28 @@
   font-size: 0.85rem;
 }
 
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
 .chips {
   display: flex;
   gap: 5px;
   overflow-x: auto;
   scrollbar-width: none;
-  margin-bottom: 1rem;
+  flex: 1;
+  min-width: 0;
+  // Aviso visual de que hay más chips fuera de vista (ver Estadísticas).
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 24px), transparent 100%);
+  mask-image: linear-gradient(to right, black calc(100% - 24px), transparent 100%);
+
+  &.at-scroll-end {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }
 
 .chips::-webkit-scrollbar {
@@ -136,7 +152,7 @@
 
 .session__venue {
   font-family: var(--font-label);
-  font-size: 0.62rem;
+  font-size: 0.78rem;
   color: var(--ink-soft);
 }
 
