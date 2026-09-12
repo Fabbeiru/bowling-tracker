@@ -1,4 +1,10 @@
 <nav class="bottom-nav" aria-label="Navegación principal" *transloco="let t">
+  <span
+    class="bottom-nav__indicator"
+    aria-hidden="true"
+    [style.width.%]="100 / items.length"
+    [style.transform]="'translateX(' + activeIndex() * 100 + '%)'"
+  ></span>
   @for (item of items; track item.path) {
     <a
       class="bottom-nav__item"

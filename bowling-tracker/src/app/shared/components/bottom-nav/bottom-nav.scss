@@ -1,4 +1,8 @@
 .bottom-nav {
+  // De borde a borde SIEMPRE, sin acotar al ancho de `.screen`: probado
+  // centrada y acotada como el resto del contenido, pero una barra de
+  // herramientas que se corta a medio ancho en una pantalla grande, con
+  // hueco vacío a los lados, se ve peor que aprovechar todo el ancho.
   position: fixed;
   left: 0;
   right: 0;
@@ -22,6 +26,13 @@
 }
 
 .bottom-nav__item {
+  // `position: relative` (sin desplazamiento) no cambia el layout, pero
+  // mete a los ítems en el mismo nivel de pintado que el indicador
+  // (`position: absolute`): sin esto, un elemento posicionado siempre pinta
+  // DESPUÉS que los hijos sin posicionar del mismo contenedor, sea cual sea
+  // su orden en el HTML — el indicador tapaba el icono y el texto del
+  // ítem activo entero.
+  position: relative;
   flex: 1;
   min-width: 0;
   display: flex;
@@ -35,7 +46,11 @@
 }
 
 .bottom-nav__item.is-active {
-  color: var(--accent);
+  // `--accent-text`, no `--accent`: el icono/etiqueta activos son texto
+  // pequeño sobre fondo claro, y el ámbar normal da ~2:1 de contraste ahí
+  // (pensado para botones grandes con `--accent-ink` encima, no para leerse
+  // solo). En oscuro es el mismo ámbar de siempre.
+  color: var(--accent-text);
 }
 
 .bottom-nav__pill {
@@ -46,11 +61,38 @@
   width: 100%;
   padding: 5px 2px 4px;
   border-radius: 12px;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, transform 0.1s ease;
 }
 
-.bottom-nav__item.is-active .bottom-nav__pill {
+/* El fondo del ítem activo ya no es estático — lo da `.bottom-nav__indicator`
+   deslizándose por debajo, así que la píldora en sí se queda transparente. */
+
+/* Píldora que se desliza de un ítem a otro al cambiar de pestaña, en vez de
+   que el resaltado aparezca/desaparezca sin más. `.bottom-nav` ya es su
+   propio contexto de posicionamiento (`position: fixed`), así que no hace
+   falta nada extra para que este `absolute` se sitúe respecto a ella.
+   `translateX` se calcula en la plantilla a partir del índice activo — un
+   *slot* por ítem, igual que `justify-content: space-around` los reparte. */
+.bottom-nav__indicator {
+  position: absolute;
+  // Nada de margin lateral aquí: `translateX(N · 100%)` desplaza N veces el
+  // ancho DEL PROPIO elemento — un margen habría hecho que ese porcentaje
+  // ya no coincidiera con la separación real entre slots y se desalineara
+  // un poco más en cada paso.
+  top: 4px;
+  bottom: calc(4px + var(--safe-bottom));
+  left: 0;
+  border-radius: 12px;
   background: var(--surface-2);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+/* Respuesta táctil al pulsar: encoge un poco la píldora mientras el dedo/
+   clic está activo, vuelve a su tamaño al soltar. `prefers-reduced-motion`
+   ya lo neutraliza de forma global (regla en styles.scss). */
+.bottom-nav__item:active .bottom-nav__pill {
+  transform: scale(0.88);
 }
 
 .bottom-nav__icon {

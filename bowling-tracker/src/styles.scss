@@ -23,6 +23,13 @@
   /* Acento propio de Bowling Tracker — igual en los dos temas */
   --accent: #f2a93b;
   --accent-ink: #1b1406;
+  /* Variante del acento para texto/iconos pequeños sobre fondo claro: el
+     ámbar de `--accent` da ~2:1 de contraste sobre blanco (falla incluso el
+     3:1 de WCAG para texto grande) — pensado para rellenos grandes
+     (botones, con `--accent-ink` encima), no para leerse él mismo. En
+     oscuro el ámbar normal ya contrasta de sobra (~8:1), así que ahí es el
+     mismo valor que `--accent`. */
+  --accent-text: #a15c0f;
 
   /* Tipografía */
   --font-display: "Bricolage Grotesque", "Hanken Grotesk", system-ui, sans-serif;
@@ -50,6 +57,7 @@
     --warn: #e0a33f;
     --danger: #f87171;
     --danger-text: #f4938a;
+    --accent-text: #f2a93b;
   }
 }
 :root[data-theme="dark"] {
@@ -65,6 +73,7 @@
   --warn: #e0a33f;
   --danger: #f87171;
   --danger-text: #f4938a;
+  --accent-text: #f2a93b;
 }
 
 * { box-sizing: border-box; }
@@ -141,7 +150,12 @@ textarea {
 /* Layout de pantalla reutilizable */
 .screen {
   padding: clamp(1rem, 5vw, 1.5rem);
-  max-width: 720px;
+  // Confirmado 2026-09-11 tras comparar 720/860/1000px con datos reales: a
+  // 900px el contenido sigue leyéndose bien en escritorio (charts, tiles y
+  // comparativas escalan sin problema); más allá de eso las listas simples
+  // etiqueta-valor ("Por frame", "Media por bolera") empiezan a verse con
+  // demasiado hueco vacío entre las dos columnas.
+  max-width: 900px;
   margin: 0 auto;
 }
 .screen__head {
