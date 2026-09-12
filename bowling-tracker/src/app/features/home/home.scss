@@ -44,7 +44,7 @@
 .starter__item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 0.6rem;
   min-height: 44px;
   padding: 0.6rem 0.9rem;
   background: var(--surface);
@@ -57,9 +57,39 @@
   & + & {
     margin-top: 0.5rem;
   }
+
+  // Completado: no se oculta ni se quita de la lista (puede que el usuario
+  // quiera añadir más de una bola, por ejemplo), pero se atenúa para que
+  // destaque menos que los pasos que faltan.
+  &--done {
+    color: var(--ink-soft);
+  }
+
+  &--done .starter__label {
+    text-decoration: line-through;
+    text-decoration-color: var(--line);
+  }
+}
+
+.starter__check {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--ok);
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.starter__label {
+  flex: 1;
+  min-width: 0;
 }
 
 .starter__arrow {
+  flex: none;
   color: var(--ink-soft);
 }
 
@@ -87,39 +117,4 @@
   gap: 0.6rem;
   margin-top: 1.2rem;
 }
-
-.tile {
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  padding: 0.8rem 0.75rem;
-  text-decoration: none;
-  color: var(--ink);
-}
-
-.tile__lab {
-  font-family: var(--font-label);
-  font-size: 0.68rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-soft);
-}
-
-.tile__val {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.85rem;
-  line-height: 1;
-  margin-top: 0.3rem;
-  font-variant-numeric: tabular-nums;
-
-  &--blue {
-    color: var(--secondary);
-  }
-
-  &--soft {
-    color: var(--ink-soft);
-    font-weight: 700;
-  }
-}
+// La tile en sí (`app-tile`, shared/components/tile) ya no se define aquí.

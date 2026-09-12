@@ -14,6 +14,7 @@ import { ToastService } from '../../core/errors/toast.service';
 import { StorageEstimate, StorageService } from '../../core/storage/storage.service';
 import { Theme, ThemeService } from '../../core/theme/theme.service';
 import { todayLocalIso } from '../../core/util/dates';
+import { markSettingsVisited } from '../../core/util/visited-settings';
 import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
 
 /** Human-readable size, e.g. 1536 -> "1,5 KB". Locale `es` per app convention. */
@@ -62,6 +63,7 @@ export class Settings {
 
   constructor() {
     void this.load();
+    markSettingsVisited();
   }
 
   private async load(): Promise<void> {

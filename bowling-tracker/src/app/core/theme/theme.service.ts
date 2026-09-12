@@ -4,16 +4,16 @@ export type Theme = 'light' | 'dark';
 
 const STORAGE_KEY = 'theme';
 
-function systemPrefersDark(): boolean {
-  return typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
 /**
  * Claro/oscuro, con el mismo mecanismo que fabbeiru.github.io/Portfolio
  * (atributo `data-theme` en `<html>` + `localStorage`). El tema inicial ya
  * lo fija un script inline en `index.html` antes de que Angular arranque,
  * para no parpadear con el tema equivocado; este servicio solo retoma ese
  * valor y permite cambiarlo desde Ajustes.
+ *
+ * Por defecto siempre claro (no se detecta el tema del sistema) hasta que
+ * el usuario elija uno explícitamente en Ajustes — a partir de ahí se
+ * recuerda tal cual en `localStorage`, sin volver a mirar el sistema.
  */
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
@@ -23,7 +23,7 @@ export class ThemeService {
   private readInitial(): Theme {
     const attr = document.documentElement.getAttribute('data-theme');
     if (attr === 'light' || attr === 'dark') return attr;
-    return systemPrefersDark() ? 'dark' : 'light';
+    return 'light';
   }
 
   set(theme: Theme): void {

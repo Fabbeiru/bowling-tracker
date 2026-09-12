@@ -16,8 +16,6 @@
     </div>
   </div>
 
-  <a class="record" routerLink="/games/new">{{ t('home.record') }}</a>
-
   @if (loading()) {
     <p class="muted">{{ t('common.loading') }}</p>
   } @else if (!hasGames()) {
@@ -28,30 +26,62 @@
 
     <div class="starter">
       <p class="starter__title">{{ t('home.starterTitle') }}</p>
-      <a class="starter__item" routerLink="/arsenal/balls/new">
-        <span>{{ t('home.starterBall') }}</span><span class="starter__arrow">›</span>
+      <a
+        class="starter__item"
+        [class.starter__item--done]="hasBalls()"
+        routerLink="/arsenal/balls/new"
+        [attr.aria-label]="hasBalls() ? t('home.starterBall') + ' — ' + t('home.starterDone') : null"
+      >
+        @if (hasBalls()) {
+          <span class="starter__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5 10 17 19 7" />
+            </svg>
+          </span>
+        }
+        <span class="starter__label">{{ t('home.starterBall') }}</span>
+        <span class="starter__arrow">›</span>
       </a>
-      <a class="starter__item" routerLink="/venues/new">
-        <span>{{ t('home.starterVenue') }}</span><span class="starter__arrow">›</span>
+      <a
+        class="starter__item"
+        [class.starter__item--done]="hasVenues()"
+        routerLink="/venues/new"
+        [attr.aria-label]="hasVenues() ? t('home.starterVenue') + ' — ' + t('home.starterDone') : null"
+      >
+        @if (hasVenues()) {
+          <span class="starter__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5 10 17 19 7" />
+            </svg>
+          </span>
+        }
+        <span class="starter__label">{{ t('home.starterVenue') }}</span>
+        <span class="starter__arrow">›</span>
       </a>
-      <a class="starter__item" routerLink="/settings">
-        <span>{{ t('home.starterSettings') }}</span><span class="starter__arrow">›</span>
+      <a
+        class="starter__item"
+        [class.starter__item--done]="visitedSettings()"
+        routerLink="/settings"
+        [attr.aria-label]="visitedSettings() ? t('home.starterSettings') + ' — ' + t('home.starterDone') : null"
+      >
+        @if (visitedSettings()) {
+          <span class="starter__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5 10 17 19 7" />
+            </svg>
+          </span>
+        }
+        <span class="starter__label">{{ t('home.starterSettings') }}</span>
+        <span class="starter__arrow">›</span>
       </a>
     </div>
   } @else {
     <div class="tiles">
-      <a class="tile" routerLink="/games">
-        <div class="tile__lab">{{ t('home.lastGame') }}</div>
-        <div class="tile__val tile__val--soft">{{ last() }}</div>
-      </a>
-      <a class="tile" routerLink="/stats">
-        <div class="tile__lab">{{ t('stats.average') }}</div>
-        <div class="tile__val">{{ stats().summary.average }}</div>
-      </a>
-      <a class="tile" routerLink="/stats">
-        <div class="tile__lab">{{ t('stats.best') }}</div>
-        <div class="tile__val tile__val--blue">{{ stats().summary.best }}</div>
-      </a>
+      <app-tile [label]="t('home.lastGame')" [value]="last()!" accent="soft" to="/games" />
+      <app-tile [label]="t('stats.average')" [value]="stats().summary.average" to="/stats" />
+      <app-tile [label]="t('stats.best')" [value]="stats().summary.best" accent="blue" to="/stats" />
     </div>
   }
+
+  <a class="record" routerLink="/games/new">{{ t('home.record') }}</a>
 </section>
