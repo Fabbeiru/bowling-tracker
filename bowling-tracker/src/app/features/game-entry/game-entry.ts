@@ -20,12 +20,13 @@ import { PinPad } from '../../shared/components/pin-pad/pin-pad';
 import { PinRack, RackDelivery } from '../../shared/components/pin-rack/pin-rack';
 import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
 import { BackLink } from '../../shared/components/back-link/back-link';
+import { Tile } from '../../shared/components/tile/tile';
 
 const SAVE_ERROR = 'errors.saveGame';
 
 @Component({
   selector: 'app-game-entry',
-  imports: [FormsModule, TranslocoDirective, Scoresheet, PinPad, PinRack, ConfirmDialog, BackLink],
+  imports: [FormsModule, TranslocoDirective, Scoresheet, PinPad, PinRack, ConfirmDialog, BackLink, Tile],
   templateUrl: './game-entry.html',
   styleUrl: './game-entry.scss',
 })

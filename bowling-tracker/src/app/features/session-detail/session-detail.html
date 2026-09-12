@@ -22,19 +22,10 @@
     </a>
 
     <div class="tiles">
-      <div class="tile">
-        <div class="tile__lab">{{ t('session.series') }}</div>
-        <div class="tile__val">{{ totals().series }}</div>
-      </div>
-      <div class="tile">
-        <div class="tile__lab">{{ t('session.average') }}</div>
-        <div class="tile__val tile__val--blue">{{ totals().average ?? '—' }}</div>
-      </div>
+      <app-tile [label]="t('session.series')" [value]="totals().series" />
+      <app-tile [label]="t('session.average')" [value]="totals().average ?? '—'" accent="blue" />
       @if (session()!.handicap !== undefined) {
-        <div class="tile">
-          <div class="tile__lab">{{ t('session.handicap') }}</div>
-          <div class="tile__val">{{ session()!.handicap }}</div>
-        </div>
+        <app-tile [label]="t('session.handicap')" [value]="session()!.handicap!" />
       }
     </div>
 

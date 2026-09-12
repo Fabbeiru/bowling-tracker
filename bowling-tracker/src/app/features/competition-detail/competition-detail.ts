@@ -5,8 +5,9 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
 import { computeStats, sessionTotals } from '../../core/stats/stats';
-import { Competition, Game, Session, Venue } from '../../models';
+import { Competition, Game, Session } from '../../models';
 import { BackLink } from '../../shared/components/back-link/back-link';
+import { Tile } from '../../shared/components/tile/tile';
 
 interface SessionRow {
   session: Session;
@@ -17,7 +18,7 @@ interface SessionRow {
 
 @Component({
   selector: 'app-competition-detail',
-  imports: [RouterLink, TranslocoDirective, BackLink],
+  imports: [RouterLink, TranslocoDirective, BackLink, Tile],
   templateUrl: './competition-detail.html',
   styleUrl: './competition-detail.scss',
 })

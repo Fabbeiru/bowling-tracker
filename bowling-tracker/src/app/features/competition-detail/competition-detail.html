@@ -26,23 +26,11 @@
       </div>
     } @else {
       <div class="tiles">
-        <div class="tile">
-          <div class="tile__lab">{{ t('stats.games') }}</div>
-          <div class="tile__val">{{ stats().summary.games }}</div>
-        </div>
-        <div class="tile">
-          <div class="tile__lab">{{ t('stats.average') }}</div>
-          <div class="tile__val">{{ stats().summary.average }}</div>
-        </div>
-        <div class="tile">
-          <div class="tile__lab">{{ t('stats.best') }}</div>
-          <div class="tile__val tile__val--blue">{{ stats().summary.best }}</div>
-        </div>
+        <app-tile [label]="t('stats.games')" [value]="stats().summary.games" />
+        <app-tile [label]="t('stats.average')" [value]="stats().summary.average" />
+        <app-tile [label]="t('stats.best')" [value]="stats().summary.best" accent="blue" />
         @if (stats().highSeries3; as hs) {
-          <div class="tile">
-            <div class="tile__lab">{{ t('stats.highSeries') }}</div>
-            <div class="tile__val">{{ hs }}</div>
-          </div>
+          <app-tile [label]="t('stats.highSeries')" [value]="hs" />
         }
       </div>
     }

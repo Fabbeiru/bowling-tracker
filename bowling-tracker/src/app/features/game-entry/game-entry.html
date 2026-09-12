@@ -44,14 +44,8 @@
         <app-scoresheet [frames]="s.frames" [currentFrame]="position()?.frame ?? null" />
 
         <div class="live">
-          <div class="tile">
-            <div class="tile__lab">{{ t('gameEntry.score') }}</div>
-            <div class="tile__val">{{ s.total }}</div>
-          </div>
-          <div class="tile">
-            <div class="tile__lab">{{ t('gameEntry.maxPossible') }}</div>
-            <div class="tile__val tile__val--blue">{{ s.maxPossible }}</div>
-          </div>
+          <app-tile [label]="t('gameEntry.score')" [value]="s.total" />
+          <app-tile [label]="t('gameEntry.maxPossible')" [value]="s.maxPossible" accent="blue" />
         </div>
       }
     }

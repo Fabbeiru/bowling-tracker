@@ -9,6 +9,7 @@ import { sessionTotals } from '../../core/stats/stats';
 import { createGame, Game, Session } from '../../models';
 import { BackLink } from '../../shared/components/back-link/back-link';
 import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
+import { Tile } from '../../shared/components/tile/tile';
 
 interface GameRow {
   game: Game;
@@ -21,7 +22,7 @@ interface GameRow {
 
 @Component({
   selector: 'app-session-detail',
-  imports: [RouterLink, TranslocoDirective, BackLink, ConfirmDialog],
+  imports: [RouterLink, TranslocoDirective, BackLink, ConfirmDialog, Tile],
   templateUrl: './session-detail.html',
   styleUrl: './session-detail.scss',
 })

@@ -16,33 +16,7 @@
   gap: 0.6rem;
 }
 
-.tile {
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  padding: 0.7rem 0.75rem;
-}
-
-.tile__lab {
-  font-family: var(--font-label);
-  font-size: 0.56rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-soft);
-}
-
-.tile__val {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.85rem;
-  line-height: 1;
-  margin-top: 0.25rem;
-  font-variant-numeric: tabular-nums;
-
-  &--blue {
-    color: var(--secondary);
-  }
-}
+// La tile en sí (`app-tile`, shared/components/tile) ya no se define aquí.
 
 .notes {
   margin: 1rem 0 0;
@@ -96,7 +70,10 @@
   margin-top: 0.7rem;
   width: 100%;
   min-height: 44px;
-  border: 0;
+  border-radius: var(--radius-sm);
+  // Mismo tratamiento que `.data-btn--danger` en Ajustes ("Borrar todos mis
+  // datos"): borde sutil teñido de rojo en vez de sin borde.
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--surface));
   background: transparent;
   color: var(--danger-text);
   font-size: 0.85rem;

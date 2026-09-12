@@ -51,34 +51,13 @@
   display: flex;
   gap: 0.7rem;
   margin-top: 0.9rem;
-}
 
-.tile {
-  flex: 1;
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  padding: 0.65rem 0.75rem;
-}
-
-.tile__lab {
-  font-family: var(--font-label);
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-soft);
-}
-
-.tile__val {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.6rem;
-  line-height: 1;
-  margin-top: 0.2rem;
-  font-variant-numeric: tabular-nums;
-
-  &--blue {
-    color: var(--secondary);
+  // La tile en sí (`app-tile`, shared/components/tile) ya no se define
+  // aquí — pero como custom element es ella la que hace de flex item, así
+  // que el `flex: 1` que antes llevaba `.tile` va dirigido a ella.
+  > app-tile {
+    flex: 1;
+    min-width: 0;
   }
 }
 
@@ -242,7 +221,11 @@ textarea.input {
   margin-top: 0.7rem;
   width: 100%;
   min-height: 44px;
-  border: 0;
+  border-radius: var(--radius-sm);
+  // Mismo tratamiento que `.data-btn--danger` en Ajustes ("Borrar todos mis
+  // datos"): borde sutil teñido de rojo en vez de sin borde — se notaba
+  // poco al lado de los demás botones, que sí lo llevan.
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--surface));
   background: transparent;
   color: var(--danger-text);
   font-size: 0.85rem;

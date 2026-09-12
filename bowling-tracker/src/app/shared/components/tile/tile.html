@@ -1,0 +1,15 @@
+@if (to()) {
+  <a class="tile" [routerLink]="to()!">
+    <div class="tile__lab">{{ label() }}</div>
+    <div class="tile__val" [class.tile__val--blue]="accent() === 'blue'" [class.tile__val--soft]="accent() === 'soft'">
+      {{ value() ?? '—' }}
+    </div>
+  </a>
+} @else {
+  <div class="tile">
+    <div class="tile__lab">{{ label() }}</div>
+    <div class="tile__val" [class.tile__val--blue]="accent() === 'blue'" [class.tile__val--soft]="accent() === 'soft'">
+      {{ value() ?? '—' }}
+    </div>
+  </div>
+}
