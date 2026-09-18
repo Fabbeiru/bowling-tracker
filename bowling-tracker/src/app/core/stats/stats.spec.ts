@@ -1,5 +1,5 @@
 import { Game } from '../../models';
-import { computeStats, sessionTotals, statsByBall } from './stats';
+import { ballComparisonRows, computeStats, sessionTotals, statsByBall } from './stats';
 
 let seq = 0;
 function totalGame(total: number, sessionId = 's'): Game {
@@ -274,6 +274,41 @@ describe('statsByBall', () => {
     const stats = statsByBall(Array.from({ length: 10 }, () => g));
     expect(stats.get('D')).toMatchObject({ strikeAttempts: 10 });
     expect(stats.get('E')).toMatchObject({ spareAttempts: 10, sparesConverted: 10 });
+  });
+});
+
+describe('ballComparisonRows', () => {
+  const names = new Map([
+    ['A', 'Bola A'],
+    ['B', 'Bola de spare'],
+  ]);
+
+  it('gives an average to a ball used as primary in 3+ finished games', () => {
+    const games = Array.from({ length: 3 }, () => ({ ...totalGame(200), primaryBallId: 'A' }));
+    const rows = ballComparisonRows(games, names);
+    expect(rows).toEqual([expect.objectContaining({ id: 'A', average: 200, games: 3 })]);
+  });
+
+  it('includes a spare-only ball that was never primaryBallId, with average null', () => {
+    // 10 frames converted with the second ball 'B', ball 'A' never named primary anywhere.
+    const games = Array.from({ length: 10 }, () => taggedFrameGame(6, 4, 'A', 'B'));
+    const rows = ballComparisonRows(games, names);
+    const row = rows.find((r) => r.id === 'B');
+    expect(row).toMatchObject({ average: null, games: 0, sparePct: 100, spareAttempts: 10, sparesConverted: 10 });
+  });
+
+  it('excludes a ball with too little data on both fronts', () => {
+    const primaryGames = Array.from({ length: 2 }, () => ({ ...totalGame(180), primaryBallId: 'A' }));
+    const spareGames = Array.from({ length: 4 }, () => taggedFrameGame(6, 4, 'X', 'A'));
+    const rows = ballComparisonRows([...primaryGames, ...spareGames], names);
+    expect(rows.find((r) => r.id === 'A')).toBeUndefined();
+  });
+
+  it('sorts by average, with average-less balls trailing', () => {
+    const primary = Array.from({ length: 3 }, () => ({ ...totalGame(150), primaryBallId: 'A' }));
+    const spareOnly = Array.from({ length: 10 }, () => taggedFrameGame(6, 4, undefined, 'B'));
+    const rows = ballComparisonRows([...primary, ...spareOnly], names);
+    expect(rows.map((r) => r.id)).toEqual(['A', 'B']);
   });
 });
 

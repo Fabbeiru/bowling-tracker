@@ -3,7 +3,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
-import { computeStats, statsByBall } from '../../core/stats/stats';
+import { BallComparisonRow, ballComparisonRows, computeStats } from '../../core/stats/stats';
 import { scoreGame } from '../../core/scoring';
 import { Ball, Competition, Game, Id, Session, SessionType, Venue } from '../../models';
 import { FilterSelect } from '../../shared/components/filter-select/filter-select';
@@ -20,15 +20,6 @@ interface NamedAverage {
   name: string;
   average: number;
   games: number;
-}
-
-interface BallComparisonRow extends NamedAverage {
-  strikePct: number | null;
-  strikes: number;
-  strikeAttempts: number;
-  sparePct: number | null;
-  sparesConverted: number;
-  spareAttempts: number;
 }
 
 /** SVG geometry for the evolution chart (viewBox 0 0 600 `h`, `h` dynamic — see `chartAspect`). */
@@ -130,14 +121,6 @@ export class Stats {
 
   readonly stats = computed(() => computeStats(this.filteredGames()));
 
-  /** Average final score per ball (primary ball), for balls used in 3+ finished games. */
-  readonly byBall = computed<NamedAverage[]>(() =>
-    this.averageBy(
-      new Map(this.balls().map((b) => [b.id, b.name])),
-      (g) => g.primaryBallId,
-    ),
-  );
-
   /** Average final score per venue, for venues played in 3+ finished games. */
   readonly byVenue = computed<NamedAverage[]>(() => {
     const byId = this.sessionById();
@@ -147,22 +130,17 @@ export class Stats {
     );
   });
 
-  /** `byBall`, plus strike% / spare-conversion% attributed per delivery (throw/frame detail). */
-  readonly ballComparison = computed<BallComparisonRow[]>(() => {
-    const perBall = statsByBall(this.filteredGames());
-    return this.byBall().map((row) => {
-      const b = perBall.get(row.id);
-      return {
-        ...row,
-        strikePct: b?.strikePct ?? null,
-        strikes: b?.strikes ?? 0,
-        strikeAttempts: b?.strikeAttempts ?? 0,
-        sparePct: b?.sparePct ?? null,
-        sparesConverted: b?.sparesConverted ?? 0,
-        spareAttempts: b?.spareAttempts ?? 0,
-      };
-    });
-  });
+  /**
+   * Average final score (primary ball, 3+ finished games) plus strike% /
+   * spare-conversion% attributed per delivery (throw/frame detail) — a row
+   * can have one without the other, e.g. a spare-only ball with no average.
+   */
+  readonly ballComparison = computed<BallComparisonRow[]>(() =>
+    ballComparisonRows(
+      this.filteredGames(),
+      new Map(this.balls().map((b) => [b.id, b.name])),
+    ),
+  );
 
   private averageBy(names: Map<string, string>, keyOf: (g: Game) => string | undefined): NamedAverage[] {
     const acc = new Map<string, { sum: number; n: number }>();

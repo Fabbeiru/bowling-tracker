@@ -11,7 +11,7 @@
   entonces, sin taggear todavía: pantalla de competición + hándicap por sesión,
   comparativa de bolas (% plenos/semiplenos por bola) y **filtros de
   bolera/bola en Estadísticas y Partidas** (ver detalle en "2026-09-11" más abajo).
-- **142 tests**, verde. Node v22.17.1.
+- **146 tests**, verde. Node v22.17.1.
 - **IMPORTANTE — importar datos REEMPLAZA todo**: "Ajustes → Importar copia" no
   es aditivo, borra los datos actuales antes de cargar el fichero (con diálogo
   de confirmación). Exportar antes si hay algo que no se quiera perder.
@@ -413,6 +413,15 @@ Ya forma parte de la v1 a publicar. Añadido:
 - Más adelante, sin prisa: PWA, pulido (CSS duplicado restante — `.seg` ×3,
   modal ×2 —, README raíz, degradado del scoresheet, decidir `AppMeta` /
   `Game.startedAt`).
+- **Pendiente (anotado 2026-09-17): formato de versionado/tags y de commits.**
+  - Formatear correctamente el versionado/tags del proyecto: convención clara
+    (semver o similar), y una plantilla legible y reutilizable para el mensaje
+    de cada tag/release que explique bien qué se cambia, qué se mejora y qué
+    se corrige (secciones tipo Added/Changed/Fixed).
+  - Establecer un formato de commits (p. ej. Conventional Commits) a partir de
+    ahora, y valorar reescribir el historial existente para ajustar solo los
+    *mensajes* de los commits al nuevo formato (sin tocar el contenido/diff de
+    cada commit).
 
 ### Puntos del gráfico: tamaño constante en pantalla, no en el dibujo (2026-09-12)
 
@@ -743,6 +752,50 @@ Ya forma parte de la v1 a publicar. Añadido:
 
 **Nota Node**: instalado v22.17.1. Angular 20 va bien; el CLI 21 (`@latest`)
 pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.
+
+### Bola de spare ausente de "Media por bola" (2026-09-18)
+
+- El usuario notó que el % de semiplenos convertidos por bola de repuesto no
+  salía en Estadísticas, aunque sospechaba que el dato sí se recogía —
+  confirmado: `statsByBall` (`core/stats/stats.ts`) ya atribuía correctamente
+  el semipleno a la bola real usada en el 2º tiro. El problema estaba en qué
+  bolas llegaban a tener **fila** en la tabla: la lista salía de `byBall()`,
+  que solo incluye bolas que fueron `primaryBallId` en ≥3 partidas completas
+  — una bola de rol `spare` casi nunca lo es (se usa sobre todo en el 2º
+  tiro), así que su fila nunca se generaba, por más semiplenos que tuviera.
+- **Arreglado con `ballComparisonRows(games, ballNames)`** (nueva función
+  pura en `core/stats/stats.ts`, con tests en `stats.spec.ts`): genera una
+  fila para cualquier bola que tenga *algo* que mostrar — como bola
+  principal en ≥3 partidas (da media) **o** con ≥10 intentos en
+  `statsByBall` (da % plenos/semiplenos) — no ambas a la vez. Una bola sin
+  ninguno de los dos no sale (nada que decir todavía). El componente
+  (`features/stats/stats.ts`) llama a esta función en vez de mezclar
+  `byBall()` + `statsByBall()` a mano; `byBall`/`NamedAverage` para bolas se
+  eliminó (Venues sigue con su propio `averageBy` privado, sin tocar).
+- Plantilla (`stats.html`): la media se pinta como "—" cuando la bola no
+  tiene partidas suficientes como principal; el subtítulo "· N partidas" del
+  nombre solo aparece si `games > 0` (si no, se omite sin más, nada de "· 0
+  partidas").
+- **Verificado con Playwright** (dev server real, `ng serve`, dato de
+  importación de prueba ad-hoc con una bola "nunca principal" con 10
+  semiplenos convertidos): la fila aparece con media "—" y "100% · 10/10" en
+  Semiplenos, sin errores de consola. Capturas de pantalla revisadas a ojo
+  (móvil, 420px) — sin roturas de layout con el "—" ni con la fila sin
+  subtítulo.
+- **`test-data/bowling-tracker-test-data.json` ampliado**: las dos bolas que
+  ya había (`test-ball-storm`, `test-ball-hammer`) siempre eran su propia
+  bola de repuesto (mismo id en `firstBallId` y `secondBallId` en todas sus
+  partidas) — el fichero oficial de pruebas **no cubría** el caso de este
+  bug (una bola que nunca es `primaryBallId`). Añadida **`test-ball-backup`**
+  ("Bola de repuesto, nunca principal") + sesión `test-session-5` (práctica,
+  2026-09-15) con 4 partidas nuevas (`test-game-s5-1..4`): bola principal
+  `test-ball-storm`, pero el 2º tiro de los cuadros 1/4/7 de cada partida usa
+  `test-ball-backup` (12 intentos, 9 convertidos = 75%), sin que
+  `test-ball-backup` sea nunca `primaryBallId` de nada. Reimportando este
+  fichero desde Ajustes se ve la fila "Bola de repuesto, nunca principal"
+  con media "—" y "75% · 9/12" en Semiplenos — verificado importándolo de
+  verdad (`parseImport` real, no simulado) contra el dev server, sin errores.
+- 146 tests.
 
 ## Preguntas abiertas para el usuario
 

@@ -285,6 +285,77 @@ export function statsByBall(games: Game[], opts: { minAttempts?: number } = {}):
   return result;
 }
 
+export interface BallComparisonRow {
+  id: Id;
+  name: string;
+  /** `null` if this ball was never the primary ball of `minGames`+ finished games. */
+  average: number | null;
+  /** Finished games where this was the primary ball — 0 for a ball only ever used for spares. */
+  games: number;
+  strikePct: number | null;
+  strikes: number;
+  strikeAttempts: number;
+  sparePct: number | null;
+  sparesConverted: number;
+  spareAttempts: number;
+}
+
+/**
+ * One row per ball with *something* worth showing: either it was the primary
+ * ball in `minGames`+ finished games (so it gets an average), or it has
+ * `minAttempts`+ deliveries attributed to it in `statsByBall` (so it gets a
+ * strike% or spare%) — attribution there is by ball actually thrown, not by
+ * `primaryBallId`. Without this a ball used only for the second ball (a
+ * "spare ball") would never appear, even with plenty of spare-conversion
+ * data: it's essentially never anyone's primary ball. A ball meeting neither
+ * bar is left out — nothing meaningful to say about it yet.
+ */
+export function ballComparisonRows(
+  games: Game[],
+  ballNames: Map<Id, string>,
+  opts: { minGames?: number; minAttempts?: number } = {},
+): BallComparisonRow[] {
+  const minGames = opts.minGames ?? 3;
+
+  const avgAcc = new Map<Id, { sum: number; n: number }>();
+  for (const g of games) {
+    const key = g.primaryBallId;
+    if (!key) continue;
+    const s = scoreGame(g);
+    const done = g.detailLevel === 'total' ? g.totalPins !== undefined : s.complete;
+    if (!done) continue;
+    const cur = avgAcc.get(key) ?? { sum: 0, n: 0 };
+    cur.sum += s.total;
+    cur.n += 1;
+    avgAcc.set(key, cur);
+  }
+
+  const perBall = statsByBall(games, { minAttempts: opts.minAttempts });
+
+  const ids = new Set<Id>([...avgAcc.keys(), ...perBall.keys()]);
+  const rows: BallComparisonRow[] = [];
+  for (const id of ids) {
+    const avg = avgAcc.get(id);
+    const hasAverage = !!avg && avg.n >= minGames;
+    const b = perBall.get(id);
+    const hasPct = (b?.strikePct ?? null) !== null || (b?.sparePct ?? null) !== null;
+    if (!hasAverage && !hasPct) continue;
+    rows.push({
+      id,
+      name: ballNames.get(id) ?? '—',
+      average: hasAverage ? round(avg!.sum / avg!.n) : null,
+      games: avg?.n ?? 0,
+      strikePct: b?.strikePct ?? null,
+      strikes: b?.strikes ?? 0,
+      strikeAttempts: b?.strikeAttempts ?? 0,
+      sparePct: b?.sparePct ?? null,
+      sparesConverted: b?.sparesConverted ?? 0,
+      spareAttempts: b?.spareAttempts ?? 0,
+    });
+  }
+  return rows.sort((a, b) => (b.average ?? -1) - (a.average ?? -1));
+}
+
 export interface SessionTotals {
   games: number;
   /** Games with at least one delivery (or a total score) recorded. */

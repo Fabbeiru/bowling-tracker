@@ -121,11 +121,14 @@
             @for (b of ballComparison(); track b.id) {
               <li class="ball-compare__row" appWrapAwareRow>
                 <div class="ball-compare__name">
-                  {{ b.name }} <span class="metrics__sub">· {{ t('stats.gamesCount', { n: b.games }) }}</span>
+                  {{ b.name }}
+                  @if (b.games > 0) {
+                    <span class="metrics__sub">· {{ t('stats.gamesCount', { n: b.games }) }}</span>
+                  }
                 </div>
                 <div class="ball-compare__figs">
                   <span class="ball-compare__fig">
-                    <b>{{ b.average }}</b>
+                    <b>{{ b.average ?? '—' }}</b>
                     <small>{{ t('stats.average') }}</small>
                   </span>
                   <span class="ball-compare__fig">
