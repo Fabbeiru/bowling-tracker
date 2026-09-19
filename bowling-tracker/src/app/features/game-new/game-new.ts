@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
@@ -63,6 +63,7 @@ export class GameNew {
     venueId: this.fb.nonNullable.control(''),
     primaryBallId: this.fb.nonNullable.control(''),
     spareBallId: this.fb.nonNullable.control(''),
+    handicap: this.fb.control<number | null>(null, [Validators.min(0), Validators.max(300)]),
   });
 
   constructor() {
@@ -100,6 +101,7 @@ export class GameNew {
     this.type.set(value);
     if (value !== 'league' && value !== 'tournament') {
       this.form.controls.competitionId.setValue('');
+      this.form.controls.handicap.setValue(null);
     }
   }
 
@@ -163,12 +165,14 @@ export class GameNew {
     this.saving.set(true);
     try {
       const v = this.form.getRawValue();
+      const type = this.type();
       const session = createSession({
-        type: this.type(),
+        type,
         date: v.date,
         defaultDetailLevel: v.detailLevel,
         competitionId: v.competitionId || undefined,
         venueId: v.venueId || undefined,
+        handicap: (type === 'league' || type === 'tournament') && v.handicap !== null ? v.handicap : undefined,
       });
       await this.repo.saveSession(session);
 

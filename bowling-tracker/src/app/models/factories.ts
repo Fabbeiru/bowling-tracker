@@ -14,6 +14,7 @@ export interface NewSessionInput {
   venueId?: Id;
   defaultDetailLevel: DetailLevel;
   notes?: string;
+  handicap?: number;
 }
 
 export function createSession(input: NewSessionInput): Session {
@@ -26,6 +27,7 @@ export function createSession(input: NewSessionInput): Session {
     venueId: input.venueId,
     notes: input.notes,
     defaultDetailLevel: input.defaultDetailLevel,
+    handicap: input.handicap,
     createdAt: ts,
     updatedAt: ts,
   };

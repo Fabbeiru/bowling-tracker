@@ -121,7 +121,9 @@
           <button type="button" class="pager__btn" [disabled]="page() === 1" (click)="prevPage()">
             {{ t('games.prevPage') }}
           </button>
-          <span class="pager__label">{{ t('games.pageOf', { page: page(), total: pageCount() }) }}</span>
+          <span class="pager__label">
+            {{ t('games.pageOf', { page: page(), total: pageCount(), shown: shownGamesCount(), games: totalGamesCount() }) }}
+          </span>
           <button type="button" class="pager__btn" [disabled]="page() === pageCount()" (click)="nextPage()">
             {{ t('games.nextPage') }}
           </button>

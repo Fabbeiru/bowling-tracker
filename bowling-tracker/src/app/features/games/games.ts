@@ -6,6 +6,7 @@ import { Repository } from '../../core/data/repository';
 import { ToastService } from '../../core/errors/toast.service';
 import { GamesNavState, GamesTypeFilter } from '../../core/nav/games-nav.state';
 import { gameToRolls, isCleanGame, scoreGame } from '../../core/scoring';
+import { paginateByItemCount } from '../../core/util/paginate';
 import { Ball, Competition, Game, Session, Venue } from '../../models';
 import { FilterSelect } from '../../shared/components/filter-select/filter-select';
 import { FilterSheet } from '../../shared/components/filter-sheet/filter-sheet';
@@ -89,25 +90,12 @@ export class Games {
 
   /**
    * Sessions bucketed into pages of ~PAGE_SIZE *games* (not sessions) each —
-   * a session is never split across pages, so a page can slightly exceed the
-   * target when a session holds several games.
+   * a session is never split across pages, so a page can exceed the target
+   * when a session holds several games (see `paginateByItemCount`).
    */
-  readonly pages = computed(() => {
-    const pages: SessionRow[][] = [];
-    let current: SessionRow[] = [];
-    let count = 0;
-    for (const row of this.filteredRows()) {
-      if (count > 0 && count >= Games.PAGE_SIZE) {
-        pages.push(current);
-        current = [];
-        count = 0;
-      }
-      current.push(row);
-      count += row.games.length;
-    }
-    if (current.length > 0) pages.push(current);
-    return pages.length > 0 ? pages : [[]];
-  });
+  readonly pages = computed(() =>
+    paginateByItemCount(this.filteredRows(), (r) => r.games.length, Games.PAGE_SIZE),
+  );
 
   readonly pageCount = computed(() => this.pages().length);
 
@@ -115,6 +103,16 @@ export class Games {
     const page = Math.min(this.page(), this.pageCount());
     return this.pages()[page - 1] ?? [];
   });
+
+  /** Games shown up to and including the current page — a running total, like "9/21", not just this page's count. */
+  readonly shownGamesCount = computed(() => {
+    const page = Math.min(this.page(), this.pageCount());
+    return this.pages()
+      .slice(0, page)
+      .reduce((n, rows) => n + rows.reduce((m, r) => m + r.games.length, 0), 0);
+  });
+
+  readonly totalGamesCount = computed(() => this.filteredRows().reduce((n, r) => n + r.games.length, 0));
 
   constructor() {
     void this.load();

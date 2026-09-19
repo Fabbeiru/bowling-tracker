@@ -68,7 +68,7 @@
     "notStarted": "Sin empezar",
     "prevPage": "< Anterior",
     "nextPage": "Siguiente >",
-    "pageOf": "Página {{page}} de {{total}}"
+    "pageOf": "Página {{page}} de {{total}} ({{shown}}/{{games}})"
   },
   "competitions": {
     "title": "Competiciones",
@@ -299,6 +299,8 @@
     "dataTitle": "Tus datos",
     "dataWhere": "Los datos se guardan solo en este dispositivo, usando el almacenamiento propio del navegador.",
     "dataNote": "No hay cuenta ni servidor. Exporta una copia de vez en cuando: si borras los datos del navegador, cambias de móvil o pasa algo raro, es tu única forma de recuperarla.",
+    "lastBackup": "Última copia: {{date}}.",
+    "lastBackupNever": "Todavía no has hecho ninguna copia.",
     "dataExport": "Exportar copia",
     "dataImport": "Importar copia",
     "dataClear": "Borrar todos mis datos",

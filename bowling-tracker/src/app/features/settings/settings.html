@@ -21,6 +21,11 @@
     <h2 class="block__title">{{ t('settings.dataTitle') }}</h2>
     <p class="note">{{ t('settings.dataWhere') }}</p>
     <p class="note">{{ t('settings.dataNote') }}</p>
+    @if (lastBackupAt(); as date) {
+      <p class="note">{{ t('settings.lastBackup', { date }) }}</p>
+    } @else {
+      <p class="note">{{ t('settings.lastBackupNever') }}</p>
+    }
 
     <div class="data-actions">
       <button type="button" class="data-btn" [disabled]="busy() !== null" (click)="exportData()">

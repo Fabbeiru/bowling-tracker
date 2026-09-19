@@ -13,7 +13,8 @@ import {
 import { ToastService } from '../../core/errors/toast.service';
 import { StorageEstimate, StorageService } from '../../core/storage/storage.service';
 import { Theme, ThemeService } from '../../core/theme/theme.service';
-import { todayLocalIso } from '../../core/util/dates';
+import { nowLocalIso, todayLocalIso } from '../../core/util/dates';
+import { AppMeta } from '../../models';
 import { markSettingsVisited } from '../../core/util/visited-settings';
 import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
 
@@ -46,6 +47,9 @@ export class Settings {
   readonly theme = this.themeService.theme;
   readonly loading = signal(true);
   readonly usage = signal<StorageEstimate | null>(null);
+  private readonly meta = signal<AppMeta | null>(null);
+  /** Just the date (YYYY-MM-DD) — app convention is plain ISO dates, no times, in the UI. */
+  readonly lastBackupAt = computed(() => this.meta()?.lastBackupAt?.slice(0, 10) ?? null);
 
   readonly busy = signal<'export' | 'import' | 'clear' | null>(null);
   /** A validated import, waiting for the user to confirm the replace. */
@@ -67,7 +71,9 @@ export class Settings {
   }
 
   private async load(): Promise<void> {
-    this.usage.set(await this.storage.estimate());
+    const [usage, meta] = await Promise.all([this.storage.estimate(), this.repo.getMeta()]);
+    this.usage.set(usage);
+    this.meta.set(meta);
     this.loading.set(false);
   }
 
@@ -91,6 +97,9 @@ export class Settings {
         a.click();
         URL.revokeObjectURL(url);
       }
+      // Reaching here means the share completed or the download was
+      // triggered — either way, count it as a backup just made.
+      await this.recordBackup();
     } catch (e) {
       // A cancelled share sheet throws AbortError — not an error worth a toast.
       if (!(e instanceof DOMException && e.name === 'AbortError')) {
@@ -99,6 +108,14 @@ export class Settings {
     } finally {
       this.busy.set(null);
     }
+  }
+
+  private async recordBackup(): Promise<void> {
+    const meta = this.meta();
+    if (!meta) return;
+    const updated: AppMeta = { ...meta, lastBackupAt: nowLocalIso() };
+    await this.repo.saveMeta(updated);
+    this.meta.set(updated);
   }
 
   // --- Import ---

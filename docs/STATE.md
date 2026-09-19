@@ -11,7 +11,7 @@
   entonces, sin taggear todavía: pantalla de competición + hándicap por sesión,
   comparativa de bolas (% plenos/semiplenos por bola) y **filtros de
   bolera/bola en Estadísticas y Partidas** (ver detalle en "2026-09-11" más abajo).
-- **146 tests**, verde. Node v22.17.1.
+- **152 tests**, verde. Node v22.17.1.
 - **IMPORTANTE — importar datos REEMPLAZA todo**: "Ajustes → Importar copia" no
   es aditivo, borra los datos actuales antes de cargar el fichero (con diálogo
   de confirmación). Exportar antes si hay algo que no se quiera perder.
@@ -796,6 +796,58 @@ pide Node ≥ 22.22.3 — conviene actualizar Node en algún momento.
   con media "—" y "75% · 9/12" en Semiplenos — verificado importándolo de
   verdad (`parseImport` real, no simulado) contra el dev server, sin errores.
 - 146 tests.
+
+### Revisión "usuario nuevo" + 3 mejoras pequeñas (2026-09-18/19)
+
+- **Revisión completa de la app desde cero** (perfil de navegador limpio, sin
+  datos, con Playwright): alta de bola/bolera, partida en los 3 niveles de
+  detalle, sesión multi-partida, competición, tema oscuro — sin errores de
+  consola. Conclusiones: el enfoque local-first sin cuenta es un punto fuerte
+  real; huecos identificados frente a otras apps de bowling — foto de bola
+  solo por URL (no cámara/galería), sin aviso de última copia, hándicap
+  manual (aceptado, cada liga tiene su fórmula). Ideas descartadas tras
+  discutirlo: registrar compañeros de equipo (ya hay hojas físicas para eso),
+  función dedicada para compartir partida como imagen (una captura de
+  pantalla ya vale). OCR de partida y sync a Drive/OneDrive del propio
+  usuario quedan anotadas para más adelante (la primera coincide con
+  `REQUIREMENTS.md` 5.1, ya marcada Won't-now Fase 3; la segunda con la idea
+  de Fase 2+ ya anotada en este fichero).
+- **Cálculo de almacenamiento verificado empíricamente**: `storage.service.ts`
+  no calcula nada — solo llama a `navigator.storage.estimate()` del
+  navegador. Medido con datos reales: 21 partidas + 3 bolas + 1 bolera + 1
+  competición + 5 sesiones pesan 17.106 bytes en JSON compacto, pero el
+  navegador reporta 86.016 bytes de IndexedDB para lo mismo (~5x) — los
+  índices por `sessionId`/`venueId`/`primaryBallId` y la granularidad del
+  motor de almacenamiento explican la diferencia. El caso real del usuario
+  (19 partidas + 3 bolas → export de 60 KB, Ajustes marca 160 KB, ratio
+  ~2,7x) es coherente con esto. No es un bug ni en un sentido ni en otro.
+- **Hándicap también al crear la sesión** (antes solo se podía añadir
+  editándola después): `NewSessionInput`/`createSession` (`factories.ts`)
+  ganan `handicap?: number`; `game-new.ts`/`.html` añaden el mismo campo que
+  ya tenía `session-form` (mismos validators/hint), visible solo con tipo
+  Liga/Torneo, se limpia al cambiar a otro tipo.
+- **Aviso de última copia de seguridad**: `AppMeta.lastBackupAt` ya existía
+  en el modelo pero no lo usaba nadie en todo el código — solo hacía falta
+  conectarlo. `settings.ts` lo carga con `getMeta()` y lo actualiza
+  (`saveMeta`) al terminar `exportData()` con éxito (compartir sin cancelar,
+  o disparar la descarga). En Ajustes → Tus datos: "Todavía no has hecho
+  ninguna copia." o "Última copia: `AAAA-MM-DD`." (fecha plana, sin hora —
+  mismo criterio que el resto de fechas de la app).
+- **Paginación de Partidas con conteo real + corte del bucketing corregido**:
+  la etiqueta pasa de "Página X de Y" a "Página X de Y (partidas en esta
+  página/total)". De paso, se corrigió un fallo real en el reparto por
+  páginas (`games.ts`): decidía cortar página **mirando hacia atrás** (solo
+  cuando lo ya acumulado llegaba a 10), así que siempre dejaba entrar una
+  sesión entera de más aunque se disparase el total — con 3 sesiones de 3 +
+  una de 6 (15 partidas), la página 1 se quedaba con las 15 en vez de parar
+  en 9. Extraído a `core/util/paginate.ts` (`paginateByItemCount`, genérica y
+  con 6 tests) que corta **mirando hacia delante**: rechaza añadir una fila a
+  una página no vacía si se pasaría de `PAGE_SIZE`, pero una fila más grande
+  que `PAGE_SIZE` ella sola nunca se descarta ni se parte, siempre ocupa
+  página propia. `games.ts` ahora es una llamada a esa función. Verificado
+  con Playwright (import ad-hoc de 4 sesiones 3+3+3+6): "Página 1 de 2
+  (9/15)" / "Página 2 de 2 (6/15)", tal cual se esperaba.
+- 152 tests.
 
 ## Preguntas abiertas para el usuario
 
